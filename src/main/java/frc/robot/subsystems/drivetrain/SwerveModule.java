@@ -8,24 +8,25 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import frc.robot.Constants;
 import frc.slicelibs.math.OnboardModuleState;
+import frc.robot.subsystems.drivetrain.SwerveModuleIO.SwerveModuleIOInputs;
 
 public class SwerveModule {
 
     private final SwerveModuleIO io;
-    private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
+    //private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
     public final int moduleNumber;
     private Rotation2d lastAngle;
     private SwerveModuleState targetState = new SwerveModuleState();
 
-    public SwerveModule(SwerveModuleIO io, int moduleNumber){
+    public SwerveModule(SwerveModuleIO io, int moduleNumber) {
         this.io = io;
         this.moduleNumber = moduleNumber;        
         lastAngle = getState().angle;
     }
 
     public void updateInputs() {
-        io.updateInputs(inputs);
-        Logger.processInputs("Drivetrain/Module" + Integer.toString(moduleNumber), inputs);
+        //io.updateInputs(inputs);
+        //Logger.processInputs("Drivetrain/Module" + Integer.toString(moduleNumber), inputs);
     }
 
     public void runSetpoint(SwerveModuleState state, boolean isOpenLoop) {
@@ -70,11 +71,13 @@ public class SwerveModule {
     }
 
     private Rotation2d getIntegratedAngle() {
-        return inputs.integratedAnglePosition;
+        //return inputs.integratedAnglePosition;
+        return new Rotation2d();
     }
 
     public Rotation2d getAbsoluteAngle() {
-        return inputs.absoluteAnglePosition;
+        //return inputs.absoluteAnglePosition;
+        return new Rotation2d();
     }
 
     public void resetToAbsolute() {
@@ -82,10 +85,11 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(
+        /*return new SwerveModuleState(
             inputs.driveVelocityMetersPerSec, 
             getIntegratedAngle()
-        );
+        );*/
+        return new SwerveModuleState();
     }
 
     public SwerveModuleState getTargetState() {
@@ -93,16 +97,18 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(
+        /*return new SwerveModulePosition(
             inputs.drivePositionMeters, 
             getIntegratedAngle()
-        );
+        );*/
+        return new SwerveModulePosition();
     }
 
     /**
      * @return The output current of the drive motor in amps
      */
     public double getDriveOutputCurrent() {
-       return inputs.driveCurrentAmps;
+       //return inputs.driveCurrentAmps;
+       return 0;
     }
 }
