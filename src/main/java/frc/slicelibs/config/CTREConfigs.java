@@ -10,6 +10,6 @@ public final class CTREConfigs {
     public CTREConfigs() {
         /* Swerve CANcoder Configuration */
         swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.kDrivetrain.ABSOLUTE_ENCODER_INVERT;
-        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 360;
+        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
     }
 }

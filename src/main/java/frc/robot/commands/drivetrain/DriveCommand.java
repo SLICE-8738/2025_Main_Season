@@ -85,7 +85,7 @@ public class DriveCommand extends Command {
     }
 
     m_drivetrain.drive(
-        new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),
+        new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF /*+ rotationFeedback*/)),
         m_isOpenLoop,
         m_isFieldRelative);
 

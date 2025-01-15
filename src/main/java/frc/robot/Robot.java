@@ -6,10 +6,6 @@ package frc.robot;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
-
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
@@ -17,6 +13,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -87,7 +85,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.m_autoSelector.updateInitialAutoPoseOffset();
+    //m_robotContainer.m_autoSelector.updateInitialAutoPoseOffset();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

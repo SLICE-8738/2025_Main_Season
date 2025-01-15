@@ -72,8 +72,8 @@ public final class Constants {
     public static final double DRIVE_BASE_RADIUS = Math.hypot(WHEEL_BASE / 2, TRACK_WIDTH / 2);
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.95);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
-    public static final double MASS = 65.3173; // TODO: Find mass (kg)
-    public static final double MOMENT_OF_INERTIA = 7; // TODO: Find MOI (kg*m^2)
+    public static final double MASS = 25; // TODO: Find mass (kg)
+    public static final double MOMENT_OF_INERTIA = 3; // TODO: Find MOI (kg*m^2)
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 0.7; // (Vex Griplocks)
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
@@ -104,7 +104,8 @@ public final class Constants {
     public static final int ANGLE_POSITION_PERIOD_MS = 300;
 
     /* Drive Motor PID Values */
-    public static final double DRIVE_KP = 0.12; // TODO: Tune drive motor PID gains
+    //public static final double DRIVE_KP = 0.12; // TODO: Tune drive motor PID gains
+    public static final double DRIVE_KP = 0.05;
     public static final double DRIVE_KI = 0.0;
     public static final double DRIVE_KD = 0.0;
 
@@ -117,7 +118,7 @@ public final class Constants {
     // TODO: Find drive and angle motor feedforward gains from characterization
     /* Drive Motor Feedforward Values */
     public static final double DRIVE_KS = 0.0;
-    public static final double DRIVE_KV = 2.4103;
+    public static final double DRIVE_KV = 2.6584;
     public static final double DRIVE_KA = 0.01;
 
     /* Angle Motor Feedforward Values */
@@ -134,7 +135,7 @@ public final class Constants {
     /* Swerve Profiling Values */
     // TODO: Find maximum velocities
     public static final double MAX_LINEAR_VELOCITY = 4.5; // meters per second
-    public static final double MAX_ANGULAR_VELOCITY = 7; // radians per second
+    public static final double MAX_ANGULAR_VELOCITY = 5.279; // radians per second
 
     /* PathPlanner Values */
     public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
@@ -158,7 +159,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
       public static final int ABSOLUTE_ENCODER_ID = 20;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(28.48);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(31.38);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
         ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
@@ -168,7 +169,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 6;
       public static final int ABSOLUTE_ENCODER_ID = 21;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(315.79);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(4.31);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
         ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
@@ -178,7 +179,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int ABSOLUTE_ENCODER_ID = 22;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(210.15);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(209.09);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
         ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
@@ -188,7 +189,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int ABSOLUTE_ENCODER_ID = 23;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.16);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(136.67);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
         ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }

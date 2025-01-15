@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.slicelibs.math.Conversions;
 
 public class SimSwerveModuleIO implements SwerveModuleIO {
+
   private final DCMotorSim driveMotor = new DCMotorSim(
     LinearSystemId.createDCMotorSystem(Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA), 
     DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO));

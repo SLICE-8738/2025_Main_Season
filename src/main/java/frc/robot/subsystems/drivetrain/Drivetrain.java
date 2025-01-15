@@ -408,7 +408,7 @@ public class Drivetrain extends SubsystemBase {
     if (RobotBase.isReal()) {
       return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
         MathUtil.inputModulus(-(m_gyro.getYaw() - 180), 0 , 360) 
-          : MathUtil.inputModulus(m_gyro.getYaw() - 180, 0, 360));
+        : MathUtil.inputModulus(m_gyro.getYaw() - 180, 0, 360));
     }
     else {
       SwerveModulePosition[] modulePositions = getModulePositions();

@@ -1,0 +1,30 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "Swerve Tab": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "types": {
+      "/AdvantageKit/RealOutputs/Alerts": "Alerts",
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonomous/Auto Mode": "String Chooser",
+      "/Shuffleboard/Autonomous/Starting Position": "String Chooser",
+      "/Shuffleboard/Debug Tab/Field": "Field2d",
+      "/Shuffleboard/Debug Tab/SysID Routine": "String Chooser",
+      "/Shuffleboard/Teleop Tab/LED Mode": "String Chooser",
+      "/SmartDashboard/Alerts": "Alerts",
+      "/SmartDashboard/Field": "Field2d"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "8738"
+  }
+}

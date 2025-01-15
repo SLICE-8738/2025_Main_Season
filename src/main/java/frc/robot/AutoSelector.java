@@ -46,8 +46,8 @@ public class AutoSelector {
 
     public enum Mode {
 
-        CHOREO_TEST_PATH("Choreo Test Path", false),
         TEST_PATH("Test Path", false),
+        CHOREO_TEST_PATH("Choreo Test Path", false),
         CHOREO_TEST_AUTO("Choreo Test Auto", false);
 
         public final String value;
@@ -90,8 +90,8 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.setDefaultOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
-        modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
+        modeChooser.setDefaultOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
+        modeChooser.addOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
         modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
 
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));

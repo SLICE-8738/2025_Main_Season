@@ -18,6 +18,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.Constants;
 import frc.slicelibs.config.SwerveModuleConstants;
@@ -58,6 +59,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
 
         /* Absolute Encoder Config */
         angleEncoder = new CANcoder(moduleConstants.absoluteEncoderID);
+        angleEncoder.getConfigurator().apply(Constants.CTRE_CONFIGS.swerveCANcoderConfig);
         angleEncoderSignal = angleEncoder.getAbsolutePosition();
         resetToAbsolute();
     }
@@ -72,7 +74,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         inputs.driveCurrentAmps = driveMotor.getOutputCurrent();
 
         inputs.absoluteAnglePosition =
-            Rotation2d.fromDegrees(angleEncoderSignal.getValueAsDouble());
+            Rotation2d.fromRotations(angleEncoderSignal.getValueAsDouble());
         inputs.integratedAnglePosition =
             Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
         inputs.angleVelocityDegreesPerSec =
@@ -117,6 +119,6 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
 
     @Override
     public void resetToAbsolute() {
-        integratedAngleEncoder.setPosition(angleEncoderSignal.getValueAsDouble() - angleOffset.getDegrees());
+        integratedAngleEncoder.setPosition(angleEncoderSignal.getValue().in(Units.Degrees) - angleOffset.getDegrees());
     }
 }
