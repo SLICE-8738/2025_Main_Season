@@ -19,8 +19,6 @@ import frc.slicelibs.config.CTREConfigs;
 import frc.slicelibs.config.REVConfigs;
 import frc.slicelibs.config.SwerveModuleConstants;
 
-import com.studica.frc.AHRS.NavXComType;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -65,7 +63,7 @@ public final class Constants {
   public final class kDrivetrain {
 
     /* Gyro */
-    public static final NavXComType NAVX_PORT = NavXComType.kUSB1;
+    public static final int GYRO_ID = 0; // TODO: Find gyro ID
     public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
 
     /* Swerve Physics */
@@ -126,7 +124,7 @@ public final class Constants {
     // TODO: Find drive and angle motor feedforward gains from characterization
     /* Drive Motor Feedforward Values */
     public static final double DRIVE_KS = 0.0;
-    public static final double DRIVE_KV = 2.4103;
+    public static final double DRIVE_KV = 1.9569;
     public static final double DRIVE_KA = 0.01;
 
     /* Angle Motor Feedforward Values */

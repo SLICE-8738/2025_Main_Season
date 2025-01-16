@@ -1,16 +1,16 @@
 package frc.slicelibs.config;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import frc.robot.Constants;
 
 public final class CTREConfigs {
     public final TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
-    public final CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
+    public final Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
 
     public CTREConfigs() {
-        /** Swerve Drive Motor Configuration */
+        /* Swerve Drive Motor Configuration */
 
             /* Motor Invert and Neutral Mode */
             var driveMotorOutput = swerveDriveFXConfig.MotorOutput;
@@ -39,5 +39,8 @@ public final class CTREConfigs {
 
             swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
             swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
+
+        /* Pigeon 2 Gyro Configuration */
+            pigeon2Config.GyroTrim.GyroScalarZ = Constants.kDrivetrain.INVERT_GYRO ? -1 : 1;
     }
 }

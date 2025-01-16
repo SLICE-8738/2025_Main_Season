@@ -26,15 +26,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
-
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
-import com.studica.frc.AHRS;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -48,15 +50,14 @@ public class Drivetrain extends SubsystemBase {
       new SwerveModulePosition()
     };
   private final SwerveDrivePoseEstimator m_odometry;
-  private final AHRS m_gyro;
+  private final Pigeon2 m_gyro;
+  private final StatusSignal<Angle> gyroYawSignal;
+  private final StatusSignal<AngularVelocity> gyroYawVelocitySignal;
   public final Field2d m_field2d;
 
   private Rotation2d fieldOrientedOffset;
 
   private Rotation2d simHeading = new Rotation2d();
-
-  public double maxLinearVelocity = 4.5;
-  public double maxAngularVelocity = 7;
 
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
@@ -71,7 +72,9 @@ public class Drivetrain extends SubsystemBase {
       new SwerveModule(mod3IO, 3)
     };
 
-    m_gyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
+    m_gyro = new Pigeon2(Constants.kDrivetrain.GYRO_ID);
+    gyroYawSignal = m_gyro.getYaw();
+    gyroYawVelocitySignal = m_gyro.getAngularVelocityZWorld();
 
     Timer.delay(1.0);
     resetModulesToAbsolute();
@@ -140,6 +143,11 @@ public class Drivetrain extends SubsystemBase {
 
     updateOdometry();
     m_field2d.setRobotPose(getPose());
+
+    BaseStatusSignal.refreshAll(
+      gyroYawSignal,
+      gyroYawVelocitySignal
+    );
 
   }
 
@@ -270,7 +278,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Swerve/Actual Module States")
+  @AutoLogOutput(key = "Drivetrain/Actual Module States")
   /**
    * Obtains and returns the current states of all drivetrain swerve modules.
    * 
@@ -290,7 +298,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Swerve/Target Module States")
+  @AutoLogOutput(key = "Drivetrain/Target Module States")
   /**
    * Obtains and returns the target states that the drivetrain swerve modules have
    * been set to.
@@ -397,6 +405,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  @AutoLogOutput(key = "Drivetrain/Heading")
   /**
    * Obtains and returns the current heading of the robot as a Rotation2d from the
    * gyro object.
@@ -406,9 +415,11 @@ public class Drivetrain extends SubsystemBase {
   public Rotation2d getHeading() {
 
     if (RobotBase.isReal()) {
-      return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
-        MathUtil.inputModulus(-(m_gyro.getYaw() - 180), 0 , 360) 
-          : MathUtil.inputModulus(m_gyro.getYaw() - 180, 0, 360));
+      /*return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
+        MathUtil.inputModulus(-(gyroYawSignal.getValue().in(Units.Degrees) - 180), 0 , 360) 
+        : MathUtil.inputModulus(gyroYawSignal.getValue().in(Units.Degrees) - 180, 0, 360));*/
+        return Rotation2d.fromDegrees(
+          MathUtil.inputModulus(gyroYawSignal.getValue().in(Units.Degrees) - 180, 0, 360));
     }
     else {
       SwerveModulePosition[] modulePositions = getModulePositions();
@@ -418,9 +429,8 @@ public class Drivetrain extends SubsystemBase {
         
         moduleDeltas[mod.moduleNumber] = 
           new SwerveModulePosition(
-            modulePositions[mod.moduleNumber].distanceMeters -
-              lastModulePositions[mod.moduleNumber].distanceMeters,
-            modulePositions[mod.moduleNumber].angle
+            modulePositions[mod.moduleNumber].distanceMeters - lastModulePositions[mod.moduleNumber].distanceMeters,
+            modulePositions[mod.moduleNumber].angle.minus(lastModulePositions[mod.moduleNumber].angle)
           );
         lastModulePositions[mod.moduleNumber] = modulePositions[mod.moduleNumber];
 
@@ -437,31 +447,12 @@ public class Drivetrain extends SubsystemBase {
    */
   public Rotation2d getRotationalVelocity() {
 
-    return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? -m_gyro.getRate() : m_gyro.getRate());
-
-  }
-
-  /**
-   * Obtains and returns the current pitch of the robot from -180 to 180 degrees from the gyro object.
-   * 
-   * @return The current pitch of the robot from -180 to 180 degrees.
-   */
-  public double getPitch() {
-
-    return m_gyro.getPitch();
-
-  }
-
-  /**
-   * Obtains and returns the current roll of the robot from -180 to 180 degrees,
-   * with an offset of 1.7 degrees from the gyro object.
-   * 
-   * @return The current pitch of the robot from -180 to 180 degrees, with an
-   *         offset of 1.7 degrees.
-   */
-  public double getRoll() {
-
-    return m_gyro.getRoll();
+    /*return Rotation2d.fromDegrees(
+      Constants.kDrivetrain.INVERT_GYRO? 
+        -gyroYawVelocitySignal.getValue().in(Units.DegreesPerSecond) 
+        : gyroYawVelocitySignal.getValue().in(Units.DegreesPerSecond));*/
+      
+      return Rotation2d.fromDegrees(gyroYawVelocitySignal.getValue().in(Units.DegreesPerSecond));
 
   }
 
@@ -474,6 +465,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  @AutoLogOutput(key = "Drivetrain/Chassis Speeds")
   /**
    * Calculates and returns the current chassis speeds of the drivetrain using
    * the average forward and sideways velocities of the individual swerve modules
