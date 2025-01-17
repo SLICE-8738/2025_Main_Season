@@ -55,9 +55,6 @@ public class Drivetrain extends SubsystemBase {
 
   private Rotation2d simHeading = new Rotation2d();
 
-  public double maxLinearVelocity = 4.5;
-  public double maxAngularVelocity = 7;
-
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
 

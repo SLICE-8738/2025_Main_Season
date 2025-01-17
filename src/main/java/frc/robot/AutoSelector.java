@@ -6,12 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 import java.util.Optional;
@@ -46,9 +47,7 @@ public class AutoSelector {
 
     public enum Mode {
 
-        TEST_PATH("Test Path", false),
-        CHOREO_TEST_PATH("Choreo Test Path", false),
-        CHOREO_TEST_AUTO("Choreo Test Auto", false);
+        TEST_PATH("Test Path", false);
 
         public final String value;
         public final boolean useStartingPosition;
@@ -68,7 +67,7 @@ public class AutoSelector {
     public final SendableChooser<StartingPosition> startingPositionChooser;
     public final SendableChooser<Mode> modeChooser;
 
-    private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
+    private Optional<WrapperCommand> autoRoutine = Optional.empty();
 
     private Pose2d initialAutoPose;
 
@@ -91,8 +90,6 @@ public class AutoSelector {
         modeChooser = new SendableChooser<Mode>();
 
         modeChooser.setDefaultOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
-        modeChooser.addOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
-        modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
 
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
@@ -121,6 +118,8 @@ public class AutoSelector {
 
         // Register named commands here
 
+        updateAutoRoutine(storedStartingPosition, storedMode);
+
     }
 
     private void updateAutoRoutine(StartingPosition position, Mode mode) {
@@ -132,7 +131,10 @@ public class AutoSelector {
 
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
                 + ", Mode: " + mode.value);
-            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
+            autoRoutine = Optional.of(
+                new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value)
+                .handleInterrupt(() -> m_drivetrain.runChassisSpeeds(new ChassisSpeeds())));
+            initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value).getStartingPose();
 
         }
         catch (Exception e) {
@@ -147,18 +149,6 @@ public class AutoSelector {
     public void updateInitialAutoPoseOffset() {
 
         Pose2d currentPose = m_drivetrain.getPose();
-
-        try {
-
-            initialAutoPose = autoRoutine.get().getStartingPose();
-
-        }
-        catch (Exception e) {
-
-            DriverStation.reportError("Selected auto routine '" + (storedMode.useStartingPosition? 
-                storedStartingPosition.value + " " + storedMode.value : storedMode.value)+ "' does not exist", false);
-
-        }
 
         if (currentPose != null && initialAutoPose != null) {
 

@@ -88,12 +88,19 @@ public class ShuffleboardData {
         withWidget(BuiltInWidgets.kDial).
         withProperties(Map.of("Min", 0, "Max", 360)).
         withPosition(0, 0).
-        withSize(2, 1);
+        withSize(2, 2);
+
+        //Displays the current speed of the robot in degrees on Shuffleboard
+        debugTab.addDouble("Drivetrain Speed", () -> Math.hypot(drivetrain.getChassisSpeeds().vxMetersPerSecond, drivetrain.getChassisSpeeds().vyMetersPerSecond)).
+        withWidget(BuiltInWidgets.kDial).
+        withProperties(Map.of("Min", 0, "Max", 5)).
+        withPosition(8, 0).
+        withSize(2, 2);
                 
         //Displays the current position of the robot on the field on Shuffleboard
         debugTab.add(drivetrain.m_field2d).
-        withPosition(4, 2).
-        withSize(3, 2);
+        withPosition(3, 1).
+        withSize(5, 3);
 
         // //Adds a tuner for the drive motor PID gains to Shuffleboard
         // ShuffleboardTuner.create(

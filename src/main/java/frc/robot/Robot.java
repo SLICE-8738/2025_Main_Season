@@ -85,7 +85,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
-    //m_robotContainer.m_autoSelector.updateInitialAutoPoseOffset();
+    m_robotContainer.m_autoSelector.updateInitialAutoPoseOffset();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

@@ -33,7 +33,7 @@ import com.studica.frc.AHRS.NavXComType;
  */
 public final class Constants {
 
-  public static final Mode ADVANTAGE_KIT_MODE = Mode.REAL;
+  public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
