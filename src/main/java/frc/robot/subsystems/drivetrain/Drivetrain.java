@@ -40,6 +40,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class Drivetrain extends SubsystemBase {
 
+
   private final SwerveModule[] swerveMods;
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -51,7 +52,7 @@ public class Drivetrain extends SubsystemBase {
     };
   private final SwerveDrivePoseEstimator m_odometry;
   private final Pigeon2 m_gyro;
-  private final StatusSignal<Angle> gyroYawSignal;
+private final StatusSignal<Angle> gyroYawSignal;
   private final StatusSignal<AngularVelocity> gyroYawVelocitySignal;
   public final Field2d m_field2d;
 
@@ -144,7 +145,7 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
     m_field2d.setRobotPose(getPose());
 
-    BaseStatusSignal.refreshAll(
+BaseStatusSignal.refreshAll(
       gyroYawSignal,
       gyroYawVelocitySignal
     );
@@ -194,18 +195,18 @@ public class Drivetrain extends SubsystemBase {
     }
 
     SwerveModuleState[] states = Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(
-          ChassisSpeeds.discretize(
-            isFieldRelative ?
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                transform.getX(),
-                transform.getY(),
-                transform.getRotation().getRadians(),
-                rotationWithOffset)
-              : new ChassisSpeeds(
-                transform.getX(), 
-                transform.getY(),
-                transform.getRotation().getRadians()),
-            0.02));    
+      ChassisSpeeds.discretize(
+        isFieldRelative ?
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+            transform.getX(),
+            transform.getY(),
+            transform.getRotation().getRadians(),
+            rotationWithOffset)
+          : new ChassisSpeeds(
+            transform.getX(), 
+            transform.getY(),
+            transform.getRotation().getRadians()),
+      0.02));      
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
@@ -405,7 +406,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Drivetrain/Heading")
+@AutoLogOutput(key = "Drivetrain/Heading")
   /**
    * Obtains and returns the current heading of the robot as a Rotation2d from the
    * gyro object.
@@ -465,7 +466,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Drivetrain/Chassis Speeds")
+@AutoLogOutput(key = "Drivetrain/Chassis Speeds")
   /**
    * Calculates and returns the current chassis speeds of the drivetrain using
    * the average forward and sideways velocities of the individual swerve modules
