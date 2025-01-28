@@ -207,6 +207,12 @@ public final class Constants {
     public static final int LED_LENGTH = 300;
   }
   
+  public final class kEndEffector {
+    public static final int ROTATION_MOTOR_ID = 1;
+    public static final int PLACEMENT_MOTOR_ID = 1;
+    
+
+  }
 }
 
 
