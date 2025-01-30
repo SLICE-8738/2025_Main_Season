@@ -6,6 +6,10 @@ package frc.robot;
 
 import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 //import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,6 +59,7 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_driveDutyCycle;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
+  public final Command m_pathfindToStation;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -111,6 +116,7 @@ public class RobotContainer {
     m_driveDutyCycle = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    m_pathfindToStation = AutoBuilder.pathfindToPoseFlipped(new Pose2d(1.462, 6.752, Rotation2d.fromDegrees(305)), Constants.kDrivetrain.PATH_CONSTRAINTS, 0.5);
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -146,6 +152,7 @@ public class RobotContainer {
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftBumper1.whileTrue(m_driveDutyCycle);
+    Button.rightBumper1.whileTrue(m_pathfindToStation);
 
     // ==================
     // Operator Controls

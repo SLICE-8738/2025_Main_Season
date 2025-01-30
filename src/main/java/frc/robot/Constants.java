@@ -33,7 +33,7 @@ import com.studica.frc.AHRS.NavXComType;
  */
 public final class Constants {
 
-  public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
+  public static final Mode ADVANTAGE_KIT_MODE = Mode.REAL;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
@@ -143,8 +143,8 @@ public final class Constants {
     public static final double ROTATION_KP = 1.0;
 
     /* Motor Idle Modes */
-    public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
     public static final IdleMode DRIVE_IDLE_MODE = IdleMode.kBrake;
+    public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
 
     /* Motor Inverts */
     public static final boolean DRIVE_INVERT = false;
