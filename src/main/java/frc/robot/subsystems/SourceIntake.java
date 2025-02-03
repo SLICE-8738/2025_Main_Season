@@ -5,10 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
 
 public class SourceIntake extends SubsystemBase {
 
@@ -16,11 +15,11 @@ public class SourceIntake extends SubsystemBase {
 
   /** Creates a new SourceIntake. */
   public SourceIntake() {
-    climbPrepareMotor = new TalonFX(0); //TODO: Find Actual Device ID    
+    climbPrepareMotor = new TalonFX(frc.robot.Constants.kSourceIntake.SOURCE_INTAKE_MOTOR_PORT); 
   }
 
-  public void moveIntake(){
-    climbPrepareMotor.set(0);
+  public void moveIntake(double speed){
+    climbPrepareMotor.set(speed);
   }
 
 

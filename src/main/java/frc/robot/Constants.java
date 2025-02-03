@@ -206,6 +206,10 @@ public final class Constants {
     public static final int LED_PWM_PORT = 1;
     public static final int LED_LENGTH = 300;
   }
+
+  public final class kSourceIntake {
+    public static final int SOURCE_INTAKE_MOTOR_PORT = 0; //TODO find actual motor port number
+  }
   
 }
 
