@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DriveCommand extends Command {
+  
   /** Creates a new SwerveDriveCommand. */
   private final Drivetrain m_drivetrain;
 
@@ -40,8 +41,8 @@ public class DriveCommand extends Command {
     m_isOpenLoop = isOpenLoop;
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
-        0.09,
-        0.9,
+        0.07,
+        0.6,
         Constants.OperatorConstants.driveExponent,
         Constants.OperatorConstants.driveExponentPercent));
     rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
@@ -86,7 +87,7 @@ public class DriveCommand extends Command {
     }
 
     m_drivetrain.drive(
-        new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),
+        new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF /*+ rotationFeedback*/)),
         m_isOpenLoop,
         m_isFieldRelative);
 

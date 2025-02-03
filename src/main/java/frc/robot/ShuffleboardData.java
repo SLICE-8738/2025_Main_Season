@@ -15,13 +15,13 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
 public class ShuffleboardData {
 
-    private final ShuffleboardTab /*driverTab,*/ debugTab, swerveTab, autoTab;
+    private final ShuffleboardTab driverTab, debugTab, swerveTab, autoTab;
 
     public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector) {
 
-        //driverTab = Shuffleboard.getTab("Driver Tab");
-        debugTab = Shuffleboard.getTab("Debug Tab");
-        swerveTab = Shuffleboard.getTab("Swerve Tab");
+        driverTab = Shuffleboard.getTab("Driver");
+        debugTab = Shuffleboard.getTab("Debug");
+        swerveTab = Shuffleboard.getTab("Swerve");
         autoTab = Shuffleboard.getTab("Autonomous");
 
         //Displays the current velocity in meters per second of the left front swerve module on Shuffleboard
@@ -154,6 +154,12 @@ public class ShuffleboardData {
         autoTab.addDouble("Initial Auto Pose Rotation Offset", () -> autoSelector.initialAutoPoseRotationOffset).
         withPosition(3, 2).
         withSize(3, 1);
+
+        //Adds the sendable chooser for the desired reef branch to align to onto Shuffleboard
+        driverTab.add("Reef Branch Align", drivetrain.branchChooser).
+        withWidget(BuiltInWidgets.kSplitButtonChooser).
+        withPosition(0, 0).
+        withSize(2, 1);
 
     }
 

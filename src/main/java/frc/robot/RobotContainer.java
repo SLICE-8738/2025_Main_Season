@@ -55,6 +55,7 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
+  public final ReefAlignCommand m_reefAlign;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -74,9 +75,9 @@ public class RobotContainer {
           m_drivetrain =
             new Drivetrain(
                 new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS));
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
           break;
         case SIM:
           m_drivetrain =
@@ -112,6 +113,8 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    m_reefAlign = new ReefAlignCommand(m_drivetrain, driverController);
+
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -146,6 +149,7 @@ public class RobotContainer {
     /* Drivetrain */
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    Button.leftBumper1.whileTrue(m_reefAlign);
 
     // ==================
     // Operator Controls

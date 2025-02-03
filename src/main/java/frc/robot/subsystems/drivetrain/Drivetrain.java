@@ -62,6 +62,8 @@ public class Drivetrain extends SubsystemBase {
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
 
+  public final SendableChooser<Double> branchChooser;
+
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
 
@@ -128,6 +130,11 @@ public class Drivetrain extends SubsystemBase {
       .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
     sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.dynamic(Direction.kReverse)
       .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
+
+    branchChooser = new SendableChooser<Double>();
+
+    branchChooser.setDefaultOption("Left", Constants.LEFT_BRANCH_X_POSITION);
+    branchChooser.addOption("Right", Constants.RIGHT_BRANCH_X_POSITION);
 
   }
 
@@ -551,6 +558,12 @@ public class Drivetrain extends SubsystemBase {
   public Command getSysIDDriveRoutine() {
 
     return sysIDChooser.getSelected();
+
+  }
+
+  public double getBranchXPosition() {
+
+    return branchChooser.getSelected();
 
   }
 
