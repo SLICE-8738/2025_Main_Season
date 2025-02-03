@@ -375,4 +375,14 @@ public final class Constants {
 
   }
 
+
+  public final class kSourceIntake {
+
+    public static final int SOURCE_INTAKE_MOTOR_PORT = 0; //TODO find actual motor port number
+    
+  }
+  
 }
+
+
+
