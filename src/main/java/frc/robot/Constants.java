@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -209,6 +210,31 @@ public final class Constants {
 
   public static final double LEFT_BRANCH_X_POSITION = -0.1651;
   public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
+
+  public static enum ReefPosition {
+
+    BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.481, 4.031, new Rotation2d())),
+    BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.536, 5.685, Rotation2d.fromDegrees(300))),
+    BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.536, 5.685, Rotation2d.fromDegrees(300))),
+    FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.454, 5.733, Rotation2d.fromDegrees(240))),
+    FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.454, 5.733, Rotation2d.fromDegrees(240))),
+    FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.461, 4.031, Rotation2d.fromDegrees(180))),
+    FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.461, 4.031, Rotation2d.fromDegrees(180))),
+    FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.49, 2.365, Rotation2d.fromDegrees(120))),
+    FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.49, 2.365, Rotation2d.fromDegrees(120))),
+    BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.488, 2.317, Rotation2d.fromDegrees(60))),
+    BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.488, 2.317, Rotation2d.fromDegrees(60))),
+    BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.481, 4.031, new Rotation2d()));
+
+    public final double branchXPosition;
+    public final Pose2d fieldPosition;
+
+    ReefPosition(double branchXPosition, Pose2d fieldPosition) {
+      this.branchXPosition = branchXPosition;
+      this.fieldPosition = fieldPosition;
+    }
+
+  }
 
 }
 

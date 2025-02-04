@@ -7,13 +7,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import frc.robot.Constants;
-import frc.slicelibs.math.Conversions;
 import frc.slicelibs.math.OnboardModuleState;
 
 public class SwerveModule {
 
     private final SwerveModuleIO io;
-    private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
+    private SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
     public final int moduleNumber;
     private Rotation2d lastAngle;
     private SwerveModuleState targetState = new SwerveModuleState();
@@ -84,7 +83,7 @@ public class SwerveModule {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-            Conversions.talonToMPS(inputs.driveVelocityMetersPerSec, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO), 
+            inputs.driveVelocityMetersPerSec, 
             getIntegratedAngle()
         );
     }
@@ -95,7 +94,7 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            Conversions.talonToMeters(inputs.drivePositionMeters, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO), 
+            inputs.drivePositionMeters, 
             getIntegratedAngle()
         );
     }

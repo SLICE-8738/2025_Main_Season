@@ -92,8 +92,8 @@ public class ShuffleboardData {
                 
         //Displays the current position of the robot on the field on Shuffleboard
         debugTab.add(drivetrain.m_field2d).
-        withPosition(4, 2).
-        withSize(3, 2);
+        withPosition(3, 1).
+        withSize(4, 3);
 
         // //Adds a tuner for the drive motor PID gains to Shuffleboard
         // ShuffleboardTuner.create(
@@ -157,7 +157,6 @@ public class ShuffleboardData {
 
         //Adds the sendable chooser for the desired reef branch to align to onto Shuffleboard
         driverTab.add("Reef Branch Align", drivetrain.branchChooser).
-        withWidget(BuiltInWidgets.kSplitButtonChooser).
         withPosition(0, 0).
         withSize(2, 1);
 

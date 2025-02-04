@@ -63,7 +63,7 @@ public class ReefAlignCommand extends Command {
 
     if (LimelightHelpers.getTV("limelight-slice")) {
       translationX = translationFilter.filter(-m_driverController.getRawAxis(1), 0)[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-      translationY = -yAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), m_drivetrain.getBranchXPosition());
+      translationY = -yAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), m_drivetrain.getReefBranchXPosition());
       rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getRotation().getY(), 0);
     }
     else {

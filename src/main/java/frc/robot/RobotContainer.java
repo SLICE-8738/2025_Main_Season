@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 //import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,7 +57,7 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
-  public final ReefAlignCommand m_reefAlign;
+  public final Command m_reefAlign;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -113,7 +115,13 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    m_reefAlign = new ReefAlignCommand(m_drivetrain, driverController);
+    m_reefAlign = new DeferredCommand(
+      () -> AutoBuilder.pathfindToPoseFlipped(
+        m_drivetrain.getReefFieldPosition(), 
+        Constants.kDrivetrain.PATH_CONSTRAINTS, 
+        0.5)
+        .until(() -> LimelightHelpers.getTV("limelight-slice")).andThen(new ReefAlignCommand(m_drivetrain, driverController)), 
+      Set.of(m_drivetrain));
 
 
     /* Tests */

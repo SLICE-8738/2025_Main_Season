@@ -5,7 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-
+import frc.robot.Constants.ReefPosition;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -36,6 +36,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class Drivetrain extends SubsystemBase {
@@ -62,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
 
-  public final SendableChooser<Double> branchChooser;
+  public final SendableChooser<ReefPosition> branchChooser;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -93,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
       getModulePositions(), 
       LimelightHelpers.getBotPose2d_wpiBlue("limelight"),
       VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(0.1, 0.1, 9999999));
+      VecBuilder.fill(0.1, 0.1, 0.1));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -131,10 +132,16 @@ public class Drivetrain extends SubsystemBase {
     sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.dynamic(Direction.kReverse)
       .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
 
-    branchChooser = new SendableChooser<Double>();
+    branchChooser = new SendableChooser<ReefPosition>();
 
-    branchChooser.setDefaultOption("Left", Constants.LEFT_BRANCH_X_POSITION);
-    branchChooser.addOption("Right", Constants.RIGHT_BRANCH_X_POSITION);
+    for (ReefPosition position : ReefPosition.values()) {
+      if (position.ordinal() == 0) {
+        branchChooser.setDefaultOption(position.name(), position);
+      }
+      else {
+        branchChooser.addOption(position.name(), position);
+      }
+    }
 
   }
 
@@ -232,16 +239,16 @@ public class Drivetrain extends SubsystemBase {
 
     if (!DriverStation.isAutonomousEnabled()) {
 
-      LimelightHelpers.SetRobotOrientation("limelight", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+      LimelightHelpers.SetRobotOrientation("limelight-slice", getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-slice");
 
-      if (estimate.tagCount >= 2) {
+      if (estimate.tagCount >= 1) {
 
-        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_CameraSpace("limelight").getTranslation();
+        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-slice").getTranslation();
 
         if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 4.5) {
         
-          m_odometry.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
         
         }
 
@@ -561,9 +568,15 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public double getBranchXPosition() {
+  public double getReefBranchXPosition() {
 
-    return branchChooser.getSelected();
+    return branchChooser.getSelected().branchXPosition;
+
+  }
+
+  public Pose2d getReefFieldPosition() {
+
+    return branchChooser.getSelected().fieldPosition;
 
   }
 
