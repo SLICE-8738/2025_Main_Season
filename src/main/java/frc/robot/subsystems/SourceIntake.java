@@ -4,22 +4,23 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.slicelibs.PositionalSubsystem;
 
 
 
-public class SourceIntake extends SubsystemBase {
+public class SourceIntake extends PositionalSubsystem {
 
-  private TalonFX climbPrepareMotor;
+private final double DEFAULT_POSITION = -35;
 
   /** Creates a new SourceIntake. */
-  public SourceIntake() {
-    climbPrepareMotor = new TalonFX(frc.robot.Constants.kSourceIntake.SOURCE_INTAKE_MOTOR_PORT); 
+  public SourceIntake(int[] ids, boolean[] inverted, double kP, double kI, double kD, double positionConversionFactor, double velocityConversionFactor) {
+    super(ids, inverted, kP, kI, kD, positionConversionFactor, velocityConversionFactor);
+    setEncoderPosition(DEFAULT_POSITION);
+
   }
 
-  public void moveIntake(double speed){
-    climbPrepareMotor.set(speed);
+  public void moveIntake(double degrees){
+    setPosition(degrees);
   }
 
 
