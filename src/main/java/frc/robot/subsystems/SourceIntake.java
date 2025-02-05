@@ -19,10 +19,9 @@ private final double DEFAULT_POSITION = -35;
 
   }
 
-  public void moveIntake(double degrees){
-    setPosition(degrees);
+  public double getDefaultPosition(){
+    return DEFAULT_POSITION;
   }
-
 
   @Override
   public void periodic() {
