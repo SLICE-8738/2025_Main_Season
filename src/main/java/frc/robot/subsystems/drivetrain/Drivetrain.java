@@ -5,7 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.ReefPosition;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -62,8 +62,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
-
-  public final SendableChooser<ReefPosition> branchChooser;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -131,17 +129,6 @@ public class Drivetrain extends SubsystemBase {
       .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
     sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.dynamic(Direction.kReverse)
       .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
-
-    branchChooser = new SendableChooser<ReefPosition>();
-
-    for (ReefPosition position : ReefPosition.values()) {
-      if (position.ordinal() == 0) {
-        branchChooser.setDefaultOption(position.name(), position);
-      }
-      else {
-        branchChooser.addOption(position.name(), position);
-      }
-    }
 
   }
 
@@ -444,7 +431,7 @@ public class Drivetrain extends SubsystemBase {
         moduleDeltas[mod.moduleNumber] = 
           new SwerveModulePosition(
             modulePositions[mod.moduleNumber].distanceMeters - lastModulePositions[mod.moduleNumber].distanceMeters,
-            modulePositions[mod.moduleNumber].angle.minus(lastModulePositions[mod.moduleNumber].angle)
+            modulePositions[mod.moduleNumber].angle
           );
         lastModulePositions[mod.moduleNumber] = modulePositions[mod.moduleNumber];
 
@@ -565,18 +552,6 @@ public class Drivetrain extends SubsystemBase {
   public Command getSysIDDriveRoutine() {
 
     return sysIDChooser.getSelected();
-
-  }
-
-  public double getReefBranchXPosition() {
-
-    return branchChooser.getSelected().branchXPosition;
-
-  }
-
-  public Pose2d getReefFieldPosition() {
-
-    return branchChooser.getSelected().fieldPosition;
 
   }
 

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.ReefPositionSelector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.config.JoystickFilterConfig;
@@ -63,7 +64,7 @@ public class ReefAlignCommand extends Command {
 
     if (LimelightHelpers.getTV("limelight-slice")) {
       translationX = translationFilter.filter(-m_driverController.getRawAxis(1), 0)[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-      translationY = -yAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), m_drivetrain.getReefBranchXPosition());
+      translationY = -yAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), ReefPositionSelector.getSelectedBranchXPosition());
       rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getRotation().getY(), 0);
     }
     else {

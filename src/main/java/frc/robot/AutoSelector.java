@@ -46,9 +46,7 @@ public class AutoSelector {
 
     public enum Mode {
 
-        CHOREO_TEST_PATH("Choreo Test Path", false),
-        TEST_PATH("Test Path", false),
-        CHOREO_TEST_AUTO("Choreo Test Auto", false);
+        TEST_PATH("Test Path", false);
 
         public final String value;
         public final boolean useStartingPosition;
@@ -90,9 +88,7 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.setDefaultOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
-        modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
-        modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
+        modeChooser.setDefaultOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
 
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
@@ -155,8 +151,7 @@ public class AutoSelector {
         }
         catch (Exception e) {
 
-            DriverStation.reportError("Selected auto routine '" + (storedMode.useStartingPosition? 
-                storedStartingPosition.value + " " + storedMode.value : storedMode.value)+ "' does not exist", false);
+            DriverStation.reportError(e.getMessage(), false);
 
         }
 

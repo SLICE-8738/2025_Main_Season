@@ -45,6 +45,7 @@ public class RobotContainer {
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
+  public final ReefPositionSelector m_reefPositionSelector;
   public final ShuffleboardData m_shuffleboardData;
 
   // ==========================
@@ -102,6 +103,7 @@ public class RobotContainer {
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain);
+    m_reefPositionSelector = new ReefPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
     // ==========================
@@ -117,12 +119,10 @@ public class RobotContainer {
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
-        m_drivetrain.getReefFieldPosition(), 
+        ReefPositionSelector.getSelectedFieldPosition(), 
         Constants.kDrivetrain.PATH_CONSTRAINTS, 
-        0.5)
-        .until(() -> LimelightHelpers.getTV("limelight-slice")).andThen(new ReefAlignCommand(m_drivetrain, driverController)), 
+        0.5).andThen(new ReefAlignCommand(m_drivetrain, driverController)), 
       Set.of(m_drivetrain));
-
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
