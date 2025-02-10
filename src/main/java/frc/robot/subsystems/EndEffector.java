@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.hal.DIOJNI;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -14,20 +15,23 @@ import frc.robot.Constants;
 public class EndEffector extends SubsystemBase {
   private TalonFX rotationMotor;
   private TalonFX placementMotor;
-  //TODO rename maybe idk
-  /* HOW INDEXING CORAL WORKS
-   * Coral begins indexing into the end effector and begins to trip the back sensor
+  // TODO rename maybe idk
+  /*
+   * HOW INDEXING CORAL WORKS
+   * Coral begins indexing into the end effector and begins to trip the back
+   * sensor
    * Coral continues being indexed and trips the middle sensor
    * Coral continues to index and trips the front sensor
    * Then untrips the back sensor
-   * The untrips the middle sensor which signals that the coral has indexed too far
-   * The end effector spins opposite to bring coral back in and retrip middle sensor
+   * The untrips the middle sensor which signals that the coral has indexed too
+   * far
+   * The end effector spins opposite to bring coral back in and retrip middle
+   * sensor
    * Coral successfully indexed
    */
-  private static DIOJNI frontSensor; 
-  private static DIOJNI backSensor; 
-  private static DIOJNI middleSensor; 
-
+  private static DigitalInput frontSensor;
+  private static DigitalInput backSensor; // this one
+  private static DigitalInput middleSensor;
 
   // TODO fix static error
 
@@ -35,30 +39,26 @@ public class EndEffector extends SubsystemBase {
   public EndEffector() {
     rotationMotor = new TalonFX(Constants.kEndEffector.ROTATION_MOTOR_ID);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
-    //TODO enter parameters
-    frontSensor.initializeDIOPort(0, false);
-    backSensor.initializeDIOPort(0, false);
-    middleSensor.initializeDIOPort(0, false);
+    // TODO enter parameters
+    frontSensor = new DigitalInput(1);
+    backSensor = new DigitalInput(2);
+    middleSensor = new DigitalInput(3);
   }
 
-  public void setRotationMotorSpeed() {
-    rotationMotor.set(.3);
+  public void setRotationMotorSpeed(double speed) {
+    rotationMotor.set(speed);
   }
 
-  public void setPlacementMotorSpeed() {
+  public void setPlacementMotorSpeed(double speed) {
     placementMotor.set(.3);
   }
 
-  public void stopRotationMotor() {
-    rotationMotor.set(0);
-  }
-
-  public void stopPlacementMotor() {
-    rotationMotor.set(0);
-  }
-
-  public Boolean getSensorValues() {
-    return frontSensor.getDIO(0);
+  public Boolean[] checkSensorsIndexing() {
+    Boolean[] sensorStatuses = new Boolean[3];
+    sensorStatuses[0] = frontSensor.get();
+    sensorStatuses[1] = middleSensor.get();
+    sensorStatuses[2] = backSensor.get();
+    return sensorStatuses;
   }
 
   @Override
