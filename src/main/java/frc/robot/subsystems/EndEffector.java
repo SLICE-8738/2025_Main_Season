@@ -28,6 +28,9 @@ public class EndEffector extends SubsystemBase {
   private static DIOJNI backSensor; 
   private static DIOJNI middleSensor; 
 
+
+  // TODO fix static error
+
   /** Creates a new EndEffector. */
   public EndEffector() {
     rotationMotor = new TalonFX(Constants.kEndEffector.ROTATION_MOTOR_ID);
@@ -55,7 +58,7 @@ public class EndEffector extends SubsystemBase {
   }
 
   public Boolean getSensorValues() {
-    frontSensor.getDIO(0);
+    return frontSensor.getDIO(0);
   }
 
   @Override
