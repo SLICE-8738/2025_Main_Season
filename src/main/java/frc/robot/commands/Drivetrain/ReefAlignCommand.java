@@ -7,7 +7,10 @@ package frc.robot.commands.Drivetrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -25,6 +28,8 @@ public class ReefAlignCommand extends Command {
 
   private final PIDController yAlignController, rotationAlignController;
 
+  private final GenericEntry aligningWithAprilTag;
+
   /** Creates a new ReefAlignCommand. */
   public ReefAlignCommand(Drivetrain drivetrain, PS4Controller driverController) {
 
@@ -37,22 +42,29 @@ public class ReefAlignCommand extends Command {
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
       0.07,
       0.6,
-      Constants.OperatorConstants.driveExponent,
-      Constants.OperatorConstants.driveExponentPercent));
+      Constants.OperatorConstants.DRIVE_EXPONENT,
+      Constants.OperatorConstants.DRIVE_EXPONENT_PERCENT));
     rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
       0.07,
       0.6,
-      Constants.OperatorConstants.turnExponent,
-      Constants.OperatorConstants.turnExponentPercent));
+      Constants.OperatorConstants.TURN_EXPONENT,
+      Constants.OperatorConstants.TURN_EXPONENT_PERCENT));
 
     yAlignController = new PIDController(2.5, 0, 0);
     rotationAlignController = new PIDController(2.5, 0, 0);
+
+    aligningWithAprilTag = Shuffleboard.getTab("Driver").add("Aligning with April Tag", false)
+    .withPosition(0,0).withSize(2, 2).getEntry();
 
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+    aligningWithAprilTag.setBoolean(true);
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -74,6 +86,9 @@ public class ReefAlignCommand extends Command {
       rotation = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * Constants.kDrivetrain.MAX_ANGULAR_VELOCITY;
     }
 
+    SmartDashboard.putNumber("Reef Align Y Error", yAlignController.getError());
+    SmartDashboard.putNumber("Reef Align Rotation Error", rotationAlignController.getError());
+
     m_drivetrain.drive(
       new Transform2d(translationX, translationY, new Rotation2d(rotation)), 
       false, 
@@ -89,6 +104,8 @@ public class ReefAlignCommand extends Command {
       new Transform2d(), 
       false,
       false);
+    
+    aligningWithAprilTag.setBoolean(false);
 
   }
 

@@ -108,9 +108,9 @@ public class AutoSelector {
                     Constants.kDrivetrain.MAX_LINEAR_VELOCITY,
                     Constants.kDrivetrain.WHEEL_COEFFICIENT_OF_FRICTION,
                     DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
-                    Constants.kDrivetrain.DRIVE_SUPPLY_CURRENT_LIMIT,
+                    Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
                     1),
-                Constants.kDrivetrain.TRACK_WIDTH
+                Constants.kDrivetrain.kSwerveKinematics.getModules()
                 ),
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
@@ -129,6 +129,7 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
                 + ", Mode: " + mode.value);
             autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
+            initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value).getStartingPose();
 
         }
         catch (Exception e) {
@@ -143,17 +144,6 @@ public class AutoSelector {
     public void updateInitialAutoPoseOffset() {
 
         Pose2d currentPose = m_drivetrain.getPose();
-
-        try {
-
-            initialAutoPose = autoRoutine.get().getStartingPose();
-
-        }
-        catch (Exception e) {
-
-            DriverStation.reportError(e.getMessage(), false);
-
-        }
 
         if (currentPose != null && initialAutoPose != null) {
 

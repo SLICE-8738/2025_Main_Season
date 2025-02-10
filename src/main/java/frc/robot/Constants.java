@@ -51,13 +51,13 @@ public final class Constants {
 
   public final class OperatorConstants {
 
-    public static final int kDriverControllerPort = 0;
+    public static final int DRIVER_CONTROLLER_PORT = 0;
 
-    public static final double driveExponent = 1.0;
-    public static final double driveExponentPercent = 1;
+    public static final double DRIVE_EXPONENT = 1.0;
+    public static final double DRIVE_EXPONENT_PERCENT = 1;
 
-    public static final double turnExponent = 1.0;
-    public static final double turnExponentPercent = 1;
+    public static final double TURN_EXPONENT = 1.0;
+    public static final double TURN_EXPONENT_PERCENT = 1;
 
   }
 
@@ -125,13 +125,8 @@ public final class Constants {
     // TODO: Find drive and angle motor feedforward gains from characterization
     /* Drive Motor Feedforward Values */
     public static final double DRIVE_KS = 0.0;
-    public static final double DRIVE_KV = 1.9569;
+    public static final double DRIVE_KV = 2.1818;
     public static final double DRIVE_KA = 0.01;
-
-    /* Angle Motor Feedforward Values */
-    public static final double ANGLE_KS = 0.0;
-    public static final double ANGLE_KV = 2.0244;
-    public static final double ANGLE_KA = 0.01;
 
     /* Drive Motor Conversion Factors */
     public static final double DRIVE_POSITION_CONVERSION_FACTOR = WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO;
@@ -140,11 +135,11 @@ public final class Constants {
     public static final double ANGLE_VELOCITY_CONVERSION_FACTOR = ANGLE_POSITION_CONVERSION_FACTOR / 60.0;
 
     /* Swerve Profiling Values */
-    public static final double MAX_LINEAR_VELOCITY = 5; // meters per second
-    public static final double MAX_ANGULAR_VELOCITY = 11; // radians per second
+    public static final double MAX_LINEAR_VELOCITY = 5.5; // meters per second
+    public static final double MAX_ANGULAR_VELOCITY = 12.5; // radians per second
 
     /* PathPlanner Values */
-    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.5, 2.5, Math.PI * 2.5, Math.PI);
+    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.5, 5.5, 10, 12.5);
     public static final double TRANSLATION_KP = 4.5;
     public static final double ROTATION_KP = 1.0;
 
@@ -212,18 +207,18 @@ public final class Constants {
 
   public static enum ReefPosition {
 
-    BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.72, 3.966, new Rotation2d())),
-    BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.627, 5.556, Rotation2d.fromDegrees(300))),
-    BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.627, 5.556, Rotation2d.fromDegrees(300))),
-    FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.382, 5.546, Rotation2d.fromDegrees(240))),
-    FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.382, 5.546, Rotation2d.fromDegrees(240))),
-    FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.269, 3.966, Rotation2d.fromDegrees(180))),
-    FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.269, 3.966, Rotation2d.fromDegrees(180))),
-    FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.392, 2.484, Rotation2d.fromDegrees(120))),
-    FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.392, 2.484, Rotation2d.fromDegrees(120))),
-    BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.68, 2.62, Rotation2d.fromDegrees(60))),
-    BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.68, 2.62, Rotation2d.fromDegrees(60))),
-    BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.72, 3.966, new Rotation2d()));
+    BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d())),
+    BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300))),
+    BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300))),
+    FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240))),
+    FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240))),
+    FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180))),
+    FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180))),
+    FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120))),
+    FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120))),
+    BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60))),
+    BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60))),
+    BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()));
 
     public final double branchXPosition;
     public final Pose2d fieldPosition;

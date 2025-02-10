@@ -150,6 +150,8 @@ public class Drivetrain extends SubsystemBase {
       gyroYawVelocitySignal
     );
 
+    SmartDashboard.putNumber("Rotational Velocity", getRotationalVelocity().getDegrees());
+
   }
 
   @Override
@@ -233,7 +235,7 @@ public class Drivetrain extends SubsystemBase {
 
         Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-slice").getTranslation();
 
-        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 4.5) {
+        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
         
           m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
         

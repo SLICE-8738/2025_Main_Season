@@ -58,6 +58,7 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
+  public final ReefAlignCommand m_aprilTagReefAlign;
   public final Command m_reefAlign;
 
   /* Tests */
@@ -112,16 +113,16 @@ public class RobotContainer {
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
-    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController,
-        false);
+    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    m_aprilTagReefAlign = new ReefAlignCommand(m_drivetrain, driverController);
     m_reefAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
         ReefPositionSelector.getSelectedFieldPosition(), 
         Constants.kDrivetrain.PATH_CONSTRAINTS, 
-        0.5).andThen(new ReefAlignCommand(m_drivetrain, driverController)), 
+        0.5).andThen(m_aprilTagReefAlign), 
       Set.of(m_drivetrain));
 
     /* Tests */
