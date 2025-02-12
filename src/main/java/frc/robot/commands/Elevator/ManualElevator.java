@@ -4,18 +4,18 @@
 
 package frc.robot.commands.Elevator;
 
-import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualElevator extends Command {
   private final Elevator m_elevator;
-  private final PS4Controller m_controller;
-
+  private final GenericHID m_controller;
 
   /** Creates a new ManualElevator. */
-  public ManualElevator(Elevator elevator, PS4Controller controller) {
+  public ManualElevator(Elevator elevator, GenericHID controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
 
@@ -25,17 +25,18 @@ public class ManualElevator extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double axis = m_controller.getLeftY();
-    
-    m_elevator.set(-axis);
-    if(m_elevator.isAtBottom() && (axis > 0)){
+    double axis = m_controller.getRawAxis(1);
+
+    m_elevator.set(MathUtil.applyDeadband(-axis, .1));
+    if (m_elevator.isAtBottom() && (axis > 0)) {
       m_elevator.set(0);
-    }else if(m_elevator.isAtTop() && (axis < 0)){
+    } else if (m_elevator.isAtTop() && (axis < 0)) {
       m_elevator.set(0);
     }
 
@@ -47,7 +48,6 @@ public class ManualElevator extends Command {
     m_elevator.set(0);
 
   }
-
 
   // Returns true when the command should end.
   @Override
