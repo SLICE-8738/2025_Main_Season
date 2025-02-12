@@ -29,7 +29,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
 
         motors = new TalonFX[ids.length];
         for (int i = 0; i < ids.length; i++) {
-            TalonFXConfiguration configs = Constants.CTRE_CONFIGS.elevatorConfiguration;
+            TalonFXConfiguration configs = Constants.CTRE_CONFIGS.positionalFXConfig;
 
             if (inverted[i]) {
                 configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

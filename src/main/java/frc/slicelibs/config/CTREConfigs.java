@@ -47,31 +47,31 @@ public final class CTREConfigs {
         /* positionalFX Configuration */
 
         /* Motor Invert and Neutral Mode */
-        var positionalFXMotorOutput = positionalFXConfiguration.MotorOutput;
-        positionalFXMotorOutput.Inverted = Constants.kpositionalFX.positionalFX_INVERT;
-        positionalFXMotorOutput.NeutralMode = Constants.kpositionalFX.positionalFX_IDLE;
+        var positionalFXMotorOutput = positionalFXConfig.MotorOutput;
+        positionalFXMotorOutput.Inverted = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_INVERT;
+        positionalFXMotorOutput.NeutralMode = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_IDLE;
 
         /* Current Limiting */
-        var positionalFXCurrentLimits = positionalFXConfiguration.CurrentLimits;
-        positionalFXCurrentLimits.SupplyCurrentLimitEnable = Constants.kpositionalFX.positionalFX_ENABLE_SUPPLY_CURRENT_LIMIT;
-        positionalFXCurrentLimits.SupplyCurrentLimit = Constants.kpositionalFX.positionalFX_SUPPLY_CURRENT_LIMIT;
-        positionalFXCurrentLimits.SupplyCurrentLowerLimit = Constants.kpositionalFX.positionalFX_SUPPLY_CURRENT_LOWER_LIMIT;
-        positionalFXCurrentLimits.SupplyCurrentLowerTime = Constants.kpositionalFX.positionalFX_SUPPLY_CURRENT_LOWER_TIME;
+        var positionalFXCurrentLimits = positionalFXConfig.CurrentLimits;
+        positionalFXCurrentLimits.SupplyCurrentLimitEnable = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT;
+        positionalFXCurrentLimits.SupplyCurrentLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LIMIT;
+        positionalFXCurrentLimits.SupplyCurrentLowerLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT;
+        positionalFXCurrentLimits.SupplyCurrentLowerTime = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME;
 
-        positionalFXCurrentLimits.StatorCurrentLimitEnable = Constants.kpositionalFX.positionalFX_ENABLE_STATOR_CURRENT_LIMIT;
-        positionalFXCurrentLimits.StatorCurrentLimit = Constants.kpositionalFX.positionalFX_STATOR_CURRENT_LIMIT;
+        positionalFXCurrentLimits.StatorCurrentLimitEnable = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT;
+        positionalFXCurrentLimits.StatorCurrentLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_STATOR_CURRENT_LIMIT;
 
         /* PID */
-        var positionalFXSlot0 = positionalFXConfiguration.Slot0;
-        positionalFXSlot0.kP = Constants.kpositionalFX.positionalFX_KP;
-        positionalFXSlot0.kI = Constants.kpositionalFX.positionalFX_KI;
-        positionalFXSlot0.kD = Constants.kpositionalFX.positionalFX_KD;
+        var positionalFXSlot0 = positionalFXConfig.Slot0;
+        positionalFXSlot0.kP = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_KP;
+        positionalFXSlot0.kI = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_KI;
+        positionalFXSlot0.kD = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_KD;
 
         /* Open and Closed Loop Ramping */
-        positionalFXConfiguration.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.kpositionalFX.OPEN_LOOP_RAMP;
-        positionalFXConfiguration.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.kpositionalFX.OPEN_LOOP_RAMP;
+        positionalFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.OPEN_LOOP_RAMP;
+        positionalFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.OPEN_LOOP_RAMP;
 
-        positionalFXConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kpositionalFX.CLOSED_LOOP_RAMP;
-        positionalFXConfiguration.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kpositionalFX.CLOSED_LOOP_RAMP;
+        positionalFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.CLOSED_LOOP_RAMP;
+        positionalFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.CLOSED_LOOP_RAMP;
     }
 }
