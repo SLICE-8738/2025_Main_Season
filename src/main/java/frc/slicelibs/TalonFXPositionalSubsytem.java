@@ -67,7 +67,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
     public void setPosition(double position) {
         PositionVoltage request = new PositionVoltage(0).withSlot(0);
         for (TalonFX motor : motors) {
-            motor.setControl(request.withPosition(position));
+            motor.setControl(request.withPosition(position * positionConversionFactor));
         }
         positionTargetReference = position;
     }
@@ -78,23 +78,19 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
         }
     }
 
-    public double getVelocity() {
-        double velocity = 0;
-        for (TalonFX motor : motors) {
-            velocity += motor.getVelocity().getValueAsDouble();
+    public double[] getVelocity() {
+        double[] velocity = new double[motors.length];
+        for (int i = 0; i < motors.length; i++) {
+            velocity[i] = motors[i].getVelocity().getValueAsDouble();
         }
-        velocity /= velocityConversionFactor;
-        velocity /= motors.length;
         return velocity;
     }
 
-    public double getPosition() {
-        double position = 0;
-        for (TalonFX motor : motors) {
-            position += motor.getRotorPosition().getValueAsDouble();
+    public double[] getPosition() {
+        double[] position = new double[motors.length];
+        for (int i = 0; i < motors.length; i++) {
+            position[i] = motors[i].getVelocity().getValueAsDouble();
         }
-        position /= positionConversionFactor;
-        position /= motors.length;
         return position;
     }
 
