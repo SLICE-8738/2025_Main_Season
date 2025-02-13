@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.GenericHID;
 //import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.Elevator.ManualElevator;
+import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
@@ -35,13 +38,14 @@ import frc.robot.testing.routines.DrivetrainTest;
 public class RobotContainer {
 
   private final PS4Controller driverController = Button.controller1;
-  //private final GenericHID operatorController = Button.controller2;
+  private final GenericHID operatorController = Button.controller2;
 
   // ==========================
   // Subsystems
   // ==========================
 
   public final Drivetrain m_drivetrain;
+  public final Elevator m_elevator;
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
@@ -61,9 +65,16 @@ public class RobotContainer {
   public final Command m_reefAlign;
   public final Command m_coralStationAlign;
 
+  /* Elevator */
+  public final ManualElevator m_manualElevator;
+  public final MoveToLevel m_toLevelOne;
+  public final MoveToLevel m_toLevelTwo;
+  public final MoveToLevel m_toLevelThree;
+  public final MoveToLevel m_toLevelFour;
+
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
-  
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -74,41 +85,44 @@ public class RobotContainer {
     // ==========================
 
     switch (Constants.ADVANTAGE_KIT_MODE) {
-        case REAL:
-          // Real robot, instantiate hardware IO implementations
-          m_drivetrain =
+      case REAL:
+        // Real robot, instantiate hardware IO implementations
+        m_drivetrain = new Drivetrain(
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
+        m_autoSelector = new AutoSelector(
+            m_drivetrain,
             new Drivetrain(
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-          m_autoSelector = new AutoSelector(
-            m_drivetrain, 
-            new Drivetrain(
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO()));
-          break;
-        case SIM:
-          m_drivetrain =
-            new Drivetrain(
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO());
-          m_autoSelector = new AutoSelector(m_drivetrain, null);
-          break;
-        default:
-          m_drivetrain =
-            new Drivetrain(
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {});
-          m_autoSelector = new AutoSelector(m_drivetrain, null);
-          break;
+                new SimSwerveModuleIO(),
+                new SimSwerveModuleIO(),
+                new SimSwerveModuleIO(),
+                new SimSwerveModuleIO()));
+        break;
+      case SIM:
+        m_drivetrain = new Drivetrain(
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO());
+        m_autoSelector = new AutoSelector(m_drivetrain, null);
+        break;
+      default:
+        m_drivetrain = new Drivetrain(
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            });
+        m_autoSelector = new AutoSelector(m_drivetrain, null);
+        break;
     }
+
+    m_elevator = new Elevator(null, null, 0.1, 0.001, 0.01, 0, 0, null, null);
 
     m_leds = new LEDs();
 
@@ -126,17 +140,20 @@ public class RobotContainer {
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
-      () -> AutoBuilder.pathfindToPoseFlipped(
-        CoralPositionSelector.getSelectedReefFieldPosition(), 
-        Constants.kDrivetrain.PATH_CONSTRAINTS, 
-        0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)), 
-      Set.of(m_drivetrain));
-    m_coralStationAlign = new DeferredCommand(
-      () -> AutoBuilder.pathfindToPoseFlipped(
-        CoralPositionSelector.getSelectedCoralStationFieldPosition(), 
-        Constants.kDrivetrain.PATH_CONSTRAINTS, 
-        0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)), 
-      Set.of(m_drivetrain));
+        () -> AutoBuilder.pathfindToPoseFlipped(
+            ReefPositionSelector.getSelectedFieldPosition(),
+            Constants.kDrivetrain.PATH_CONSTRAINTS,
+            0.5).andThen(m_aprilTagReefAlign),
+        Set.of(m_drivetrain));
+
+    /* Elevator */
+    double threshold = 1;
+
+    m_manualElevator = new ManualElevator(m_elevator, operatorController);
+    m_toLevelOne = new MoveToLevel(m_elevator, 0, threshold);
+    m_toLevelTwo = new MoveToLevel(m_elevator, 1, threshold);
+    m_toLevelThree = new MoveToLevel(m_elevator, 2, threshold);
+    m_toLevelFour = new MoveToLevel(m_elevator, 3, threshold);
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -178,6 +195,11 @@ public class RobotContainer {
     // Operator Controls
     // ==================
 
+    /* Elevator */
+    Button.controlPadDown2.onTrue(m_toLevelOne);
+    Button.controlPadLeft2.onTrue(m_toLevelTwo);
+    Button.controlPadRight2.onTrue(m_toLevelThree);
+    Button.controlPadUp2.onTrue(m_toLevelFour);
   }
 
   /**
