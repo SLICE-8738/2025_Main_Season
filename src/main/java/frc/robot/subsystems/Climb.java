@@ -7,21 +7,29 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.slicelibs.PositionalSubsystem;
 
-public class Climb extends SubsystemBase {
+public class Climb extends SubsystemBase{
 
   private TalonFX climberMotor;
-  private AbsoluteEncoder climberEncoder;
+  private Encoder climberEncoder;
 
   /** Creates a new Climb. */
   public Climb() {
     climberMotor = new TalonFX(0); //TODO make sure to get actual device ID
+    climberEncoder = new Encoder(0, 0);
   }
 
   public void moveClimbMotor(double speed){
     climberMotor.set(speed);
   }
+
+  public double returnVelocity(){
+    return climberMotor.getVelocity();
+  }
+
 
   @Override
   public void periodic() {
