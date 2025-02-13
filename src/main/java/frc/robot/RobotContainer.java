@@ -58,8 +58,6 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
-  public final CoralPositionAlignCommand m_aprilTagReefAlign;
-  public final CoralPositionAlignCommand m_aprilTagCoralStationAlign;
   public final Command m_reefAlign;
   public final Command m_coralStationAlign;
 
@@ -119,19 +117,17 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    m_aprilTagReefAlign = new CoralPositionAlignCommand(m_drivetrain, driverController, true);
-    m_aprilTagCoralStationAlign = new CoralPositionAlignCommand(m_drivetrain, driverController, false);
     m_reefAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
         CoralPositionSelector.getSelectedReefFieldPosition(), 
         Constants.kDrivetrain.PATH_CONSTRAINTS, 
-        0.5).andThen(m_aprilTagReefAlign), 
+        0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)), 
       Set.of(m_drivetrain));
     m_coralStationAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
         CoralPositionSelector.getSelectedCoralStationFieldPosition(), 
         Constants.kDrivetrain.PATH_CONSTRAINTS, 
-        0.5).andThen(m_aprilTagCoralStationAlign), 
+        0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)), 
       Set.of(m_drivetrain));
 
     /* Tests */

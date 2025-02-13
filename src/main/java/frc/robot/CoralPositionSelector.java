@@ -90,13 +90,13 @@ public class CoralPositionSelector {
 
     public static double getSelectedCoralStationXAlignPosition() {
 
-        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition)].xAlignPosition;
+        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12].xAlignPosition;
 
     }
 
     public static Pose2d getSelectedCoralStationFieldPosition() {
 
-        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition)].fieldPosition;
+        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12].fieldPosition;
 
     }
 
