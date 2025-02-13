@@ -14,30 +14,34 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
-import frc.robot.ReefPositionSelector;
+import frc.robot.CoralPositionSelector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.config.JoystickFilterConfig;
 
-public class ReefAlignCommand extends Command {
+public class CoralPositionAlignCommand extends Command {
 
   private final Drivetrain m_drivetrain;
   private final PS4Controller m_driverController;
+  private final boolean m_alignWithReef;
 
   private final PolarJoystickFilter translationFilter, rotationFilter;
 
-  private final PIDController yAlignController, rotationAlignController;
+  private final PIDController xAlignController, rotationAlignController;
 
-  private final GenericEntry aligningWithAprilTag;
+  private static final GenericEntry aligningWithAprilTag = 
+    Shuffleboard.getTab("Driver").add("Aligning with April Tag", false)
+    .withPosition(0,0).withSize(2, 2).getEntry();
 
   /** Creates a new ReefAlignCommand. */
-  public ReefAlignCommand(Drivetrain drivetrain, PS4Controller driverController) {
+  public CoralPositionAlignCommand(Drivetrain drivetrain, PS4Controller driverController, boolean alignWithReef) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
     m_driverController = driverController;
+    m_alignWithReef = alignWithReef;
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
       0.07,
@@ -50,11 +54,8 @@ public class ReefAlignCommand extends Command {
       Constants.OperatorConstants.TURN_EXPONENT,
       Constants.OperatorConstants.TURN_EXPONENT_PERCENT));
 
-    yAlignController = new PIDController(2.5, 0, 0);
+    xAlignController = new PIDController(2.5, 0, 0);
     rotationAlignController = new PIDController(2.5, 0, 0);
-
-    aligningWithAprilTag = Shuffleboard.getTab("Driver").add("Aligning with April Tag", false)
-    .withPosition(0,0).withSize(2, 2).getEntry();
 
   }
 
@@ -76,7 +77,9 @@ public class ReefAlignCommand extends Command {
 
     if (LimelightHelpers.getTV("limelight-slice")) {
       translationX = translationFilter.filter(-m_driverController.getRawAxis(1), 0)[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-      translationY = -yAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), ReefPositionSelector.getSelectedBranchXPosition());
+      translationY = -xAlignController.calculate(
+        LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), 
+        m_alignWithReef ? CoralPositionSelector.getSelectedReefXAlignPosition() : CoralPositionSelector.getSelectedCoralStationXAlignPosition());
       rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getRotation().getY(), 0);
     }
     else {
@@ -86,7 +89,7 @@ public class ReefAlignCommand extends Command {
       rotation = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * Constants.kDrivetrain.MAX_ANGULAR_VELOCITY;
     }
 
-    SmartDashboard.putNumber("Reef Align Y Error", yAlignController.getError());
+    SmartDashboard.putNumber("Reef Align X Error", xAlignController.getError());
     SmartDashboard.putNumber("Reef Align Rotation Error", rotationAlignController.getError());
 
     m_drivetrain.drive(

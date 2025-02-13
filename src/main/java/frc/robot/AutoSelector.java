@@ -11,13 +11,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 
+import frc.robot.Constants.kDrivetrain.CoralPosition;
+import frc.robot.commands.Drivetrain.AutonomousCoralPositionAlignCommand;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 import java.util.Optional;
+import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-//import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -34,11 +38,11 @@ public class AutoSelector {
 
         PLACEHOLDER("Placeholder");
 
-        public final String value;
+        public final String name;
 
-        StartingPosition(String value) {
+        StartingPosition(String name) {
 
-            this.value = value;
+            this.name = name;
 
         }
 
@@ -46,14 +50,15 @@ public class AutoSelector {
 
     public enum Mode {
 
-        TEST_PATH("Test Path", false);
+        TEST_PATH("Test Path", false),
+        AUTO_BUILDER("Auto Builder", false);
 
-        public final String value;
+        public final String name;
         public final boolean useStartingPosition;
 
-        Mode(String value, boolean useStartingPosition) {
+        Mode(String name, boolean useStartingPosition) {
 
-            this.value = value;
+            this.name = name;
             this.useStartingPosition = useStartingPosition;
 
         }
@@ -68,11 +73,7 @@ public class AutoSelector {
 
     private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
 
-    private Pose2d initialAutoPose;
-
-    public double initialAutoPoseXOffset = 0;
-    public double initialAutoPoseYOffset = 0;
-    public double initialAutoPoseRotationOffset = 0;
+    private Pose2d initialAutoPose = new Pose2d();
 
     private final Drivetrain m_drivetrain;
 
@@ -88,7 +89,8 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.setDefaultOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
+        modeChooser.setDefaultOption(Mode.TEST_PATH.name, Mode.TEST_PATH);
+        modeChooser.addOption(Mode.AUTO_BUILDER.name, Mode.AUTO_BUILDER);
 
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
@@ -115,7 +117,18 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        // Register named commands here
+        for (CoralPosition position : CoralPosition.values()) {
+
+            NamedCommands.registerCommand(
+                "Go To" + position.name, 
+                new DeferredCommand(() -> AutoBuilder.pathfindToPoseFlipped(
+                    position.fieldPosition,
+                    Constants.kDrivetrain.PATH_CONSTRAINTS,
+                    0.5
+                ).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)),
+                Set.of(drivetrain)));
+
+        }
 
     }
 
@@ -126,10 +139,10 @@ public class AutoSelector {
 
         try {
 
-            System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
-                + ", Mode: " + mode.value);
-            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
-            initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value).getStartingPose();
+            System.out.println("Auto selection changed, updating creator; Starting Position: " + position.name
+                + ", Mode: " + mode.name);
+            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name));
+            initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
 
         }
         catch (Exception e) {
@@ -141,19 +154,9 @@ public class AutoSelector {
 
     }
 
-    public void updateInitialAutoPoseOffset() {
+    public Transform2d getInitialAutoPoseOffset() {
 
-        Pose2d currentPose = m_drivetrain.getPose();
-
-        if (currentPose != null && initialAutoPose != null) {
-
-            Transform2d offset = initialAutoPose.minus(currentPose);
-
-            initialAutoPoseXOffset = offset.getX();
-            initialAutoPoseYOffset = offset.getY();
-            initialAutoPoseRotationOffset = offset.getRotation().getDegrees();
-
-        }
+        return initialAutoPose.minus(m_drivetrain.getPose());
 
     }
 
@@ -165,13 +168,13 @@ public class AutoSelector {
 
     public String getStartingPosition() {
 
-        return startingPositionChooser.getSelected().value;
+        return startingPositionChooser.getSelected().name;
 
     }
 
     public String getMode() {
 
-        return modeChooser.getSelected().value;
+        return modeChooser.getSelected().name;
 
     }
 
