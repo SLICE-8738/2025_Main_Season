@@ -46,9 +46,7 @@ public class AutoSelector {
 
     public enum Mode {
 
-        CHOREO_TEST_PATH("Choreo Test Path", false),
-        TEST_PATH("Test Path", false),
-        CHOREO_TEST_AUTO("Choreo Test Auto", false);
+        TEST_PATH("Test Path", false);
 
         public final String value;
         public final boolean useStartingPosition;
@@ -90,9 +88,7 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.setDefaultOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
-        modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
-        modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
+        modeChooser.setDefaultOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
 
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
@@ -112,9 +108,9 @@ public class AutoSelector {
                     Constants.kDrivetrain.MAX_LINEAR_VELOCITY,
                     Constants.kDrivetrain.WHEEL_COEFFICIENT_OF_FRICTION,
                     DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
-                    Constants.kDrivetrain.DRIVE_SUPPLY_CURRENT_LIMIT,
+                    Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
                     1),
-                Constants.kDrivetrain.TRACK_WIDTH
+                Constants.kDrivetrain.kSwerveKinematics.getModules()
                 ),
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
@@ -133,6 +129,7 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
                 + ", Mode: " + mode.value);
             autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
+            initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value).getStartingPose();
 
         }
         catch (Exception e) {
@@ -147,18 +144,6 @@ public class AutoSelector {
     public void updateInitialAutoPoseOffset() {
 
         Pose2d currentPose = m_drivetrain.getPose();
-
-        try {
-
-            initialAutoPose = autoRoutine.get().getStartingPose();
-
-        }
-        catch (Exception e) {
-
-            DriverStation.reportError("Selected auto routine '" + (storedMode.useStartingPosition? 
-                storedStartingPosition.value + " " + storedMode.value : storedMode.value)+ "' does not exist", false);
-
-        }
 
         if (currentPose != null && initialAutoPose != null) {
 

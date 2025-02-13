@@ -19,9 +19,9 @@ public class ShuffleboardData {
 
     public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector) {
 
-        //driverTab = Shuffleboard.getTab("Driver Tab");
-        debugTab = Shuffleboard.getTab("Debug Tab");
-        swerveTab = Shuffleboard.getTab("Swerve Tab");
+        //driverTab = Shuffleboard.getTab("Driver");
+        debugTab = Shuffleboard.getTab("Debug");
+        swerveTab = Shuffleboard.getTab("Swerve");
         autoTab = Shuffleboard.getTab("Autonomous");
 
         //Displays the current velocity in meters per second of the left front swerve module on Shuffleboard
@@ -92,8 +92,8 @@ public class ShuffleboardData {
                 
         //Displays the current position of the robot on the field on Shuffleboard
         debugTab.add(drivetrain.m_field2d).
-        withPosition(4, 2).
-        withSize(3, 2);
+        withPosition(3, 1).
+        withSize(4, 3);
 
         // //Adds a tuner for the drive motor PID gains to Shuffleboard
         // ShuffleboardTuner.create(
