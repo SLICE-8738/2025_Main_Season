@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class EndEffectorCommand extends Command {
+public class IndexCommand extends Command {
   /** Creates a new EndEffectorCommand. */
   EndEffector endEffector;
-  Boolean frontMotor;
-  Boolean middleMotor;
-  Boolean backMotor;
+  Boolean frontSensor;
+  Boolean middleSensor;
+  Boolean backSensor;
 
-  public EndEffectorCommand() {
+  public IndexCommand() {
     endEffector = new EndEffector();
   }
 
@@ -29,9 +29,9 @@ public class EndEffectorCommand extends Command {
   @Override
   public void execute() {
     Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
-    frontMotor = sensorGroup[0];
-    middleMotor = sensorGroup[2];
-    backMotor = sensorGroup[3];
+    frontSensor = sensorGroup[0];
+    middleSensor = sensorGroup[1];
+    backSensor = sensorGroup[2];
 
   }
 
@@ -46,7 +46,7 @@ public class EndEffectorCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (backMotor == false) {
+    if (backSensor == false && frontSensor == true && middleSensor == true) {
       return true;
     }
     return false;

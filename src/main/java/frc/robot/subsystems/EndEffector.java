@@ -50,7 +50,7 @@ public class EndEffector extends SubsystemBase {
   }
 
   public void setPlacementMotorSpeed(double speed) {
-    placementMotor.set(.3);
+    placementMotor.set(speed);
   }
 
   public Boolean[] checkSensorsIndexing() {
