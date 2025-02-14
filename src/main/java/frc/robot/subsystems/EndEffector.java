@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -15,6 +16,7 @@ import frc.robot.Constants;
 public class EndEffector extends SubsystemBase {
   private TalonFX rotationMotor;
   private TalonFX placementMotor;
+  private Encoder encoder;
   // TODO rename maybe idk
   /*
    * HOW INDEXING CORAL WORKS

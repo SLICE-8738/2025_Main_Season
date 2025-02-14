@@ -4,49 +4,45 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IndexCommand extends Command {
-  /** Creates a new EndEffectorCommand. */
+public class BumpAlgae extends Command {
+  /** Creates a new BumpAlgae. */
   EndEffector endEffector;
-  Boolean frontSensor;
-  Boolean middleSensor;
-  Boolean backSensor;
+  Timer timer;
 
-  public IndexCommand(EndEffector endEffector) {
+  public BumpAlgae(EndEffector endEffector) {
     this.endEffector = endEffector;
+    Timer timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
-    frontSensor = sensorGroup[0];
-    middleSensor = sensorGroup[1];
-    backSensor = sensorGroup[2];
-
+    endEffector.setRotationMotorSpeed(.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     endEffector.setRotationMotorSpeed(0);
-    endEffector.setPlacementMotorSpeed(0);
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (backSensor == false && frontSensor == true && middleSensor == true) {
+    if (timer.get() == 1) {
       return true;
     }
     return false;
