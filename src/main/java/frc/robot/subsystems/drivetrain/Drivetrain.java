@@ -29,6 +29,8 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
+import java.util.List;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -99,7 +101,7 @@ public class Drivetrain extends SubsystemBase {
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
         Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
-        m_field2d.getObject("Trajectory").setPoses(path);
+        setField2dTrajectory(path, "Trajectory");
       }
     );
     PathPlannerLogging.setLogTargetPoseCallback(
@@ -259,6 +261,12 @@ public class Drivetrain extends SubsystemBase {
   public Pose2d getPose() {
 
     return m_odometry.getEstimatedPosition();
+
+  }
+
+  public void setField2dTrajectory(List<Pose2d> poses, String trajectoryName) {
+
+    m_field2d.getObject(trajectoryName).setPoses(poses);
 
   }
 

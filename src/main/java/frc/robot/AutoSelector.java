@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -17,8 +18,16 @@ import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.commands.Drivetrain.AutonomousCoralPositionAlignCommand;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -27,6 +36,8 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 
 /**
  * This class primarily manages the creation and updating of the autonomous mode
@@ -74,6 +85,8 @@ public class AutoSelector {
     private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
 
     private Pose2d initialAutoPose = new Pose2d();
+
+    private Map<String, List<Pose2d>> autoTrajectories = new HashMap<String, List<Pose2d>>();
 
     private final Drivetrain m_drivetrain;
 
@@ -128,6 +141,8 @@ public class AutoSelector {
                 ).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)),
                 Set.of(drivetrain)));
 
+            autoTrajectories.put("Go To" + position.name, Pathfinding.getCurrentPath(Constants.kDrivetrain.PATH_CONSTRAINTS, new GoalEndState(0.5, position.fieldPosition.getRotation())).getPathPoses());
+
         }
 
     }
@@ -143,6 +158,15 @@ public class AutoSelector {
                 + ", Mode: " + mode.name);
             autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name));
             initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
+
+            JSONObject autoJSON = (JSONObject) new JSONParser().parse(new FileReader(new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoRoutine.get().getName() + ".auto")));
+            JSONObject[] autoCommands = (JSONObject[]) ((JSONObject) ((JSONObject) (autoJSON.get("command"))).get("data")).get("commands");
+
+            for (JSONObject command : autoCommands) {
+
+                m_drivetrain.setField2dTrajectory(autoTrajectories.get((String) ((JSONObject) command.get("data")).get("name")), (String) ((JSONObject) command.get("data")).get("name"));
+
+            }
 
         }
         catch (Exception e) {

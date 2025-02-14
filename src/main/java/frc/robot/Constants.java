@@ -220,10 +220,10 @@ public final class Constants {
       BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()), "Back Middle Right Branch"),
   
       /* Coral Station Positions */
-      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)), "Left Coral Station Left"),
       LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)), "Left Coral Station Right"),
-      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)), "Right Coral Station Left"),
-      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)), "Right Coral Station Right");
+      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)), "Left Coral Station Left"),
+      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)), "Right Coral Station Right"),
+      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)), "Right Coral Station Left");
   
       public final double xAlignPosition;
       public final Pose2d fieldPosition;

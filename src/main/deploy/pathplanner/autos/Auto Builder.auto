@@ -7,7 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Go To Back Middle Right Branch"
+            "name": "Go To Back Middle Left Branch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Go To Left Coral Station Right"
           }
         }
       ]
