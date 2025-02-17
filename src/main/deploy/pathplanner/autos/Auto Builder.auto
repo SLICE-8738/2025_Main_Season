@@ -15,6 +15,12 @@
           "data": {
             "name": "Go To Left Coral Station Right"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Go To Front Right Right Branch"
+          }
         }
       ]
     }

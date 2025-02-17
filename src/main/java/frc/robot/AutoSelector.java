@@ -10,6 +10,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -21,11 +22,11 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -37,6 +38,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
 /**
@@ -86,7 +88,8 @@ public class AutoSelector {
 
     private Pose2d initialAutoPose = new Pose2d();
 
-    private Map<String, List<Pose2d>> autoTrajectories = new HashMap<String, List<Pose2d>>();
+    private final Map<String, Pose2d> autoPoses = new HashMap<String, Pose2d>();
+    private Pose2d prevAutoPose;
 
     private final Drivetrain m_drivetrain;
 
@@ -125,23 +128,24 @@ public class AutoSelector {
                     DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
                     Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
                     1),
-                Constants.kDrivetrain.kSwerveKinematics.getModules()
-                ),
+                Constants.kDrivetrain.kSwerveKinematics.getModules()),
             () -> DriverStation.getAlliance().get() == Alliance.Red,
-            m_drivetrain);
+            drivetrain);
+
+        Pathfinding.ensureInitialized();
 
         for (CoralPosition position : CoralPosition.values()) {
 
             NamedCommands.registerCommand(
-                "Go To" + position.name, 
-                new DeferredCommand(() -> AutoBuilder.pathfindToPoseFlipped(
-                    position.fieldPosition,
-                    Constants.kDrivetrain.PATH_CONSTRAINTS,
-                    0.5
-                ).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)),
-                Set.of(drivetrain)));
+                "Go To " + position.name, 
+                new DeferredCommand(
+                    () -> AutoBuilder.pathfindToPoseFlipped(
+                        position.fieldPosition,
+                        Constants.kDrivetrain.PATH_CONSTRAINTS,
+                        0.5).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)), 
+                    Set.of(drivetrain)));
 
-            autoTrajectories.put("Go To" + position.name, Pathfinding.getCurrentPath(Constants.kDrivetrain.PATH_CONSTRAINTS, new GoalEndState(0.5, position.fieldPosition.getRotation())).getPathPoses());
+            autoPoses.put("Go To " + position.name, position.fieldPosition);
 
         }
 
@@ -157,21 +161,41 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.name
                 + ", Mode: " + mode.name);
             autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name));
-            initialAutoPose = new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
+            initialAutoPose = (mode == Mode.AUTO_BUILDER) ? 
+                m_drivetrain.getPose() 
+                : new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
 
             JSONObject autoJSON = (JSONObject) new JSONParser().parse(new FileReader(new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoRoutine.get().getName() + ".auto")));
-            JSONObject[] autoCommands = (JSONObject[]) ((JSONObject) ((JSONObject) (autoJSON.get("command"))).get("data")).get("commands");
+            JSONArray autoCommands = (JSONArray) ((JSONObject) ((JSONObject) (autoJSON.get("command"))).get("data")).get("commands");
+            
+            prevAutoPose = m_drivetrain.getPose();
 
-            for (JSONObject command : autoCommands) {
+            for (int i = 0; i < autoCommands.size(); i++) {
 
-                m_drivetrain.setField2dTrajectory(autoTrajectories.get((String) ((JSONObject) command.get("data")).get("name")), (String) ((JSONObject) command.get("data")).get("name"));
+                String pathName = (String) ((JSONObject) ((JSONObject) autoCommands.get(i)).get("data")).get("name");
+
+                AutoBuilder.pathfindToPoseFlipped(
+                    autoPoses.get(pathName),
+                    Constants.kDrivetrain.PATH_CONSTRAINTS,
+                    0.5).initialize();
+
+                Pathfinding.setStartPosition(prevAutoPose.getTranslation());
+                
+                Timer.delay(0.07);
+
+                m_drivetrain.setField2dTrajectory(
+                    Pathfinding.getCurrentPath(Constants.kDrivetrain.PATH_CONSTRAINTS, new GoalEndState(0.5, autoPoses.get(pathName).getRotation())).getPathPoses(), 
+                    pathName);
+
+                prevAutoPose = autoPoses.get(pathName);
 
             }
 
         }
         catch (Exception e) {
 
-            DriverStation.reportError(e.getMessage(), true);            
+            DriverStation.reportError(e.getMessage(), false);   
+            e.printStackTrace();         
             autoRoutine = Optional.empty();
 
         }
