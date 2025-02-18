@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 //import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,6 +45,7 @@ public class RobotContainer {
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
+  public final CoralPositionSelector m_coralPositionSelector;
   public final ShuffleboardData m_shuffleboardData;
 
   // ==========================
@@ -55,6 +58,8 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
+  public final Command m_reefAlign;
+  public final Command m_coralStationAlign;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -74,9 +79,9 @@ public class RobotContainer {
           m_drivetrain =
             new Drivetrain(
                 new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS));
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
           break;
         case SIM:
           m_drivetrain =
@@ -99,6 +104,7 @@ public class RobotContainer {
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain);
+    m_coralPositionSelector = new CoralPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
     // ==========================
@@ -107,11 +113,22 @@ public class RobotContainer {
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
-    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController,
-        false);
+    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    m_reefAlign = new DeferredCommand(
+      () -> AutoBuilder.pathfindToPoseFlipped(
+        CoralPositionSelector.getSelectedReefFieldPosition(), 
+        Constants.kDrivetrain.PATH_CONSTRAINTS, 
+        0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)), 
+      Set.of(m_drivetrain));
+    m_coralStationAlign = new DeferredCommand(
+      () -> AutoBuilder.pathfindToPoseFlipped(
+        CoralPositionSelector.getSelectedCoralStationFieldPosition(), 
+        Constants.kDrivetrain.PATH_CONSTRAINTS, 
+        0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)), 
+      Set.of(m_drivetrain));
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -146,6 +163,8 @@ public class RobotContainer {
     /* Drivetrain */
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    Button.leftBumper1.whileTrue(m_reefAlign);
+    Button.rightBumper1.whileTrue(m_coralStationAlign);
 
     // ==================
     // Operator Controls
