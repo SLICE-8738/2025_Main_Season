@@ -19,17 +19,13 @@ public class Climb extends SubsystemBase{
   /** Creates a new Climb. */
   public Climb() {
     climberMotor = new TalonFX(0); //TODO make sure to get actual device ID
-    climberEncoder = new Encoder(0, 0);
+    //climberEncoder = new Encoder(0, 0);
+    climberEncoder = new Encoder(null, null);
   }
 
   public void moveClimbMotor(double speed){
     climberMotor.set(speed);
   }
-
-  public double returnVelocity(){
-    return climberMotor.getVelocity();
-  }
-
 
   @Override
   public void periodic() {
