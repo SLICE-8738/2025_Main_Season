@@ -8,20 +8,32 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.slicelibs.TalonFXPositionalSubsytem;
 
-public class GroundIntake extends SubsystemBase {
+public class GroundIntake extends TalonFXPositionalSubsytem {
 
+  /* 
   private TalonFX groundMotor;
+  */
+
+  // TODO: FIND ACTUAL ID
+  public int[] motorID = {0};
   private double positionConversionFactor;
   private double velocityConversionFactor;
   private double positionTargetReference;
   private double velocityTargetReference;
+  
 
   /** Creates a new GroundIntake. */
-  public GroundIntake(double kP, double kI, double kD, double PCF, double VCF) {
+  public GroundIntake(double kP, double kI, double kD) {
+    super(motorID, [false], 0, 0, 0, GravityTypeValue.Arm_Cosine, 0/*PositionalConversionFactor */, 0 /*VelocityConversionFactor */ ); // TODO : ADD ACTUAL PID AND CONVERSION VALUES (in Constants)
+
+    
+    /*
     //TalonFX and TalonFX Configuration
     groundMotor = new TalonFX(0); // TODO - Change device ID.
     TalonFXConfiguration configuration = new TalonFXConfiguration();
@@ -33,8 +45,10 @@ public class GroundIntake extends SubsystemBase {
     // Other needed in Constructor
     positionConversionFactor = PCF;
     velocityConversionFactor = VCF;
+    */
   }
 
+  
   /**
    * Opens or closes the ground intake.
    */
