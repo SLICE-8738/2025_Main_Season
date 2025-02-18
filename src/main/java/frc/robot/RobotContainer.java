@@ -125,7 +125,7 @@ public class RobotContainer {
         break;
     }
 
-    m_elevator = new Elevator(null, null, 0.1, 0.001, 0.01, 0, 0, null, null);
+    m_elevator = new Elevator(new int[] { 0, 1 }, new boolean[] { false, false }, 0.1, 0.001, 0.01, 0, 0, null, null);
 
     m_leds = new LEDs();
 
