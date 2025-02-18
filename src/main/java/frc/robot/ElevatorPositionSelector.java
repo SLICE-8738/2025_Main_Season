@@ -34,7 +34,7 @@ public class ElevatorPositionSelector {
                 selectedPosition = positions.get(0);
         }
 
-        public void setSelectedPosition(int level) {
+        public static void setSelectedPosition(int level) {
                 switch (level) {
                         case 1:
                                 selectedPosition.setBoolean(false);
@@ -59,7 +59,7 @@ public class ElevatorPositionSelector {
                 }
         }
 
-        public int getSelectedPosition() {
+        public static int getSelectedPosition() {
                 for (int i = 0; i < positions.size(); i++) {
                         if (positions.get(i).equals(selectedPosition)) {
                                 int position = i;
