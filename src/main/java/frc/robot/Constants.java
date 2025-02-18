@@ -34,7 +34,7 @@ import frc.slicelibs.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static final Mode ADVANTAGE_KIT_MODE = Mode.REAL;
+  public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
@@ -78,10 +78,10 @@ public final class Constants {
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 0.7; // (Vex Griplocks)
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
-      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module 
-      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
-      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
-      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
+        new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module
+        new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
+        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
+        new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
 
     /* Motor Gearing */
     public static final double DRIVE_GEAR_RATIO = (5.14 / 1.0); // 5.14:1
@@ -152,7 +152,7 @@ public final class Constants {
     public static final boolean ANGLE_INVERT = false;
 
     /* Absolute Angle Encoder Invert */
-    public static final boolean ABSOLUTE_ENCODER_INVERT = false; //TODO: Determine whether to invert
+    public static final boolean ABSOLUTE_ENCODER_INVERT = false; // TODO: Determine whether to invert
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
@@ -162,7 +162,7 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 3;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(172.65);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
     /* Front Right Module - Module 1 */
@@ -172,7 +172,7 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID_ID = 2;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(4.39);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID_ID, ANGLE_OFFSET);
     }
 
     /* Back Right Module - Module 2 */
@@ -182,7 +182,7 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 1;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(25.94);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
     /* Back Left Module - Module 3 */
@@ -192,7 +192,7 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 0;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(274.26);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
   }
@@ -211,7 +211,7 @@ public final class Constants {
     public static final NeutralModeValue POSITIONALFX_IDLE = NeutralModeValue.Brake;
 
     /* Current Limiting */
-    //TODO: Find current limits
+    // TODO: Find current limits
     public static final boolean POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
     public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 40;
     public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
@@ -224,13 +224,13 @@ public final class Constants {
     public static final double CLOSED_LOOP_RAMP = 0.0;
 
     /* PID */
-    //TODO: Tune PIDs
+    // TODO: Tune PIDs
     public static final double POSITIONALFX_KP = 0.1;
     public static final double POSITIONALFX_KI = 0.001;
     public static final double POSITIONALFX_KD = 0.01;
 
   }
-  
+
   public static final double LEFT_BRANCH_X_POSITION = -0.1651;
   public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
 
@@ -260,6 +260,3 @@ public final class Constants {
   }
 
 }
-
-
-
