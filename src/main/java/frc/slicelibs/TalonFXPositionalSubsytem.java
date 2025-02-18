@@ -89,7 +89,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
     public double[] getPosition() {
         double[] position = new double[motors.length];
         for (int i = 0; i < motors.length; i++) {
-            position[i] = motors[i].getVelocity().getValueAsDouble();
+            position[i] = motors[i].getPosition().getValueAsDouble();
         }
         return position;
     }
