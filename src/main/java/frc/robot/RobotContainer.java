@@ -49,7 +49,7 @@ public class RobotContainer {
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
-  public final ReefPositionSelector m_reefPositionSelector;
+  public final CoralPositionSelector m_coralPositionSelector;
   public final ElevatorPositionSelector m_elevatorPositionSelector;
   public final ShuffleboardData m_shuffleboardData;
 
@@ -63,8 +63,8 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
-  public final ReefAlignCommand m_aprilTagReefAlign;
   public final Command m_reefAlign;
+  public final Command m_coralStationAlign;
 
   /* Elevator */
   public final ManualElevator m_manualElevator;
@@ -119,7 +119,7 @@ public class RobotContainer {
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain);
-    m_reefPositionSelector = new ReefPositionSelector();
+    m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
@@ -133,12 +133,17 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    m_aprilTagReefAlign = new ReefAlignCommand(m_drivetrain, driverController);
     m_reefAlign = new DeferredCommand(
         () -> AutoBuilder.pathfindToPoseFlipped(
-            ReefPositionSelector.getSelectedFieldPosition(),
+            CoralPositionSelector.getSelectedReefFieldPosition(),
             Constants.kDrivetrain.PATH_CONSTRAINTS,
-            0.5).andThen(m_aprilTagReefAlign),
+            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)),
+        Set.of(m_drivetrain));
+    m_coralStationAlign = new DeferredCommand(
+        () -> AutoBuilder.pathfindToPoseFlipped(
+            CoralPositionSelector.getSelectedCoralStationFieldPosition(),
+            Constants.kDrivetrain.PATH_CONSTRAINTS,
+            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
         Set.of(m_drivetrain));
 
     /* Elevator */
@@ -184,6 +189,7 @@ public class RobotContainer {
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftBumper1.whileTrue(m_reefAlign);
+    Button.rightBumper1.whileTrue(m_coralStationAlign);
 
     // ==================
     // Operator Controls
