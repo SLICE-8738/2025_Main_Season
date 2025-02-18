@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.commands.Elevator.SetElevatorLevel;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
@@ -68,10 +69,11 @@ public class RobotContainer {
 
   /* Elevator */
   public final ManualElevator m_manualElevator;
-  public final MoveToLevel m_toLevelOne;
-  public final MoveToLevel m_toLevelTwo;
-  public final MoveToLevel m_toLevelThree;
-  public final MoveToLevel m_toLevelFour;
+  public final MoveToLevel m_toLevel;
+  public final SetElevatorLevel m_setLevelOne;
+  public final SetElevatorLevel m_setLevelTwo;
+  public final SetElevatorLevel m_setLevelThree;
+  public final SetElevatorLevel m_setLevelFour;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -150,10 +152,11 @@ public class RobotContainer {
     double threshold = 1;
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
-    m_toLevelOne = new MoveToLevel(m_elevator, 0, threshold);
-    m_toLevelTwo = new MoveToLevel(m_elevator, 1, threshold);
-    m_toLevelThree = new MoveToLevel(m_elevator, 2, threshold);
-    m_toLevelFour = new MoveToLevel(m_elevator, 3, threshold);
+    m_toLevel = new MoveToLevel(m_elevator, threshold);
+    m_setLevelOne = new SetElevatorLevel(1);
+    m_setLevelTwo = new SetElevatorLevel(2);
+    m_setLevelThree = new SetElevatorLevel(3);
+    m_setLevelFour = new SetElevatorLevel(4);
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -191,15 +194,18 @@ public class RobotContainer {
     Button.leftBumper1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
 
+    /* Elevator */
+    Button.rightTrigger1.onTrue(m_toLevel);
+
     // ==================
     // Operator Controls
     // ==================
 
     /* Elevator */
-    Button.controlPadDown2.onTrue(m_toLevelOne);
-    Button.controlPadLeft2.onTrue(m_toLevelTwo);
-    Button.controlPadRight2.onTrue(m_toLevelThree);
-    Button.controlPadUp2.onTrue(m_toLevelFour);
+    Button.controlPadDown2.onTrue(m_setLevelOne);
+    Button.controlPadLeft2.onTrue(m_setLevelTwo);
+    Button.controlPadRight2.onTrue(m_setLevelThree);
+    Button.controlPadUp2.onTrue(m_setLevelFour);
   }
 
   /**
