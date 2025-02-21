@@ -55,12 +55,12 @@ public class MoveToLevel extends Command {
         if (m_elevator.atTarget(m_threshold)) {
             finished = true;
         }
-        if (m_elevator.isAtTop() && movementDirection) {
-            finished = true;
-        }
-        if (m_elevator.isAtBottom() && !movementDirection) {
-            finished = true;
-        }
+        // if (m_elevator.isAtTop() && movementDirection) {
+        //     finished = true;
+        // }
+        // if (m_elevator.isAtBottom() && !movementDirection) {
+        //     finished = true;
+        // }
 
         return finished;
     }

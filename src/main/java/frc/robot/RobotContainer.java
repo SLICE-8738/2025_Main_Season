@@ -116,7 +116,7 @@ public class RobotContainer {
         break;
     }
 
-    m_elevator = new Elevator(new int[] { 0, 1 }, new boolean[] { false, false }, 0.1, 0.001, 0.01, 0, 0, null, null);
+    m_elevator = new Elevator(new int[] { 9, 10 }, new boolean[] { true, false }, 0.1, 0.001, 0.01, 0, 0);
 
     m_leds = new LEDs();
 
@@ -165,6 +165,7 @@ public class RobotContainer {
     configureBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_elevator.setDefaultCommand(m_manualElevator);
 
   }
 
@@ -193,7 +194,6 @@ public class RobotContainer {
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftBumper1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
-
     /* Elevator */
     Button.rightTrigger1.onTrue(m_toLevel);
 
