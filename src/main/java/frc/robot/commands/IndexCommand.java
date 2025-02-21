@@ -12,7 +12,7 @@ public class IndexCommand extends Command {
   /** Creates a new EndEffectorCommand. */
   EndEffector endEffector;
   Boolean frontSensor;
-  Boolean middleSensor;
+  //Boolean middleSensor;
   Boolean backSensor;
 
   public IndexCommand(EndEffector endEffector) {
@@ -30,7 +30,7 @@ public class IndexCommand extends Command {
   public void execute() {
     Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
-    middleSensor = sensorGroup[1];
+    //middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
 
   }
@@ -46,9 +46,11 @@ public class IndexCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (backSensor == false && frontSensor == true && middleSensor == true) {
+    if (backSensor == false && frontSensor == true) {
       return true;
     }
     return false;
   }
+
+  //&& middleSensor == true
 }

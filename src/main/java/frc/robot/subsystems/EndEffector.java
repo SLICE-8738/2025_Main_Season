@@ -16,7 +16,7 @@ import frc.robot.Constants;
 public class EndEffector extends SubsystemBase {
   private TalonFX rotationMotor;
   private TalonFX placementMotor;
-  private Encoder encoder;
+  //private Encoder encoder;
   // TODO rename maybe idk
   /*
    * HOW INDEXING CORAL WORKS
@@ -33,7 +33,7 @@ public class EndEffector extends SubsystemBase {
    */
   private static DigitalInput frontSensor;
   private static DigitalInput backSensor; // this one
-  private static DigitalInput middleSensor;
+  //private static DigitalInput middleSensor;
 
   // TODO fix static error
 
@@ -42,9 +42,9 @@ public class EndEffector extends SubsystemBase {
     rotationMotor = new TalonFX(Constants.kEndEffector.ROTATION_MOTOR_ID);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // TODO enter parameters
-    frontSensor = new DigitalInput(1);
-    backSensor = new DigitalInput(2);
-    middleSensor = new DigitalInput(3);
+    frontSensor = new DigitalInput(8);
+    backSensor = new DigitalInput(9);
+    //middleSensor = new DigitalInput(3);
   }
 
   public void setRotationMotorSpeed(double speed) {
@@ -58,7 +58,7 @@ public class EndEffector extends SubsystemBase {
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = frontSensor.get();
-    sensorStatuses[1] = middleSensor.get();
+    //sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = backSensor.get();
     return sensorStatuses;
   }

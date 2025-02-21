@@ -208,8 +208,8 @@ public final class Constants {
   }
   
   public final class kEndEffector {
-    public static final int ROTATION_MOTOR_ID = 1;
-    public static final int PLACEMENT_MOTOR_ID = 1;
+    public static final int ROTATION_MOTOR_ID = 11;
+    public static final int PLACEMENT_MOTOR_ID = 12;
     
 
   }
