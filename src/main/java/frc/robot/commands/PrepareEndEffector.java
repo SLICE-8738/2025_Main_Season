@@ -4,52 +4,32 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class BumpAlgae extends Command {
-  /** Creates a new BumpAlgae. */
+public class PrepareEndEffector extends Command {
+  /** Creates a new PrepareEndEffector. */
   EndEffector endEffector;
-  Timer timer;
-
-  public BumpAlgae(EndEffector endEffector) {
+  public PrepareEndEffector(EndEffector endEffector) {
     this.endEffector = endEffector;
-    Timer timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    timer.start();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    endEffector.setRotationMotorSpeed(.2);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    if (timer.get() <= 2) {
-      endEffector.setRotationMotorSpeed(-.2);
-      timer.stop();
-    }
-    endEffector.setRotationMotorSpeed(0);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer.get() >= 1) {
-      return true;
-    }
     return false;
   }
 }

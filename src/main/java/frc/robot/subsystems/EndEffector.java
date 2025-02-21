@@ -46,6 +46,7 @@ public class EndEffector extends SubsystemBase {
     backSensor = new DigitalInput(2);
     middleSensor = new DigitalInput(3);
   }
+  
 
   public void setRotationMotorSpeed(double speed) {
     rotationMotor.set(speed);
@@ -54,6 +55,10 @@ public class EndEffector extends SubsystemBase {
   public void setPlacementMotorSpeed(double speed) {
     placementMotor.set(speed);
   }
+
+
+
+  
 
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
