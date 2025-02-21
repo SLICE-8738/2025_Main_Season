@@ -239,6 +239,14 @@ public final class Constants {
 
   }
 
+  public final class kGroundIntake {
+    public static final int GROUND_INTAKE_KP = 0;
+    public static final int GROUND_INTAKE_KI = 0;
+    public static final int GROUND_INTAKE_KD = 0;
+    public static final int POSITION_CONVERSION_FACTOR = 0;
+    public static final int VELOCITY_CONVERSION_FACTOR = 0;
+  }
+
   public final class kLEDs {
     public static final int LED_PWM_PORT = 1;
     public static final int LED_LENGTH = 300;
