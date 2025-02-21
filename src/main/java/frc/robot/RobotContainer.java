@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-//import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.GroundIntake.GroundIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
@@ -35,7 +36,7 @@ import frc.robot.testing.routines.DrivetrainTest;
 public class RobotContainer {
 
   private final PS4Controller driverController = Button.controller1;
-  //private final GenericHID operatorController = Button.controller2;
+  private final GenericHID operatorController = Button.controller2;
 
   // ==========================
   // Subsystems
@@ -47,6 +48,8 @@ public class RobotContainer {
   public final AutoSelector m_autoSelector;
   public final CoralPositionSelector m_coralPositionSelector;
   public final ShuffleboardData m_shuffleboardData;
+
+  public final GroundIntake m_GroundIntake;
 
   // ==========================
   // Commands
@@ -63,6 +66,9 @@ public class RobotContainer {
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
+
+  /* Ground Intake */
+  public final GroundIntakeCommand m_GroundIntakeCommand;
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -107,6 +113,8 @@ public class RobotContainer {
     m_coralPositionSelector = new CoralPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
+    m_GroundIntake = new GroundIntake();
+
     // ==========================
     // Commands
     // ==========================
@@ -132,6 +140,9 @@ public class RobotContainer {
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
+
+    /* Ground Intake */
+    m_GroundIntakeCommand = new GroundIntakeCommand(m_GroundIntake);
 
     // Configure the trigger bindings
     configureBindings();
@@ -165,6 +176,8 @@ public class RobotContainer {
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftBumper1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
+
+    Button.cross2.whileTrue(m_GroundIntakeCommand);
 
     // ==================
     // Operator Controls

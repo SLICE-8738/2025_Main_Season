@@ -70,7 +70,7 @@ public class GroundIntake extends SubsystemBase {
   public void setPosition(double set){
     PositionVoltage positionRequest = new PositionVoltage(0).withSlot(0);
 
-    groundMotor.setControl(positionRequest.withPosition(set * positionConversionFactor);
+    groundMotor.setControl(positionRequest.withPosition(set * positionConversionFactor));
 
     positionTargetReference = set;
   }
