@@ -34,6 +34,9 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
             if (inverted[i]) {
                 configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
             }
+            else{
+                configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            }
             configs.Slot0.kP = kP;
             configs.Slot0.kI = kI;
             configs.Slot0.kD = kD;
