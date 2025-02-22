@@ -6,13 +6,14 @@ package frc.robot;
 
 import java.util.Set;
 
+import edu.wpi.first.wpilibj.GenericHID;
 //import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.commands.IndexCommand;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -33,31 +34,35 @@ import frc.robot.testing.routines.DrivetrainTest;
 public class RobotContainer {
 
   private final PS4Controller driverController = Button.controller1;
-  //private final GenericHID operatorController = Button.controller2;
+  private final GenericHID operatorController = Button.controller2;
 
   // ==========================
   // Subsystems
   // ==========================
 
-  public final Drivetrain m_drivetrain;
-  public final LEDs m_leds;
+  // public final Drivetrain m_drivetrain;
+  public final EndEffector m_endEffector;
+  // public final LEDs m_leds;
 
-  public final AutoSelector m_autoSelector;
-  public final ShuffleboardData m_shuffleboardData;
+  // public final AutoSelector m_autoSelector;
+  //public final ShuffleboardData m_shuffleboardData;
 
   // ==========================
   // Commands
   // ==========================
 
-  /* Drivetrain */
-  public final DriveCommand m_swerveDriveOpenLoop;
-  public final DriveCommand m_swerveDriveClosedLoop;
-  public final RunDutyCycleCommand m_setDrivePercentOutput;
-  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
-  public final Command m_sysIDDriveRoutine;
+  // /* Drivetrain */
+  // public final DriveCommand m_swerveDriveOpenLoop;
+  // public final DriveCommand m_swerveDriveClosedLoop;
+  // public final RunDutyCycleCommand m_setDrivePercentOutput;
+  // public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
+  // public final Command m_sysIDDriveRoutine;
 
-  /* Tests */
-  public final DrivetrainTest m_drivetrainTest;
+  /* End Effector */
+  public final IndexCommand m_indexCoral;
+
+  // /* Tests */
+  // public final DrivetrainTest m_drivetrainTest;
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,58 +73,62 @@ public class RobotContainer {
     // Subsystems
     // ==========================
 
-    switch (Constants.ADVANTAGE_KIT_MODE) {
-        case REAL:
-          // Real robot, instantiate hardware IO implementations
-          m_drivetrain =
-            new Drivetrain(
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS));
-          break;
-        case SIM:
-          m_drivetrain =
-            new Drivetrain(
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO());
-          break;
-        default:
-          m_drivetrain =
-            new Drivetrain(
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {});
-          break;
-    }
+    // switch (Constants.ADVANTAGE_KIT_MODE) {
+    //     case REAL:
+    //       // Real robot, instantiate hardware IO implementations
+    //       m_drivetrain =
+    //         new Drivetrain(
+    //             new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+    //             new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
+    //             new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
+    //             new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
+    //       break;
+    //     case SIM:
+    //       m_drivetrain =
+    //         new Drivetrain(
+    //           new SimSwerveModuleIO(),
+    //           new SimSwerveModuleIO(),
+    //           new SimSwerveModuleIO(),
+    //           new SimSwerveModuleIO());
+    //       break;
+    //     default:
+    //       m_drivetrain =
+    //         new Drivetrain(
+    //           new SwerveModuleIO() {},
+    //           new SwerveModuleIO() {},
+    //           new SwerveModuleIO() {},
+    //           new SwerveModuleIO() {});
+    //       break;
+    // }
 
-    m_leds = new LEDs();
+    m_endEffector = new EndEffector();
+    //m_leds = new LEDs();
 
-    m_autoSelector = new AutoSelector(m_drivetrain);
-    m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
+    // m_autoSelector = new AutoSelector(m_drivetrain);
+    // m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
     // ==========================
     // Commands
     // ==========================
 
-    /* Drivetrain */
-    m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
-    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController,
-        false);
-    m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
-    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-    m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    // /* Drivetrain */
+    // m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
+    // m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController,
+    //     false);
+    // m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
+    // m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+    // m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
 
-    /* Tests */
-    m_drivetrainTest = new DrivetrainTest(m_drivetrain);
+    /* End Effector */
+    m_indexCoral = new IndexCommand(m_endEffector);
+
+    // /* Tests */
+    // m_drivetrainTest = new DrivetrainTest(m_drivetrain);
 
     // Configure the trigger bindings
     configureBindings();
 
-    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
 
   }
 
@@ -143,13 +152,15 @@ public class RobotContainer {
     // Driver Controls
     // ================
 
-    /* Drivetrain */
-    Button.triangle1.onTrue(m_resetFieldOrientedHeading);
-    Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    // /* Drivetrain */
+    // Button.triangle1.onTrue(m_resetFieldOrientedHeading);
+    // Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
 
     // ==================
     // Operator Controls
     // ==================
+
+    Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
 
   }
 
@@ -160,8 +171,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return m_autoSelector.getAutoRoutine();
-
+    //return m_autoSelector.getAutoRoutine();
+    return null;
   }
 
 }

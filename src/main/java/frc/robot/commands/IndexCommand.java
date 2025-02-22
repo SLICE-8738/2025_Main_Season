@@ -32,6 +32,7 @@ public class IndexCommand extends Command {
     frontSensor = sensorGroup[0];
     //middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
+    endEffector.setPlacementMotorSpeed(0.1);
 
   }
 
