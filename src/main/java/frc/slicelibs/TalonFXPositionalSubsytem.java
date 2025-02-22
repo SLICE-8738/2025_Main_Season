@@ -62,7 +62,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
         VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
 
         for (TalonFX motor : motors) {
-            motor.setControl(request.withVelocity(velocity * velocityConversionFactor));
+            motor.setControl(request.withVelocity(velocity / velocityConversionFactor));
         }
         velocityTargetReference = velocity;
     }
@@ -70,21 +70,21 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
     public void setPosition(double position) {
         PositionVoltage request = new PositionVoltage(0).withSlot(0);
         for (TalonFX motor : motors) {
-            motor.setControl(request.withPosition(position * positionConversionFactor));
+            motor.setControl(request.withPosition(position / positionConversionFactor));
         }
         positionTargetReference = position;
     }
 
     public void setEncoderPosition(double position) {
         for (TalonFX motor : motors) {
-            motor.getConfigurator().setPosition(position);
+            motor.getConfigurator().setPosition(position / positionConversionFactor);
         }
     }
 
     public double[] getVelocity() {
         double[] velocity = new double[motors.length];
         for (int i = 0; i < motors.length; i++) {
-            velocity[i] = motors[i].getVelocity().getValueAsDouble();
+            velocity[i] = motors[i].getVelocity().getValueAsDouble() * velocityConversionFactor;
         }
         return velocity;
     }
@@ -92,7 +92,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
     public double[] getPosition() {
         double[] position = new double[motors.length];
         for (int i = 0; i < motors.length; i++) {
-            position[i] = motors[i].getPosition().getValueAsDouble();
+            position[i] = motors[i].getPosition().getValueAsDouble() * positionConversionFactor;
         }
         return position;
     }
@@ -102,12 +102,12 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
         if (motors[0].getAppliedControl().getClass() == PositionVoltage.class) {
             for (int i = 0; i < motors.length; i++) {
                 atTarget[i] = Math
-                        .abs(motors[i].getRotorPosition().getValueAsDouble() - positionTargetReference) < threshold;
+                        .abs(motors[i].getRotorPosition().getValueAsDouble() - (positionTargetReference / positionConversionFactor)) < (threshold / positionConversionFactor);
             }
         } else if (motors[0].getAppliedControl().getClass() == VelocityVoltage.class) {
             for (int i = 0; i < motors.length; i++) {
                 atTarget[i] = Math
-                        .abs(motors[i].getVelocity().getValueAsDouble() - velocityTargetReference) < threshold;
+                        .abs(motors[i].getVelocity().getValueAsDouble() - (velocityTargetReference / velocityConversionFactor)) < (threshold / velocityConversionFactor);
             }
         }
 
