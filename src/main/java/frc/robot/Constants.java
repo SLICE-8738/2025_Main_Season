@@ -64,7 +64,7 @@ public final class Constants {
   public final class kDrivetrain {
 
     /* Gyro */
-    public static final int GYRO_ID = 10;
+    public static final int GYRO_ID = 15;
     public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
 
     /* Swerve Physics */
