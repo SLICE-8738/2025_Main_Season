@@ -116,7 +116,7 @@ public class RobotContainer {
         break;
     }
 
-    m_elevator = new Elevator(new int[] { 9, 10 }, new boolean[] { true, false }, 0.1, 0.001, 0.01, 0, 0);
+    m_elevator = new Elevator(new int[] { 9, 10 }, new boolean[] { true, false }, 0.1, 0.001, 0.01, Constants.kElevator.POSITION_CONVERSION_FACTOR, Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
 
     m_leds = new LEDs();
 

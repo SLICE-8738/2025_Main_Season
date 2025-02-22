@@ -239,6 +239,11 @@ public final class Constants {
 
   }
 
+  public final class kElevator {
+    public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 4.0; // Pitch diameter times pi (to get pitch circumference) divided by gear ratio
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR / 60.0; // 60 is to convert minutes to seconds
+  }
+
   public final class kLEDs {
     public static final int LED_PWM_PORT = 1;
     public static final int LED_LENGTH = 300;
