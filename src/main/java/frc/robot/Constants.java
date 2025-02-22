@@ -240,7 +240,7 @@ public final class Constants {
   }
 
   public final class kElevator {
-    public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 4.0 * 1.15; // Pitch diameter times pi (to get pitch circumference) divided by gear ratio. 1.15 is arbitrary from empirical testing
+    public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 3.5; // Pitch diameter times pi (to get pitch circumference) divided by gear ratio.
     public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
   }
 
