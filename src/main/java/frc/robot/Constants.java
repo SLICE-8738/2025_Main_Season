@@ -244,6 +244,31 @@ public final class Constants {
     public static final int RIGHT_MOTOR_ID = 10;
     public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 3.5; // Pitch diameter times pi (to get pitch circumference) divided by gear ratio.
     public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
+
+    /* Motor Invert */
+    public static final InvertedValue ELEVATORFX_INVERT = InvertedValue.Clockwise_Positive;
+
+    /* Motor Idle Modes */
+    public static final NeutralModeValue ELEVATORFX_IDLE = NeutralModeValue.Brake;
+
+    /* Current Limiting */
+    // TODO: Find current limits
+    public static final boolean ELEVATORFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LIMIT = 40;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+    public static final double ELEVATORFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+
+    public static final boolean ELEVATORFX_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double ELEVATORFX_STATOR_CURRENT_LIMIT = 65;
+
+    public static final double OPEN_LOOP_RAMP = 0.25;
+    public static final double CLOSED_LOOP_RAMP = 0.0;
+
+    /* PID */
+    // TODO: Tune PIDs
+    public static final double ELEVATORFX_KP = 0.1;
+    public static final double ELEVATORFX_KI = 0.001;
+    public static final double ELEVATORFX_KD = 0.01;
   }
 
   public final class kLEDs {
@@ -252,31 +277,6 @@ public final class Constants {
   }
 
   public final class kTalonFXPositionalSubsystem {
-
-    /* Motor Invert */
-    public static final InvertedValue POSITIONALFX_INVERT = InvertedValue.Clockwise_Positive;
-
-    /* Motor Idle Modes */
-    public static final NeutralModeValue POSITIONALFX_IDLE = NeutralModeValue.Brake;
-
-    /* Current Limiting */
-    // TODO: Find current limits
-    public static final boolean POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-    public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
-    public static final double POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
-
-    public static final boolean POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 65;
-
-    public static final double OPEN_LOOP_RAMP = 0.25;
-    public static final double CLOSED_LOOP_RAMP = 0.0;
-
-    /* PID */
-    // TODO: Tune PIDs
-    public static final double POSITIONALFX_KP = 0.1;
-    public static final double POSITIONALFX_KI = 0.001;
-    public static final double POSITIONALFX_KD = 0.01;
 
   }
 
