@@ -4,6 +4,7 @@
 
 package frc.slicelibs;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -24,13 +25,13 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
     private double velocityTargetReference;
 
     public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
-            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor) {
+            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor, TalonFXConfiguration motorConfigs) {
         if (ids.length != inverted.length)
             throw new IllegalArgumentException("ids and inverted must be the same length");
 
         motors = new TalonFX[ids.length];
         for (int i = 0; i < ids.length; i++) {
-            TalonFXConfiguration configs = Constants.CTRE_CONFIGS.positionalFXConfig;
+            TalonFXConfiguration configs = motorConfigs;
 
             if (inverted[i]) {
                 configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
