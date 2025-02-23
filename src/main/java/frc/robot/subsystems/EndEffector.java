@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.slicelibs.TalonFXPositionalSubsystem;
 
-public class EndEffector extends SubsystemBase {
-  private TalonFX rotationMotor;
+public class EndEffector extends TalonFXPositionalSubsystem {
   private TalonFX placementMotor;
   private AnalogEncoder encoder;
   // TODO rename maybe idk
@@ -40,7 +40,7 @@ public class EndEffector extends SubsystemBase {
 
   /** Creates a new EndEffector. */
   public EndEffector() {
-    rotationMotor = new TalonFX(Constants.kEndEffector.ROTATION_MOTOR_ID);
+    super(new int[] {11}, new boolean[] {false}, 0.13, 0, 0, null, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // TODO enter parameters
     frontSensor = new DigitalInput(1);

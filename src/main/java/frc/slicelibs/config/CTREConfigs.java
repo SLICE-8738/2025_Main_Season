@@ -8,7 +8,7 @@ import frc.robot.Constants;
 public final class CTREConfigs {
     public final TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     public final Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
-    public final TalonFXConfiguration positionalFX = new TalonFXConfiguration();
+    public final TalonFXConfiguration positionalFXConfig = new TalonFXConfiguration();
 
 
     public CTREConfigs() {
@@ -46,12 +46,12 @@ public final class CTREConfigs {
             pigeon2Config.GyroTrim.GyroScalarZ = Constants.kDrivetrain.INVERT_GYRO ? -1 : 1;
 
                     /* Motor Invert and Neutral Mode */
-        var positionalFXMotorOutput = .MotorOutput;
+        var positionalFXMotorOutput = positionalFXConfig.MotorOutput;
         positionalFXMotorOutput.Inverted = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_INVERT;
         positionalFXMotorOutput.NeutralMode = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_IDLE;
 
         /* Current Limiting */
-        var positionalFXCurrentLimits = endEffectorFXConfig.CurrentLimits;
+        var positionalFXCurrentLimits = positionalFXConfig.CurrentLimits;
         positionalFXCurrentLimits.SupplyCurrentLimitEnable = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT;
         positionalFXCurrentLimits.SupplyCurrentLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LIMIT;
         positionalFXCurrentLimits.SupplyCurrentLowerLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT;
