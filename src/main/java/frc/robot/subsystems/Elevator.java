@@ -5,9 +5,9 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.slicelibs.TalonFXPositionalSubsytem;
+import frc.slicelibs.TalonFXPositionalSubsystem;
 
-public class Elevator extends TalonFXPositionalSubsytem {
+public class Elevator extends TalonFXPositionalSubsystem {
 
     // private DigitalInput bottomLimitSwitch;
     //private DigitalInput topLimitSwitch;

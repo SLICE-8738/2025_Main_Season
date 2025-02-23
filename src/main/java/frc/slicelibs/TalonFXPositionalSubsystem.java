@@ -16,14 +16,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 /** Add your docs here. */
-public class TalonFXPositionalSubsytem extends SubsystemBase {
+public class TalonFXPositionalSubsystem extends SubsystemBase {
     private TalonFX[] motors;
     private double positionConversionFactor;
     private double velocityConversionFactor;
     private double positionTargetReference;
     private double velocityTargetReference;
 
-    public TalonFXPositionalSubsytem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
+    public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
             GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor) {
         if (ids.length != inverted.length)
             throw new IllegalArgumentException("ids and inverted must be the same length");
