@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.BumpAlgae;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.ManualEndEffector;
+import frc.robot.commands.PrepareEndEffector;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.subsystems.*;
@@ -66,6 +67,9 @@ public class RobotContainer {
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
+  public final PrepareEndEffector m_prepareEndEffectorAngle1;
+  public final PrepareEndEffector m_prepareEndEffectorAngle2;
+
 
   // /* Tests */
   // public final DrivetrainTest m_drivetrainTest;
@@ -129,6 +133,8 @@ public class RobotContainer {
     m_indexCoral = new IndexCommand(m_endEffector);
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
+    m_prepareEndEffectorAngle1 = new PrepareEndEffector(m_endEffector, 45);
+    m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 0);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
 
     // /* Tests */
@@ -172,6 +178,8 @@ public class RobotContainer {
     Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
     Button.triangle2.onTrue(m_bumpAlgae);
     Button.square2.onTrue(m_scoreCoral);
+    Button.leftBumper2.onTrue(m_prepareEndEffectorAngle1);
+    Button.rightBumper2.onTrue(m_prepareEndEffectorAngle2);
 
   }
 
