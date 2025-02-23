@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.BumpAlgae;
 import frc.robot.commands.IndexCommand;
+import frc.robot.commands.ManualEndEffector;
+import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -62,6 +64,8 @@ public class RobotContainer {
   /* End Effector */
   public final IndexCommand m_indexCoral;
   public final BumpAlgae m_bumpAlgae;
+  public final ScoreCoral m_scoreCoral;
+  public final ManualEndEffector m_manualEndEffector;
 
   // /* Tests */
   // public final DrivetrainTest m_drivetrainTest;
@@ -124,6 +128,8 @@ public class RobotContainer {
     /* End Effector */
     m_indexCoral = new IndexCommand(m_endEffector);
     m_bumpAlgae = new BumpAlgae(m_endEffector);
+    m_scoreCoral = new ScoreCoral(m_endEffector);
+    m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
 
     // /* Tests */
     // m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -132,7 +138,7 @@ public class RobotContainer {
     configureBindings();
 
     //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
-
+    m_endEffector.setDefaultCommand(m_manualEndEffector);
   }
 
   /**
@@ -164,8 +170,8 @@ public class RobotContainer {
     // ==================
 
     Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
-    Button.triangle1.onTrue(m_bumpAlgae);
-
+    Button.triangle2.onTrue(m_bumpAlgae);
+    Button.square2.onTrue(m_scoreCoral);
 
   }
 

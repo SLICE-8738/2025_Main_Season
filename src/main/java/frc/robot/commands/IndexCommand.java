@@ -10,6 +10,7 @@ import frc.robot.subsystems.EndEffector;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IndexCommand extends Command {
   /** Creates a new EndEffectorCommand. */
+  
   EndEffector endEffector;
   Boolean frontSensor;
   //Boolean middleSensor;
@@ -17,6 +18,8 @@ public class IndexCommand extends Command {
 
   public IndexCommand(EndEffector endEffector) {
     this.endEffector = endEffector;
+    addRequirements(endEffector);
+
   }
 
   // Called when the command is initially scheduled.
@@ -32,14 +35,14 @@ public class IndexCommand extends Command {
     frontSensor = sensorGroup[0];
     //middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    endEffector.setPlacementMotorSpeed(0.1);
+    endEffector.setPlacementMotorSpeed(-0.1);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    endEffector.setRotationMotorSpeed(0);
+    endEffector.set(0);
     endEffector.setPlacementMotorSpeed(0);
 
   }

@@ -11,13 +11,17 @@ import frc.robot.subsystems.EndEffector;
 public class PrepareEndEffector extends Command {
   /** Creates a new PrepareEndEffector. */
   EndEffector endEffector;
-  public PrepareEndEffector(EndEffector endEffector) {
+  double angle;
+  public PrepareEndEffector(EndEffector endEffector, double angle) {
     this.endEffector = endEffector;
+    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    endEffector.setPosition(angle);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -25,11 +29,17 @@ public class PrepareEndEffector extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    endEffector.set(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (endEffector.atTarget(1) ) {
+      return true;
+    } else {
     return false;
+    }
   }
 }
