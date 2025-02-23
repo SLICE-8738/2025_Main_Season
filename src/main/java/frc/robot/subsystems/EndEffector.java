@@ -40,7 +40,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   /** Creates a new EndEffector. */
   public EndEffector() {
-    super(new int[] {11}, new boolean[] {false}, 0.13, 0, 0, null, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
+    super(new int[] {11}, new boolean[] {false}, 0.13, 0, 0, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // TODO enter parameters
     frontSensor = new DigitalInput(1);
