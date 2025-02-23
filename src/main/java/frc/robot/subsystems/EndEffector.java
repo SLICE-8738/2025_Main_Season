@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.hal.DIOJNI;
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
@@ -17,7 +17,7 @@ import frc.robot.Constants;
 public class EndEffector extends SubsystemBase {
   private TalonFX rotationMotor;
   private TalonFX placementMotor;
-  //private Encoder encoder;
+  private AnalogEncoder encoder;
   // TODO rename maybe idk
   /*
    * HOW INDEXING CORAL WORKS
@@ -34,7 +34,7 @@ public class EndEffector extends SubsystemBase {
    */
   private static DigitalInput frontSensor;
   private static DigitalInput backSensor; // this one
-  //private static DigitalInput middleSensor;
+  private static DigitalInput middleSensor;
 
   // TODO fix static error
 
@@ -43,9 +43,9 @@ public class EndEffector extends SubsystemBase {
     rotationMotor = new TalonFX(Constants.kEndEffector.ROTATION_MOTOR_ID);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // TODO enter parameters
-    frontSensor = new DigitalInput(8);
-    backSensor = new DigitalInput(9);
-    //middleSensor = new DigitalInput(3);
+    frontSensor = new DigitalInput(1);
+    backSensor = new DigitalInput(2);
+    middleSensor = new DigitalInput(3);
   }
   
 
@@ -64,7 +64,7 @@ public class EndEffector extends SubsystemBase {
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = frontSensor.get();
-    //sensorStatuses[1] = middleSensor.get();
+    sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = backSensor.get();
     return sensorStatuses;
   }

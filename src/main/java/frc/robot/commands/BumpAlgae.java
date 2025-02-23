@@ -31,17 +31,16 @@ public class BumpAlgae extends Command {
   @Override
   public void execute() {
     endEffector.setRotationMotorSpeed(.2);
+    if (timer.get() >= 1) {
+      endEffector.setRotationMotorSpeed(-.2);
+      timer.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (timer.get() <= 2) {
-      endEffector.setRotationMotorSpeed(-.2);
-      timer.stop();
-    }
     endEffector.setRotationMotorSpeed(0);
-
   }
 
   // Returns true when the command should end.

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.BumpAlgae;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.subsystems.*;
@@ -60,6 +61,7 @@ public class RobotContainer {
 
   /* End Effector */
   public final IndexCommand m_indexCoral;
+  public final BumpAlgae m_bumpAlgae;
 
   // /* Tests */
   // public final DrivetrainTest m_drivetrainTest;
@@ -121,6 +123,7 @@ public class RobotContainer {
 
     /* End Effector */
     m_indexCoral = new IndexCommand(m_endEffector);
+    m_bumpAlgae = new BumpAlgae(m_endEffector);
 
     // /* Tests */
     // m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -161,6 +164,8 @@ public class RobotContainer {
     // ==================
 
     Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
+    Button.triangle1.onTrue(m_bumpAlgae);
+
 
   }
 
