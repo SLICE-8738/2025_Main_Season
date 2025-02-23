@@ -116,7 +116,7 @@ public class RobotContainer {
         break;
     }
 
-    m_elevator = new Elevator(new int[] { 9, 10 }, new boolean[] { true, false }, 0.1, 0.001, 0.01, Constants.kElevator.POSITION_CONVERSION_FACTOR, Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
+    m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID }, new boolean[] { true, false }, 1.75, 0.2, 0.175, Constants.kElevator.POSITION_CONVERSION_FACTOR, Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
 
     m_leds = new LEDs();
 
@@ -149,7 +149,7 @@ public class RobotContainer {
         Set.of(m_drivetrain));
 
     /* Elevator */
-    double threshold = 1;
+    double threshold = .01;
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
     m_toLevel = new MoveToLevel(m_elevator, threshold);
