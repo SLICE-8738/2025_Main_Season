@@ -10,15 +10,17 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 
 public class EndEffector extends TalonFXPositionalSubsystem {
   private TalonFX placementMotor;
-  private AnalogEncoder encoder;
+  private DutyCycleEncoder encoder;
   // TODO rename maybe idk
   /*
    * HOW INDEXING CORAL WORKS
@@ -35,7 +37,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
    */
   private static DigitalInput frontSensor;
   private static DigitalInput backSensor; // this one
-  private static DigitalInput middleSensor;
+  //private static DigitalInput middleSensor;
 
   // TODO fix static error
 
@@ -46,7 +48,11 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     // TODO enter parameters
     frontSensor = new DigitalInput(1);
     backSensor = new DigitalInput(2);
-    middleSensor = new DigitalInput(3);
+    //middleSensor = new DigitalInput(3);
+
+    encoder = new DutyCycleEncoder(0);
+    double absoluteAngle = encoder.get();
+    setEncoderPosition(absoluteAngle - Constants.kEndEffector.ENCODER_OFFSET);
   }
 
   public void setPlacementMotorSpeed(double speed) {
@@ -56,13 +62,14 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = frontSensor.get();
-    sensorStatuses[1] = middleSensor.get();
+    //sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = backSensor.get();
     return sensorStatuses;
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Absolute Angle", encoder.get());
     // This method will be called once per scheduler run
   }
 }

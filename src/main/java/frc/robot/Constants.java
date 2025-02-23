@@ -213,6 +213,8 @@ public final class Constants {
     public static final int PLACEMENT_MOTOR_ID = 12;
     public static final double POSITIONAL_CONVERSION_FACTOR = 360*(8/70)*(1/3);
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
+
+    public static final double ENCODER_OFFSET = 0;
     
 
   }
