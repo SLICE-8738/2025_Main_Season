@@ -4,17 +4,20 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.signals.GravityTypeValue;
+
 import frc.slicelibs.PositionalSubsystem;
+import frc.slicelibs.TalonFXPositionalSubsystem;
 
 
 
-public class SourceIntake extends PositionalSubsystem {
+public class SourceIntake extends TalonFXPositionalSubsystem {
 
 private final double DEFAULT_POSITION = -35;
 
   /** Creates a new SourceIntake. */
   public SourceIntake(int[] ids, boolean[] inverted, double kP, double kI, double kD, double positionConversionFactor, double velocityConversionFactor) {
-    super(ids, inverted, kP, kI, kD, positionConversionFactor, velocityConversionFactor);
+    super(ids, inverted, kP, kI, kD, GravityTypeValue.Arm_Cosine, positionConversionFactor, velocityConversionFactor);
     setEncoderPosition(DEFAULT_POSITION);
 
   }
