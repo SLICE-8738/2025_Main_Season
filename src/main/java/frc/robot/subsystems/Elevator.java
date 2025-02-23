@@ -5,7 +5,9 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
+import frc.slicelibs.config.CTREConfigs;
 
 public class Elevator extends TalonFXPositionalSubsystem {
 
@@ -15,7 +17,7 @@ public class Elevator extends TalonFXPositionalSubsystem {
     public Elevator(int[] ids, boolean[] inverted, double kP, double kI, double kD, double positionConversionFactor,
             double velocityConversionFactor) {
         super(ids, inverted, kP, kI, kD, GravityTypeValue.Elevator_Static, positionConversionFactor,
-                velocityConversionFactor);
+                velocityConversionFactor, Constants.CTRE_CONFIGS.elevatorFXConfig);
         setEncoderPosition(0);
 
         // this.bottomLimitSwitch = bottomLimitSwitch;
