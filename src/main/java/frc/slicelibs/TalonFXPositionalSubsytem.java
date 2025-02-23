@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -73,6 +74,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
             motor.setControl(request.withPosition(position / positionConversionFactor));
         }
         positionTargetReference = position;
+        SmartDashboard.putNumber("Elevator Target", position);
     }
 
     public void setEncoderPosition(double position) {
@@ -102,7 +104,7 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
         if (motors[0].getAppliedControl().getClass() == PositionVoltage.class) {
             for (int i = 0; i < motors.length; i++) {
                 atTarget[i] = Math
-                        .abs(motors[i].getRotorPosition().getValueAsDouble() - (positionTargetReference / positionConversionFactor)) < (threshold / positionConversionFactor);
+                        .abs(motors[i].getPosition().getValueAsDouble() - (positionTargetReference / positionConversionFactor)) < (threshold / positionConversionFactor);
             }
         } else if (motors[0].getAppliedControl().getClass() == VelocityVoltage.class) {
             for (int i = 0; i < motors.length; i++) {

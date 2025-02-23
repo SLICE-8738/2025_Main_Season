@@ -10,12 +10,14 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class ElevatorPositionSelector {
         private static final ShuffleboardTab driverTab = Shuffleboard.getTab("Driver");
         private static final ArrayList<GenericEntry> positions = new ArrayList<GenericEntry>();
         private static GenericEntry selectedPosition;
+        private static int level;
 
         public ElevatorPositionSelector() {
                 positions.add(
@@ -32,6 +34,7 @@ public class ElevatorPositionSelector {
                                                 .withWidget(BuiltInWidgets.kToggleButton).getEntry());
 
                 selectedPosition = positions.get(0);
+                level = 0;
         }
 
         public static void setSelectedPosition(int level) {
@@ -57,15 +60,11 @@ public class ElevatorPositionSelector {
                                 selectedPosition.setBoolean(true);
                                 break;
                 }
+                ElevatorPositionSelector.level = level;
+                SmartDashboard.putNumber("Elevator Level", level);
         }
 
         public static int getSelectedPosition() {
-                for (int i = 0; i < positions.size(); i++) {
-                        if (positions.get(i).equals(selectedPosition)) {
-                                int position = i;
-                                return position;
-                        }
-                }
-                return -1;
+                return ElevatorPositionSelector.level;
         }
 }

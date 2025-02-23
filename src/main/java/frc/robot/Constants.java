@@ -240,6 +240,8 @@ public final class Constants {
   }
 
   public final class kElevator {
+    public static final int LEFT_MOTOR_ID = 9;
+    public static final int RIGHT_MOTOR_ID = 10;
     public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 3.5; // Pitch diameter times pi (to get pitch circumference) divided by gear ratio.
     public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
   }
