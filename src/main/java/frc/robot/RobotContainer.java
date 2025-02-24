@@ -26,6 +26,7 @@ import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
 import frc.robot.subsystems.drivetrain.SimSwerveModuleIO;
 import frc.robot.subsystems.drivetrain.SwerveModuleIO;
 import frc.robot.testing.routines.DrivetrainTest;
+import frc.slicelibs.config.CTREConfigs;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -116,7 +117,7 @@ public class RobotContainer {
         break;
     }
 
-    m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID }, new boolean[] { true, false }, 1.75, 0.2, 0.175, Constants.kElevator.POSITION_CONVERSION_FACTOR, Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
+    m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID }, new boolean[] { true, false }, 2.5, 0.04, 0.25, Constants.kElevator.POSITION_CONVERSION_FACTOR, Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
 
     m_leds = new LEDs();
 
@@ -195,7 +196,7 @@ public class RobotContainer {
     Button.leftBumper1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
     /* Elevator */
-    Button.rightTrigger1.onTrue(m_toLevel);
+    Button.rightTrigger1.onTrue(m_toLevel.withTimeout(2.0));
 
     // ==================
     // Operator Controls
