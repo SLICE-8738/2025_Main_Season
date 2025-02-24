@@ -211,7 +211,8 @@ public final class Constants {
   public final class kEndEffector {
     public static final int ROTATION_MOTOR_ID = 11;
     public static final int PLACEMENT_MOTOR_ID = 12;
-    public static final double POSITIONAL_CONVERSION_FACTOR = 360*(8/70)*(1/3);
+
+    public static final double POSITIONAL_CONVERSION_FACTOR = 360.0*(8.0/70.0)*(1.0/3.0);
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
     public static final double ENCODER_OFFSET = .807;
