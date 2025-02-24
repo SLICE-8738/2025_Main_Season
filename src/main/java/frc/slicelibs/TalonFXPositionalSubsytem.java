@@ -12,7 +12,6 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 /** Add your docs here. */
 public class TalonFXPositionalSubsytem extends SubsystemBase {
@@ -23,15 +22,18 @@ public class TalonFXPositionalSubsytem extends SubsystemBase {
     private double velocityTargetReference;
 
     public TalonFXPositionalSubsytem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
-            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor) {
+            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor,
+            TalonFXConfiguration motorConfigs) {
         if (ids.length != inverted.length)
             throw new IllegalArgumentException("ids and inverted must be the same length");
 
         motors = new TalonFX[ids.length];
         for (int i = 0; i < ids.length; i++) {
-            TalonFXConfiguration configs = Constants.CTRE_CONFIGS.positionalFXConfig;
+            TalonFXConfiguration configs = motorConfigs;
 
             if (inverted[i]) {
+                configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            } else {
                 configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
             }
             configs.Slot0.kP = kP;
