@@ -215,7 +215,7 @@ public final class Constants {
     public static final double POSITIONAL_CONVERSION_FACTOR = 360.0*(8.0/70.0)*(1.0/3.0);
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
-    public static final double ENCODER_OFFSET = .807;
+    public static final double ENCODER_OFFSET = 290.79;
     
 
   }

@@ -6,8 +6,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.hal.DIOJNI;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -51,13 +53,18 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     //middleSensor = new DigitalInput(3);
 
     encoder = new DutyCycleEncoder(6);
+
     encoder.setInverted(true);
-    double absoluteAngle = encoder.get();
-    //setEncoderPosition((absoluteAngle - Constants.kEndEffector.ENCODER_OFFSET) * 360);
+    placementMotor.getConfigurator().setPosition((encoder.get() * 360) - Constants.kEndEffector.ENCODER_OFFSET);
+
   }
 
   public void setPlacementMotorSpeed(double speed) {
     placementMotor.set(speed);
+  }
+
+  public Rotation2d getRelativeAngle() {
+    return Rotation2d.fromDegrees(getPosition()[0]);
   }
 
   public Boolean[] checkSensorsIndexing() {

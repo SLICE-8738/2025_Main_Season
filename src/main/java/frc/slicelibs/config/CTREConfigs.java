@@ -10,7 +10,6 @@ public final class CTREConfigs {
     public final Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
     public final TalonFXConfiguration positionalFXConfig = new TalonFXConfiguration();
 
-
     public CTREConfigs() {
         /* Swerve Drive Motor Configuration */
 
@@ -72,5 +71,6 @@ public final class CTREConfigs {
 
         positionalFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.CLOSED_LOOP_RAMP;
         positionalFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.CLOSED_LOOP_RAMP;
+
     }
 }
