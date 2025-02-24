@@ -71,6 +71,7 @@ public class RobotContainer {
   /* Elevator */
   public final ManualElevator m_manualElevator;
   public final MoveToLevel m_toLevel;
+  public final SetElevatorLevel m_setLevelSource;
   public final SetElevatorLevel m_setLevelOne;
   public final SetElevatorLevel m_setLevelTwo;
   public final SetElevatorLevel m_setLevelThree;
@@ -117,7 +118,9 @@ public class RobotContainer {
         break;
     }
 
-    m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID }, new boolean[] { true, false }, 2.5, 0.04, 0.25, Constants.kElevator.POSITION_CONVERSION_FACTOR, Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
+    m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID },
+        new boolean[] { true, false }, 2.5, 0.04, 0.25, Constants.kElevator.POSITION_CONVERSION_FACTOR,
+        Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
 
     m_leds = new LEDs();
 
@@ -154,6 +157,7 @@ public class RobotContainer {
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
     m_toLevel = new MoveToLevel(m_elevator, threshold);
+    m_setLevelSource = new SetElevatorLevel(0);
     m_setLevelOne = new SetElevatorLevel(1);
     m_setLevelTwo = new SetElevatorLevel(2);
     m_setLevelThree = new SetElevatorLevel(3);

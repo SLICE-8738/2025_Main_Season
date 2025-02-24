@@ -21,7 +21,10 @@ public class ElevatorPositionSelector {
 
         public ElevatorPositionSelector() {
                 positions.add(
-                                driverTab.add("Level 1", true).withPosition(13, 6)
+                                driverTab.add("Level 1", true).withPosition(13, 8)
+                                                .withWidget(BuiltInWidgets.kToggleButton).getEntry());
+                positions.add(
+                                driverTab.add("Source", false).withPosition(13, 6)
                                                 .withWidget(BuiltInWidgets.kToggleButton).getEntry());
                 positions.add(
                                 driverTab.add("Level 2", false).withPosition(13, 4)
