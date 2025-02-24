@@ -214,7 +214,7 @@ public final class Constants {
     public static final double POSITIONAL_CONVERSION_FACTOR = 360*(8/70)*(1/3);
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
-    public static final double ENCODER_OFFSET = 0;
+    public static final double ENCODER_OFFSET = .807;
     
 
   }
@@ -231,12 +231,12 @@ public final class Constants {
     /* Current Limiting */
     // TODO: Find current limits
     public static final boolean POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-    public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+    public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 25;
+    public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 40;
     public static final double POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
     public static final boolean POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 65;
+    public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 40;
 
     public static final double OPEN_LOOP_RAMP = 0.25;
     public static final double CLOSED_LOOP_RAMP = 0.0;

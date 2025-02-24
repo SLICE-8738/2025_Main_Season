@@ -46,13 +46,14 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     super(new int[] {11}, new boolean[] {false}, 0.13, 0, 0, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // TODO enter parameters
-    frontSensor = new DigitalInput(1);
-    backSensor = new DigitalInput(2);
+    frontSensor = new DigitalInput(8);
+    backSensor = new DigitalInput(9);
     //middleSensor = new DigitalInput(3);
 
-    encoder = new DutyCycleEncoder(0);
+    encoder = new DutyCycleEncoder(6);
+    encoder.setInverted(true);
     double absoluteAngle = encoder.get();
-    setEncoderPosition(absoluteAngle - Constants.kEndEffector.ENCODER_OFFSET);
+    //setEncoderPosition((absoluteAngle - Constants.kEndEffector.ENCODER_OFFSET) * 360);
   }
 
   public void setPlacementMotorSpeed(double speed) {
@@ -61,15 +62,19 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
-    sensorStatuses[0] = frontSensor.get();
+    sensorStatuses[0] = !frontSensor.get();
     //sensorStatuses[1] = middleSensor.get();
-    sensorStatuses[2] = backSensor.get();
+    sensorStatuses[2] = !backSensor.get();
     return sensorStatuses;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Absolute Angle", encoder.get());
+    SmartDashboard.putNumber("Absolute End Effector Angle", encoder.get());
+    SmartDashboard.putNumber("Relative End Effector Angle", getPosition()[0]);
+    SmartDashboard.putBoolean("SensorFront", frontSensor.get());
+    SmartDashboard.putBoolean("SensorBack", backSensor.get());
+
     // This method will be called once per scheduler run
   }
 }

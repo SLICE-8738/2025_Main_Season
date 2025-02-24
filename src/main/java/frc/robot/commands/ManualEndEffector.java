@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
@@ -28,7 +29,7 @@ public class ManualEndEffector extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    endEffector.set(controller.getRawAxis(0));
+    endEffector.set(MathUtil.applyDeadband(controller.getRawAxis(0) * .5, .1));
   }
 
   // Called once the command ends or is interrupted.
