@@ -34,7 +34,7 @@ import frc.slicelibs.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
+  public static final Mode ADVANTAGE_KIT_MODE = Mode.REAL;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
@@ -64,7 +64,7 @@ public final class Constants {
   public final class kDrivetrain {
 
     /* Gyro */
-    public static final int GYRO_ID = 10;
+    public static final int GYRO_ID = 15;
     public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
 
     /* Swerve Physics */
@@ -78,10 +78,10 @@ public final class Constants {
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 0.7; // (Vex Griplocks)
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
-      new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module 
-      new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
-      new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
-      new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
+        new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module
+        new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
+        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
+        new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
 
     /* Motor Gearing */
     public static final double DRIVE_GEAR_RATIO = (5.14 / 1.0); // 5.14:1
@@ -152,91 +152,145 @@ public final class Constants {
     public static final boolean ANGLE_INVERT = false;
 
     /* Absolute Angle Encoder Invert */
-    public static final boolean ABSOLUTE_ENCODER_INVERT = false; //TODO: Determine whether to invert
+    public static final boolean ABSOLUTE_ENCODER_INVERT = false; // TODO: Determine whether to invert
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public final class Mod0 {
-      public static final int DRIVE_MOTOR_ID = 2;
-      public static final int ANGLE_MOTOR_ID = 6;
-      public static final int ABSOLUTE_ENCODER_ID = 3;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(172.65);
+      public static final int DRIVE_MOTOR_ID = 4;
+      public static final int ANGLE_MOTOR_ID = 8;
+      public static final int ABSOLUTE_ENCODER_ID = 2;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(273.3);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
     /* Front Right Module - Module 1 */
     public final class Mod1 {
-      public static final int DRIVE_MOTOR_ID = 3;
-      public static final int ANGLE_MOTOR_ID = 7;
-      public static final int ABSOLUTE_ENCODER_ID_ID = 2;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(4.39);
+      public static final int DRIVE_MOTOR_ID = 1;
+      public static final int ANGLE_MOTOR_ID = 5;
+      public static final int ABSOLUTE_ENCODER_ID = 1;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(295.2);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
     /* Back Right Module - Module 2 */
     public final class Mod2 {
-      public static final int DRIVE_MOTOR_ID = 4;
-      public static final int ANGLE_MOTOR_ID = 8;
-      public static final int ABSOLUTE_ENCODER_ID = 1;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(25.94);
+      public static final int DRIVE_MOTOR_ID = 2;
+      public static final int ANGLE_MOTOR_ID = 6;
+      public static final int ABSOLUTE_ENCODER_ID = 3;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.6);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
     /* Back Left Module - Module 3 */
     public final class Mod3 {
-      public static final int DRIVE_MOTOR_ID = 5;
-      public static final int ANGLE_MOTOR_ID = 9;
+      public static final int DRIVE_MOTOR_ID = 3;
+      public static final int ANGLE_MOTOR_ID = 7;
       public static final int ABSOLUTE_ENCODER_ID = 0;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(274.26);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(82.1);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-        ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
     }
 
     public static final double LEFT_BRANCH_X_POSITION = -0.1651;
     public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
-  
+
     public static final double CORAL_STATION_LEFT_X_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_X_POSITION = 0.25;
-  
+
     public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
     public static enum CoralPosition {
 
       /* Reef Positions */
-      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()), "Back Middle Left Branch"),
-      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)), "Back Left Right Branch"),
-      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)), "Back Left Left Branch"),
-      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)), "Front Left Right Branch"),
-      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)), "Front Left Left Branch"),
-      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)), "Front Middle Right Branch"),
-      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)), "Front Middle Left Branch"),
-      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)), "Front Right Right Branch"),
-      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)), "Front Right Left Branch"),
-      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)), "Back Right Right Branch"),
-      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)), "Back Right Left Branch"),
-      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()), "Back Middle Right Branch"),
-  
+      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
+          "Back Middle Left Branch"),
+      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+          "Back Left Right Branch"),
+      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+          "Back Left Left Branch"),
+      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+          "Front Left Right Branch"),
+      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+          "Front Left Left Branch"),
+      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+          "Front Middle Right Branch"),
+      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+          "Front Middle Left Branch"),
+      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+          "Front Right Right Branch"),
+      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+          "Front Right Left Branch"),
+      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+          "Back Right Right Branch"),
+      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+          "Back Right Left Branch"),
+      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
+          "Back Middle Right Branch"),
+
       /* Coral Station Positions */
-      LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)), "Left Coral Station Right"),
-      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)), "Left Coral Station Left"),
-      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)), "Right Coral Station Right"),
-      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)), "Right Coral Station Left");
-  
+      LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
+          "Left Coral Station Right"),
+      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
+          "Left Coral Station Left"),
+      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
+          "Right Coral Station Right"),
+      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
+          "Right Coral Station Left");
+
       public final double xAlignPosition;
       public final Pose2d fieldPosition;
       public final String name;
-  
+
       CoralPosition(double xAlignPosition, Pose2d fieldPosition, String name) {
         this.xAlignPosition = xAlignPosition;
         this.fieldPosition = fieldPosition;
         this.name = name;
       }
-  
+
     }
 
+  }
+
+  public final class kElevator {
+    public static final int LEFT_MOTOR_ID = 9;
+    public static final int RIGHT_MOTOR_ID = 10;
+    public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 3.5; // Pitch diameter times pi (to
+                                                                                         // get pitch circumference)
+                                                                                         // divided by gear ratio.
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
+    public static final double KP = 2.85;
+    public static final double KI = 0.06;
+    public static final double KD = 0.25;
+    public static final double THRESHOLD = .01;
+
+    /* Motor Invert */
+    public static final InvertedValue ELEVATORFX_INVERT = InvertedValue.Clockwise_Positive;
+
+    /* Motor Idle Modes */
+    public static final NeutralModeValue ELEVATORFX_IDLE = NeutralModeValue.Brake;
+
+    /* Current Limiting */
+    // TODO: Find current limits
+    public static final boolean ELEVATORFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LIMIT = 40;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+    public static final double ELEVATORFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+
+    public static final boolean ELEVATORFX_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double ELEVATORFX_STATOR_CURRENT_LIMIT = 65;
+
+    public static final double OPEN_LOOP_RAMP = 0.25;
+    public static final double CLOSED_LOOP_RAMP = 0.0;
+
+    /* PID */
+    // TODO: Tune PIDs
+    public static final double ELEVATORFX_KP = 0.1;
+    public static final double ELEVATORFX_KI = 0.001;
+    public static final double ELEVATORFX_KD = 0.01;
   }
 
   public final class kLEDs {
@@ -246,33 +300,8 @@ public final class Constants {
 
   public final class kTalonFXPositionalSubsystem {
 
-    /* Motor Invert */
-    public static final InvertedValue POSITIONALFX_INVERT = InvertedValue.Clockwise_Positive;
-
-    /* Motor Idle Modes */
-    public static final NeutralModeValue POSITIONALFX_IDLE = NeutralModeValue.Brake;
-
-    /* Current Limiting */
-    //TODO: Find current limits
-    public static final boolean POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-    public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
-    public static final double POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
-
-    public static final boolean POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 65;
-
-    public static final double OPEN_LOOP_RAMP = 0.25;
-    public static final double CLOSED_LOOP_RAMP = 0.0;
-
-    /* PID */
-    //TODO: Tune PIDs
-    public static final double POSITIONALFX_KP = 0.1;
-    public static final double POSITIONALFX_KI = 0.001;
-    public static final double POSITIONALFX_KD = 0.01;
-
   }
-  
+
   public static final double LEFT_BRANCH_X_POSITION = -0.1651;
   public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
 
@@ -302,6 +331,3 @@ public final class Constants {
   }
 
 }
-
-
-
