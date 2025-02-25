@@ -154,6 +154,7 @@ public final class Constants {
     /* Absolute Angle Encoder Invert */
     public static final boolean ABSOLUTE_ENCODER_INVERT = false; // TODO: Determine whether to invert
 
+    
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public final class Mod0 {
@@ -161,40 +162,136 @@ public final class Constants {
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int ABSOLUTE_ENCODER_ID = 2;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(273.3);
-      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
+          DRIVE_MOTOR_ID, 
+          ANGLE_MOTOR_ID,
+          ABSOLUTE_ENCODER_ID, 
+          ANGLE_OFFSET);
     }
-
+    
     /* Front Right Module - Module 1 */
     public final class Mod1 {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
       public static final int ABSOLUTE_ENCODER_ID = 1;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(295.2);
-      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
+          DRIVE_MOTOR_ID, 
+          ANGLE_MOTOR_ID,
+          ABSOLUTE_ENCODER_ID, 
+          ANGLE_OFFSET);
     }
-
+    
     /* Back Right Module - Module 2 */
     public final class Mod2 {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 6;
       public static final int ABSOLUTE_ENCODER_ID = 3;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.6);
-      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
+          DRIVE_MOTOR_ID, 
+          ANGLE_MOTOR_ID,
+          ABSOLUTE_ENCODER_ID, 
+          ANGLE_OFFSET);
     }
-
+    
     /* Back Left Module - Module 3 */
     public final class Mod3 {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int ABSOLUTE_ENCODER_ID = 0;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(82.1);
-      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, ANGLE_OFFSET);
+      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
+          DRIVE_MOTOR_ID, 
+          ANGLE_MOTOR_ID,
+          ABSOLUTE_ENCODER_ID, 
+          ANGLE_OFFSET);
     }
 
+  }
+
+  public final class kElevator {
+    public static final int LEFT_MOTOR_ID = 9;
+    public static final int RIGHT_MOTOR_ID = 10;
+    public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 3.5; // Pitch diameter times pi (to
+                                                                                         // get pitch circumference)
+                                                                                         // divided by gear ratio.
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
+    public static final double KP = 2.85;
+    public static final double KI = 0.06;
+    public static final double KD = 0.25;
+    public static final double THRESHOLD = .01;
+
+    /* Motor Invert */
+    public static final InvertedValue ELEVATORFX_INVERT = InvertedValue.Clockwise_Positive;
+
+    /* Motor Idle Modes */
+    public static final NeutralModeValue ELEVATORFX_IDLE = NeutralModeValue.Brake;
+
+    /* Current Limiting */
+    // TODO: Find current limits
+    public static final boolean ELEVATORFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LIMIT = 40;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+    public static final double ELEVATORFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+
+    public static final boolean ELEVATORFX_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double ELEVATORFX_STATOR_CURRENT_LIMIT = 65;
+
+    public static final double OPEN_LOOP_RAMP = 0.25;
+    public static final double CLOSED_LOOP_RAMP = 0.0;
+
+    /* PID */
+    // TODO: Tune PIDs
+    public static final double ELEVATORFX_KP = 0.1;
+    public static final double ELEVATORFX_KI = 0.001;
+    public static final double ELEVATORFX_KD = 0.01;
+  }
+
+  public final class kLEDs {
+    public static final int LED_PWM_PORT = 1;
+    public static final int LED_LENGTH = 300;
+  }
+  
+  public final class kEndEffector {
+    
+    public static final int ROTATION_MOTOR_ID = 11;
+    public static final int PLACEMENT_MOTOR_ID = 12;
+
+    public static final double POSITIONAL_CONVERSION_FACTOR = 360.0*(8.0/70.0)*(15.0/36.0);
+    public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
+
+    public static final double ENCODER_OFFSET = 296;
+
+  }
+
+  public final class kTalonFXPositionalSubsystem {
+    /* Motor Invert */
+    public static final InvertedValue POSITIONALFX_INVERT = InvertedValue.Clockwise_Positive;
+
+    /* Motor Idle Modes */
+    public static final NeutralModeValue POSITIONALFX_IDLE = NeutralModeValue.Brake;
+
+    /* Current Limiting */
+    // TODO: Find current limits
+    public static final boolean POSITIONALFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 35;
+    public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 50;
+    public static final double POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+
+    public static final boolean POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 50;
+
+    public static final double OPEN_LOOP_RAMP = 0.25;
+    public static final double CLOSED_LOOP_RAMP = 0.0;
+
+    /* PID */
+    // TODO: Tune PIDs
+    public static final double POSITIONALFX_KP = 0.1;
+    public static final double POSITIONALFX_KI = 0.001;
+    public static final double POSITIONALFX_KD = 0.01;
+  }
+  
     public static final double LEFT_BRANCH_X_POSITION = -0.1651;
     public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
 
@@ -250,84 +347,5 @@ public final class Constants {
         this.fieldPosition = fieldPosition;
         this.name = name;
       }
-
-    }
-
-  }
-
-  public final class kElevator {
-    public static final int LEFT_MOTOR_ID = 9;
-    public static final int RIGHT_MOTOR_ID = 10;
-    public static final double POSITION_CONVERSION_FACTOR = (0.0382016 * Math.PI) / 3.5; // Pitch diameter times pi (to
-                                                                                         // get pitch circumference)
-                                                                                         // divided by gear ratio.
-    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
-    public static final double KP = 2.85;
-    public static final double KI = 0.06;
-    public static final double KD = 0.25;
-    public static final double THRESHOLD = .01;
-
-    /* Motor Invert */
-    public static final InvertedValue ELEVATORFX_INVERT = InvertedValue.Clockwise_Positive;
-
-    /* Motor Idle Modes */
-    public static final NeutralModeValue ELEVATORFX_IDLE = NeutralModeValue.Brake;
-
-    /* Current Limiting */
-    // TODO: Find current limits
-    public static final boolean ELEVATORFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-    public static final int ELEVATORFX_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int ELEVATORFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
-    public static final double ELEVATORFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
-
-    public static final boolean ELEVATORFX_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double ELEVATORFX_STATOR_CURRENT_LIMIT = 65;
-
-    public static final double OPEN_LOOP_RAMP = 0.25;
-    public static final double CLOSED_LOOP_RAMP = 0.0;
-
-    /* PID */
-    // TODO: Tune PIDs
-    public static final double ELEVATORFX_KP = 0.1;
-    public static final double ELEVATORFX_KI = 0.001;
-    public static final double ELEVATORFX_KD = 0.01;
-  }
-
-  public final class kLEDs {
-    public static final int LED_PWM_PORT = 1;
-    public static final int LED_LENGTH = 300;
-  }
-
-  public final class kTalonFXPositionalSubsystem {
-
-  }
-
-  public static final double LEFT_BRANCH_X_POSITION = -0.1651;
-  public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
-
-  public static enum ReefPosition {
-
-    BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d())),
-    BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300))),
-    BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300))),
-    FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240))),
-    FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240))),
-    FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180))),
-    FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180))),
-    FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120))),
-    FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120))),
-    BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60))),
-    BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60))),
-    BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()));
-
-    public final double branchXPosition;
-    public final Pose2d fieldPosition;
-
-    ReefPosition(double branchXPosition, Pose2d fieldPosition) {
-      this.branchXPosition = branchXPosition;
-      this.fieldPosition = fieldPosition;
-    }
-
-  }
 
 }

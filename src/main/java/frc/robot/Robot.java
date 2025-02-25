@@ -42,7 +42,7 @@ public class Robot extends LoggedRobot {
       case REAL: 
         //Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        new PowerDistribution(23, ModuleType.kRev); // Enables power distribution logging
         break;
       case SIM:
         // Running simulation code, log to NT
@@ -87,6 +87,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
+    //m_robotContainer.m_autoSelector.updateInitialAutoPoseOffset();
     m_robotContainer.m_coralPositionSelector.update();
   }
 

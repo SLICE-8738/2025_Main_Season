@@ -4,7 +4,6 @@
 
 package frc.slicelibs;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -74,6 +73,7 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         for (TalonFX motor : motors) {
             motor.setControl(request.withPosition(position / positionConversionFactor));
         }
+      
         positionTargetReference = position;
         SmartDashboard.putNumber("Elevator Target", position);
     }

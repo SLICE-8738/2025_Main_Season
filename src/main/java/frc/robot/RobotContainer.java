@@ -15,6 +15,11 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.commands.BumpAlgae;
+import frc.robot.commands.IndexCommand;
+import frc.robot.commands.ManualEndEffector;
+import frc.robot.commands.PrepareEndEffector;
+import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Elevator.ElevatorToStow;
 import frc.robot.commands.Elevator.ManualElevator;
@@ -46,8 +51,14 @@ public class RobotContainer {
   // Subsystems
   // ==========================
 
+  // public final Drivetrain m_drivetrain;
+  // public final LEDs m_leds;
+
+  // public final AutoSelector m_autoSelector;
+  //public final ShuffleboardData m_shuffleboardData;
   public final Drivetrain m_drivetrain;
   public final Elevator m_elevator;
+  public final EndEffector m_endEffector;
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
@@ -59,6 +70,25 @@ public class RobotContainer {
   // Commands
   // ==========================
 
+  // /* Drivetrain */
+  // public final DriveCommand m_swerveDriveOpenLoop;
+  // public final DriveCommand m_swerveDriveClosedLoop;
+  // public final RunDutyCycleCommand m_setDrivePercentOutput;
+  // public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
+  // public final Command m_sysIDDriveRoutine;
+
+  /* End Effector */
+  public final IndexCommand m_indexCoral;
+  public final BumpAlgae m_bumpAlgae;
+  public final ScoreCoral m_scoreCoral;
+  public final ManualEndEffector m_manualEndEffector;
+  public final PrepareEndEffector m_prepareEndEffectorAngle1;
+  public final PrepareEndEffector m_prepareEndEffectorAngle2;
+
+
+  // /* Tests */
+  // public final DrivetrainTest m_drivetrainTest;
+  
   /* Drivetrain */
   public final DriveCommand m_swerveDriveOpenLoop;
   public final DriveCommand m_swerveDriveClosedLoop;
@@ -90,7 +120,7 @@ public class RobotContainer {
     // Subsystems
     // ==========================
 
-    switch (Constants.ADVANTAGE_KIT_MODE) {
+    /*switch (Constants.ADVANTAGE_KIT_MODE) {
         case REAL:
           // Real robot, instantiate hardware IO implementations
           m_drivetrain =
@@ -125,7 +155,7 @@ public class RobotContainer {
               new SwerveModuleIO() {});
           m_autoSelector = new AutoSelector(m_drivetrain, null);
           break;
-    }
+    }*/
     
     m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID },
         new boolean[] { true, false }, Constants.kElevator.KP, Constants.kElevator.KI, Constants.kElevator.KD,
@@ -134,19 +164,37 @@ public class RobotContainer {
 
     m_leds = new LEDs();
 
-    m_autoSelector = new AutoSelector(m_drivetrain);
     m_reefPositionSelector = new ReefPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
-    m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
+    //m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
     // ==========================
     // Commands
     // ==========================
 
+    // /* Drivetrain */
+    // m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
+    // m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController,
+    //     false);
+    // m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
+    // m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+    // m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+
+    /* End Effector */
+    m_indexCoral = new IndexCommand(m_endEffector);
+    m_bumpAlgae = new BumpAlgae(m_endEffector);
+    m_scoreCoral = new ScoreCoral(m_endEffector);
+    m_prepareEndEffectorAngle1 = new PrepareEndEffector(m_endEffector, 45);
+    m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 85);
+    m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
+
+    // /* Tests */
+    // m_drivetrainTest = new DrivetrainTest(m_drivetrain);
+    
     /* Drivetrain */
-    m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
+    /*m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
     m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
@@ -162,7 +210,7 @@ public class RobotContainer {
             CoralPositionSelector.getSelectedCoralStationFieldPosition(),
             Constants.kDrivetrain.PATH_CONSTRAINTS,
             0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
-        Set.of(m_drivetrain));
+        Set.of(m_drivetrain));*/
 
     /* Elevator */
 
@@ -175,13 +223,11 @@ public class RobotContainer {
     m_setLevelFour = new SetElevatorLevel(4);
     m_elevatorToStow = new ElevatorToStow(m_elevator, Constants.kElevator.THRESHOLD);
 
-    /* Tests */
-    m_drivetrainTest = new DrivetrainTest(m_drivetrain);
-
     // Configure the trigger bindings
     configureBindings();
 
-    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_endEffector.setDefaultCommand(m_manualEndEffector);
     m_elevator.setDefaultCommand(m_manualElevator);
 
   }
@@ -206,11 +252,11 @@ public class RobotContainer {
     // Driver Controls
     // ================
 
-    /* Drivetrain */
-    Button.triangle1.onTrue(m_resetFieldOrientedHeading);
+    // /* Drivetrain */
+    /*Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftBumper1.whileTrue(m_reefAlign);
-    Button.rightBumper1.whileTrue(m_coralStationAlign);
+    Button.rightBumper1.whileTrue(m_coralStationAlign);*/
     /* Elevator */
     Button.rightTrigger1.onTrue(m_toLevel.withTimeout(2.0));
     Button.psButton1.onTrue(m_elevatorToStow);
@@ -219,6 +265,12 @@ public class RobotContainer {
     // Operator Controls
     // ==================
 
+    Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
+    Button.triangle2.onTrue(m_bumpAlgae);
+    Button.square2.onTrue(m_scoreCoral);
+    Button.circle2.onTrue(m_prepareEndEffectorAngle1);
+    Button.rightBumper2.onTrue(m_prepareEndEffectorAngle2);
+
     /* Elevator */
     Button.controlPadDown2.onTrue(m_setLevelOne);
     Button.leftBumper2.onTrue(m_setLevelSource);
@@ -226,6 +278,7 @@ public class RobotContainer {
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
     Button.psButton2.onTrue(m_elevatorToStow);
+    
   }
 
   /**
@@ -235,8 +288,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    return m_autoSelector.getAutoRoutine();
-
+    //return m_autoSelector.getAutoRoutine();
+    return null;
   }
 
 }
