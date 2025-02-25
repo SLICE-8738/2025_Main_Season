@@ -24,12 +24,24 @@ public class ManualEndEffector extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    endEffector.resetRelativeEncoder();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    endEffector.set(MathUtil.applyDeadband(controller.getRawAxis(0) * .5, .1));
+    double axis = MathUtil.applyDeadband(controller.getRawAxis(0) * .5, .1);
+    if(axis < 0 && endEffector.getAngle().getDegrees() <= 0){
+      axis = 0;
+    }
+    if(axis > 0 && endEffector.getAngle().getDegrees() >= 88){
+      axis = 0;
+    }
+    if (axis == 0){
+      axis = .02 * endEffector.getAngle().getCos();
+    }
+    endEffector.set(axis);
   }
 
   // Called once the command ends or is interrupted.

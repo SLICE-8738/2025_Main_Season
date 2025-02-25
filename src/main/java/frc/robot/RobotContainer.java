@@ -134,7 +134,7 @@ public class RobotContainer {
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
     m_prepareEndEffectorAngle1 = new PrepareEndEffector(m_endEffector, 45);
-    m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 0);
+    m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 85);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
 
     // /* Tests */

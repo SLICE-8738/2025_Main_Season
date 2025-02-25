@@ -38,14 +38,14 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   /** Creates a new EndEffector. */
   public EndEffector() {
-    super(new int[] {11}, new boolean[] {false}, 0.13, 0, 0, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
+    super(new int[] {11}, new boolean[] {false}, 1.75, 0.025, 0.2, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
     // TODO enter parameters
     frontSensor = new DigitalInput(8);
     backSensor = new DigitalInput(9);
     //middleSensor = new DigitalInput(3);
 
-    encoder = new DutyCycleEncoder(6, 360, Constants.kEndEffector.ENCODER_OFFSET);
-    setEncoderPosition(encoder.get());
+    encoder = new DutyCycleEncoder(6, 360, 0);
+    encoder.setInverted(true);
   }
  
   public void setAngle(Rotation2d angle) {
@@ -55,12 +55,24 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     return Rotation2d.fromDegrees(getPosition()[0]);
   }
 
+  public Rotation2d getAbsoluteAngle() {
+    return Rotation2d.fromDegrees(encoder.get());
+  }
+
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = !frontSensor.get();
     //sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = !backSensor.get();
     return sensorStatuses;
+  }
+
+  public void resetRelativeEncoder() {
+    if (encoder.get() < 60) {
+      setEncoderPosition(360 + encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
+    }else {
+      setEncoderPosition(encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
+    }
   }
 
   @Override

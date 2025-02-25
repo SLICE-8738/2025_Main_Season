@@ -12,7 +12,10 @@ public class PrepareEndEffector extends Command {
   /** Creates a new PrepareEndEffector. */
   EndEffector endEffector;
   double angle;
+  //true = up    false = down
+  private boolean movementDirection;
   public PrepareEndEffector(EndEffector endEffector, double angle) {
+    addRequirements(endEffector);
     this.endEffector = endEffector;
     this.angle = angle;
   }
@@ -21,6 +24,12 @@ public class PrepareEndEffector extends Command {
   @Override
   public void initialize() {
     endEffector.setPosition(angle);
+    if(endEffector.getAngle().getDegrees() < angle){
+      movementDirection = true;
+    }
+    if(endEffector.getAngle().getDegrees() > angle){
+      movementDirection = false;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,6 +45,12 @@ public class PrepareEndEffector extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(endEffector.getAngle().getDegrees() >= 88 && movementDirection){
+      return true;
+    } else if(endEffector.getAngle().getDegrees() <= 0 && !movementDirection){
+      return true;
+    }
+    
     if (endEffector.atTarget(1) ) {
       return true;
     } else {
