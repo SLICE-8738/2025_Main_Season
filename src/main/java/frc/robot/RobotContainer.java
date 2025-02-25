@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.Elevator.ElevatorToStow;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.SetElevatorLevel;
@@ -76,6 +77,7 @@ public class RobotContainer {
   public final SetElevatorLevel m_setLevelTwo;
   public final SetElevatorLevel m_setLevelThree;
   public final SetElevatorLevel m_setLevelFour;
+  public final ElevatorToStow m_elevatorToStow;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -167,6 +169,7 @@ public class RobotContainer {
     m_setLevelTwo = new SetElevatorLevel(2);
     m_setLevelThree = new SetElevatorLevel(3);
     m_setLevelFour = new SetElevatorLevel(4);
+    m_elevatorToStow = new ElevatorToStow(m_elevator, threshold);
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -206,6 +209,7 @@ public class RobotContainer {
     Button.rightBumper1.whileTrue(m_coralStationAlign);
     /* Elevator */
     Button.rightTrigger1.onTrue(m_toLevel.withTimeout(2.0));
+    Button.psButton1.onTrue(m_elevatorToStow);
 
     // ==================
     // Operator Controls
@@ -217,6 +221,7 @@ public class RobotContainer {
     Button.controlPadLeft2.onTrue(m_setLevelTwo);
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
+    Button.start.onTrue(m_elevatorToStow);
   }
 
   /**
