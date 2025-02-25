@@ -77,9 +77,9 @@ public class REVConfigs {
             angleSparkMaxConfig.encoder.velocityConversionFactor(Constants.kDrivetrain.ANGLE_VELOCITY_CONVERSION_FACTOR);
 
             /* PID */
-            angleSparkMaxConfig.closedLoop.p(Constants.kDrivetrain.DRIVE_KP);
-            angleSparkMaxConfig.closedLoop.i(Constants.kDrivetrain.DRIVE_KI);
-            angleSparkMaxConfig.closedLoop.d(Constants.kDrivetrain.DRIVE_KD);
+            angleSparkMaxConfig.closedLoop.p(Constants.kDrivetrain.ANGLE_KP);
+            angleSparkMaxConfig.closedLoop.i(Constants.kDrivetrain.ANGLE_KI);
+            angleSparkMaxConfig.closedLoop.d(Constants.kDrivetrain.ANGLE_KD);
     }
 
 }

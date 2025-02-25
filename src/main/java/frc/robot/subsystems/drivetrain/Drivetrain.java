@@ -29,6 +29,8 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
+import java.util.List;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,6 +38,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class Drivetrain extends SubsystemBase {
@@ -92,14 +95,14 @@ private final StatusSignal<Angle> gyroYawSignal;
       getModulePositions(), 
       LimelightHelpers.getBotPose2d_wpiBlue("limelight"),
       VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(0.1, 0.1, 9999999));
+      VecBuilder.fill(0.1, 0.1, 0.1));
 
     fieldOrientedOffset = new Rotation2d();
 
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
         Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
-        m_field2d.getObject("Trajectory").setPoses(path);
+        setField2dTrajectory(path, "Trajectory");
       }
     );
     PathPlannerLogging.setLogTargetPoseCallback(
@@ -149,6 +152,8 @@ private final StatusSignal<Angle> gyroYawSignal;
       gyroYawSignal,
       gyroYawVelocitySignal
     );
+
+    SmartDashboard.putNumber("Rotational Velocity", getRotationalVelocity().getDegrees());
 
   }
 
@@ -226,16 +231,16 @@ private final StatusSignal<Angle> gyroYawSignal;
 
     if (!DriverStation.isAutonomousEnabled()) {
 
-      LimelightHelpers.SetRobotOrientation("limelight", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+      LimelightHelpers.SetRobotOrientation("limelight-slice", getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-slice");
 
-      if (estimate.tagCount >= 2) {
+      if (estimate.tagCount >= 1) {
 
-        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_CameraSpace("limelight").getTranslation();
+        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-slice").getTranslation();
 
-        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 4.5) {
+        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
         
-          m_odometry.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
         
         }
 
@@ -257,6 +262,12 @@ private final StatusSignal<Angle> gyroYawSignal;
   public Pose2d getPose() {
 
     return m_odometry.getEstimatedPosition();
+
+  }
+
+  public void setField2dTrajectory(List<Pose2d> poses, String trajectoryName) {
+
+    m_field2d.getObject(trajectoryName).setPoses(poses);
 
   }
 
@@ -431,7 +442,7 @@ private final StatusSignal<Angle> gyroYawSignal;
         moduleDeltas[mod.moduleNumber] = 
           new SwerveModulePosition(
             modulePositions[mod.moduleNumber].distanceMeters - lastModulePositions[mod.moduleNumber].distanceMeters,
-            modulePositions[mod.moduleNumber].angle.minus(lastModulePositions[mod.moduleNumber].angle)
+            modulePositions[mod.moduleNumber].angle
           );
         lastModulePositions[mod.moduleNumber] = modulePositions[mod.moduleNumber];
 

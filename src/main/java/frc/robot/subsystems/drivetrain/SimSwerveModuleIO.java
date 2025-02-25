@@ -17,11 +17,11 @@ import frc.slicelibs.math.Conversions;
 
 public class SimSwerveModuleIO implements SwerveModuleIO {
   private final DCMotorSim driveMotor = new DCMotorSim(
-    LinearSystemId.createDCMotorSystem(Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA), 
-    DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO));
+    LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.025, Constants.kDrivetrain.DRIVE_GEAR_RATIO),
+    DCMotor.getNEO(1));
   private final DCMotorSim angleMotor = new DCMotorSim(
-    LinearSystemId.createDCMotorSystem(Constants.kDrivetrain.ANGLE_KV, Constants.kDrivetrain.ANGLE_KA), 
-    DCMotor.getNEO(1).withReduction(Constants.kDrivetrain.ANGLE_GEAR_RATIO));
+    LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.004, Constants.kDrivetrain.ANGLE_GEAR_RATIO),
+    DCMotor.getNEO(1));
 
   private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, Constants.kDrivetrain.DRIVE_KV);
   private final PIDController drivePID = new PIDController(0.1, 0.0, 0.0);

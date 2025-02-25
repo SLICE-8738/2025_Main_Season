@@ -19,10 +19,14 @@ public class ShuffleboardData {
 
     public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector) {
 
-        //driverTab = Shuffleboard.getTab("Driver Tab");
-        debugTab = Shuffleboard.getTab("Debug Tab");
-        swerveTab = Shuffleboard.getTab("Swerve Tab");
+        //driverTab = Shuffleboard.getTab("Driver");
+        debugTab = Shuffleboard.getTab("Debug");
+        swerveTab = Shuffleboard.getTab("Swerve");
         autoTab = Shuffleboard.getTab("Autonomous");
+
+        // ==========================
+        // Drivetrain
+        // ==========================
 
         //Displays the current velocity in meters per second of the left front swerve module on Shuffleboard
         swerveTab.addDouble("Left Front Velocity", () -> drivetrain.getModuleStates()[0].speedMetersPerSecond).
@@ -92,8 +96,8 @@ public class ShuffleboardData {
                 
         //Displays the current position of the robot on the field on Shuffleboard
         debugTab.add(drivetrain.m_field2d).
-        withPosition(4, 2).
-        withSize(3, 2);
+        withPosition(3, 1).
+        withSize(4, 3);
 
         // //Adds a tuner for the drive motor PID gains to Shuffleboard
         // ShuffleboardTuner.create(
@@ -128,10 +132,18 @@ public class ShuffleboardData {
 
         debugTab.add("SysID Routine", drivetrain.sysIDChooser);
 
+        // ==========================
+        // Autonomous
+        // ==========================
+
         //Adds the sendable chooser for the desired autonomous mode onto Shuffleboard
-        autoTab.add("Auto Mode", autoSelector.modeChooser).withPosition(2, 0).withSize(2, 1);
+        autoTab.add("Auto Mode", autoSelector.modeChooser).
+        withPosition(2, 0).
+        withSize(2, 1);
         //Adds the sendable chooser for the robot starting position onto Shuffleboard
-        autoTab.add("Starting Position", autoSelector.startingPositionChooser).withPosition(5, 0).withSize(2, 1);
+        autoTab.add("Starting Position", autoSelector.startingPositionChooser).
+        withPosition(5, 0).
+        withSize(2, 1);
 
         //Displays the autonomous mode selected on the sendable chooser on Shuffleboard
         autoTab.addString("Selected Auto Mode", autoSelector::getMode).
@@ -143,15 +155,15 @@ public class ShuffleboardData {
         withSize(2, 1);
 
         //Displays the X offset of the robot from the inital pose of the selected autonomous routine on Shuffleboard
-        autoTab.addDouble("Initial Auto Pose X Offset", () -> autoSelector.initialAutoPoseXOffset).
+        autoTab.addDouble("Initial Auto Pose X Offset", () -> autoSelector.getInitialAutoPoseOffset().getX()).
         withPosition(1, 2).
         withSize(2, 1);
         //Displays the Y offset of the robot from the inital pose of the selected autonomous routine on Shuffleboard
-        autoTab.addDouble("Initial Auto Pose Y Offset", () -> autoSelector.initialAutoPoseYOffset).
+        autoTab.addDouble("Initial Auto Pose Y Offset", () -> autoSelector.getInitialAutoPoseOffset().getY()).
         withPosition(6, 2).
         withSize(2, 1);
         //Displays the rotational offset of the robot from the inital pose of the selected autonomous routine on Shuffleboard
-        autoTab.addDouble("Initial Auto Pose Rotation Offset", () -> autoSelector.initialAutoPoseRotationOffset).
+        autoTab.addDouble("Initial Auto Pose Rotation Offset", () -> autoSelector.getInitialAutoPoseOffset().getRotation().getDegrees()).
         withPosition(3, 2).
         withSize(3, 1);
 

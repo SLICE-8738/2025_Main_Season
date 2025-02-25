@@ -24,13 +24,13 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
     private double velocityTargetReference;
 
     public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
-            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor) {
+            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor, TalonFXConfiguration motorConfigs) {
         if (ids.length != inverted.length)
             throw new IllegalArgumentException("ids and inverted must be the same length");
 
         motors = new TalonFX[ids.length];
         for (int i = 0; i < ids.length; i++) {
-            TalonFXConfiguration configs = Constants.CTRE_CONFIGS.positionalFXConfig;
+            TalonFXConfiguration configs = motorConfigs;
 
             if (inverted[i]) {
                 configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -61,21 +61,19 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
 
     public void setVelocity(double velocity) {
         VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
-        request.Velocity = velocity / velocityConversionFactor;
 
         for (TalonFX motor : motors) {
-            motor.setControl(request);
+            motor.setControl(request.withVelocity(velocity / velocityConversionFactor));
         }
         velocityTargetReference = velocity;
     }
 
     public void setPosition(double position) {
         PositionVoltage request = new PositionVoltage(0).withSlot(0);
-        request.Position = position / positionConversionFactor;
-
         for (TalonFX motor : motors) {
-            motor.setControl(request);
+            motor.setControl(request.withPosition(position / positionConversionFactor));
         }
+      
         positionTargetReference = position;
         SmartDashboard.putNumber("Elevator Target", position);
     }
