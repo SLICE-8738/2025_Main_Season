@@ -91,34 +91,42 @@ public class RobotContainer {
     // ==========================
 
     switch (Constants.ADVANTAGE_KIT_MODE) {
-      case REAL:
-        // Real robot, instantiate hardware IO implementations
-        m_drivetrain = new Drivetrain(
-            new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-            new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
-            new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
-            new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-        break;
-      case SIM:
-        m_drivetrain = new Drivetrain(
-            new SimSwerveModuleIO(),
-            new SimSwerveModuleIO(),
-            new SimSwerveModuleIO(),
-            new SimSwerveModuleIO());
-        break;
-      default:
-        m_drivetrain = new Drivetrain(
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            });
-        break;
+        case REAL:
+          // Real robot, instantiate hardware IO implementations
+          m_drivetrain =
+            new Drivetrain(
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
+                new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
+          m_autoSelector = new AutoSelector(
+            m_drivetrain, 
+            new Drivetrain(
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO()));
+          break;
+        case SIM:
+          m_drivetrain =
+            new Drivetrain(
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO());
+          m_autoSelector = new AutoSelector(m_drivetrain, null);
+          break;
+        default:
+          m_drivetrain =
+            new Drivetrain(
+              new SwerveModuleIO() {},
+              new SwerveModuleIO() {},
+              new SwerveModuleIO() {},
+              new SwerveModuleIO() {});
+          m_autoSelector = new AutoSelector(m_drivetrain, null);
+          break;
     }
-
+    
     m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID },
         new boolean[] { true, false }, Constants.kElevator.KP, Constants.kElevator.KI, Constants.kElevator.KD,
         Constants.kElevator.POSITION_CONVERSION_FACTOR,
