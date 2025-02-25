@@ -265,6 +265,7 @@ public final class Constants {
     public static final double KP = 2.85;
     public static final double KI = 0.06;
     public static final double KD = 0.25;
+    public static final double THRESHOLD = .01;
 
     /* Motor Invert */
     public static final InvertedValue ELEVATORFX_INVERT = InvertedValue.Clockwise_Positive;

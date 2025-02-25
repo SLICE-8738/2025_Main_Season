@@ -160,16 +160,15 @@ public class RobotContainer {
         Set.of(m_drivetrain));
 
     /* Elevator */
-    double threshold = .01;
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
-    m_toLevel = new MoveToLevel(m_elevator, threshold);
+    m_toLevel = new MoveToLevel(m_elevator, Constants.kElevator.THRESHOLD);
     m_setLevelSource = new SetElevatorLevel(0);
     m_setLevelOne = new SetElevatorLevel(1);
     m_setLevelTwo = new SetElevatorLevel(2);
     m_setLevelThree = new SetElevatorLevel(3);
     m_setLevelFour = new SetElevatorLevel(4);
-    m_elevatorToStow = new ElevatorToStow(m_elevator, threshold);
+    m_elevatorToStow = new ElevatorToStow(m_elevator, Constants.kElevator.THRESHOLD);
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
