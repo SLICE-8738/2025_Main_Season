@@ -145,7 +145,7 @@ private final StatusSignal<Angle> gyroYawSignal;
     updateOdometry();
     m_field2d.setRobotPose(getPose());
 
-BaseStatusSignal.refreshAll(
+  BaseStatusSignal.refreshAll(
       gyroYawSignal,
       gyroYawVelocitySignal
     );

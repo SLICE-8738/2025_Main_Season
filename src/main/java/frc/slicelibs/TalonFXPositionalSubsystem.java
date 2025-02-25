@@ -61,17 +61,20 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
 
     public void setVelocity(double velocity) {
         VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
+        request.Velocity = velocity / velocityConversionFactor;
 
         for (TalonFX motor : motors) {
-            motor.setControl(request.withVelocity(velocity / velocityConversionFactor));
+            motor.setControl(request);
         }
         velocityTargetReference = velocity;
     }
 
     public void setPosition(double position) {
         PositionVoltage request = new PositionVoltage(0).withSlot(0);
+        request.Position = position / positionConversionFactor;
+
         for (TalonFX motor : motors) {
-            motor.setControl(request.withPosition(position / positionConversionFactor));
+            motor.setControl(request);
         }
         positionTargetReference = position;
         SmartDashboard.putNumber("Elevator Target", position);

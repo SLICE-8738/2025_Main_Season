@@ -33,14 +33,14 @@ public class ScoreCoral extends Command {
     frontSensor = sensorGroup[0];
     //middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    endEffector.setPlacementMotorSpeed(-0.1);
+    endEffector.setVelocity(-0.1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     endEffector.set(0);
-    endEffector.setPlacementMotorSpeed(0);
+    endEffector.setVelocity(0);
   }
 
   // Returns true when the command should end.

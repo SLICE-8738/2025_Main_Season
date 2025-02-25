@@ -4,24 +4,17 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 
 public class EndEffector extends TalonFXPositionalSubsystem {
-  private TalonFX placementMotor;
   private DutyCycleEncoder encoder;
   // TODO rename maybe idk
   /*
@@ -46,24 +39,19 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   /** Creates a new EndEffector. */
   public EndEffector() {
     super(new int[] {11}, new boolean[] {false}, 0.13, 0, 0, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
-    placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // TODO enter parameters
     frontSensor = new DigitalInput(8);
     backSensor = new DigitalInput(9);
     //middleSensor = new DigitalInput(3);
 
-    encoder = new DutyCycleEncoder(6);
-
-    encoder.setInverted(true);
-    placementMotor.getConfigurator().setPosition((encoder.get() * 360) - Constants.kEndEffector.ENCODER_OFFSET);
-
+    encoder = new DutyCycleEncoder(6, 360, Constants.kEndEffector.ENCODER_OFFSET);
+    setEncoderPosition(encoder.get());
+  }
+ 
+  public void setAngle(Rotation2d angle) {
   }
 
-  public void setPlacementMotorSpeed(double speed) {
-    placementMotor.set(speed);
-  }
-
-  public Rotation2d getRelativeAngle() {
+  public Rotation2d getAngle() {
     return Rotation2d.fromDegrees(getPosition()[0]);
   }
 
