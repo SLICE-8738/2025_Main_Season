@@ -22,7 +22,7 @@ public class MoveToLevel extends Command {
     public void initialize() {
         switch (ElevatorPositionSelector.getSelectedPosition()) {
             case 0:
-                m_level = 0;
+                m_level = 0.2735;
                 break;
             case 1:
                 m_level = 0.254;
