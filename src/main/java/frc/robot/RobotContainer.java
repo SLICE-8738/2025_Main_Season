@@ -128,7 +128,8 @@ public class RobotContainer {
     }
 
     m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID },
-        new boolean[] { true, false }, 2.85, 0.06, 0.25, Constants.kElevator.POSITION_CONVERSION_FACTOR,
+        new boolean[] { true, false }, Constants.kElevator.KP, Constants.kElevator.KI, Constants.kElevator.KD,
+        Constants.kElevator.POSITION_CONVERSION_FACTOR,
         Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
 
     m_leds = new LEDs();
@@ -216,7 +217,7 @@ public class RobotContainer {
     Button.controlPadLeft2.onTrue(m_setLevelTwo);
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
-    }
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
