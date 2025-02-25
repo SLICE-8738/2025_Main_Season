@@ -9,8 +9,6 @@ import java.util.Set;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID;
-//import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -219,7 +217,7 @@ public class RobotContainer {
     Button.controlPadLeft2.onTrue(m_setLevelTwo);
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
-    Button.start.onTrue(m_elevatorToStow);
+    Button.psButton2.onTrue(m_elevatorToStow);
   }
 
   /**
