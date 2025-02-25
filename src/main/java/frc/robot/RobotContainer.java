@@ -82,6 +82,13 @@ public class RobotContainer {
                 new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
                 new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
                 new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
+          m_autoSelector = new AutoSelector(
+            m_drivetrain, 
+            new Drivetrain(
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO()));
           break;
         case SIM:
           m_drivetrain =
@@ -90,6 +97,7 @@ public class RobotContainer {
               new SimSwerveModuleIO(),
               new SimSwerveModuleIO(),
               new SimSwerveModuleIO());
+          m_autoSelector = new AutoSelector(m_drivetrain, null);
           break;
         default:
           m_drivetrain =
@@ -98,12 +106,12 @@ public class RobotContainer {
               new SwerveModuleIO() {},
               new SwerveModuleIO() {},
               new SwerveModuleIO() {});
+          m_autoSelector = new AutoSelector(m_drivetrain, null);
           break;
     }
 
     m_leds = new LEDs();
 
-    m_autoSelector = new AutoSelector(m_drivetrain);
     m_coralPositionSelector = new CoralPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 

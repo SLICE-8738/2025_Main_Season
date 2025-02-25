@@ -10,10 +10,10 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.commands.Drivetrain.AutonomousCoralPositionAlignCommand;
@@ -37,8 +37,6 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
 /**
@@ -89,13 +87,13 @@ public class AutoSelector {
     private Pose2d initialAutoPose = new Pose2d();
 
     private final Map<String, Pose2d> autoPoses = new HashMap<String, Pose2d>();
-    private Pose2d prevAutoPose;
 
-    private final Drivetrain m_drivetrain;
+    private final Drivetrain m_drivetrain, m_simDrivetrain;
 
-    public AutoSelector(Drivetrain drivetrain) {
+    public AutoSelector(Drivetrain drivetrain, Drivetrain simDrivetrain) {
 
         m_drivetrain = drivetrain;
+        m_simDrivetrain = simDrivetrain;
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
@@ -111,10 +109,10 @@ public class AutoSelector {
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
         AutoBuilder.configure(
-            m_drivetrain::getPose,
-            m_drivetrain::resetOdometry,
-            m_drivetrain::getChassisSpeeds,
-            m_drivetrain::runChassisSpeeds,
+            drivetrain::getPose,
+            drivetrain::resetOdometry,
+            drivetrain::getChassisSpeeds,
+            drivetrain::runChassisSpeeds,
             new PPHolonomicDriveController(
                 new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
                 new PIDConstants(Constants.kDrivetrain.ROTATION_KP)),
@@ -165,29 +163,78 @@ public class AutoSelector {
                 m_drivetrain.getPose() 
                 : new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
 
+            if (m_simDrivetrain != null) {
+
+                AutoBuilder.configure(
+                    m_simDrivetrain::getPose,
+                    m_simDrivetrain::resetOdometry,
+                    m_simDrivetrain::getChassisSpeeds,
+                    m_simDrivetrain::runChassisSpeeds,
+                    new PPHolonomicDriveController(
+                        new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
+                        new PIDConstants(Constants.kDrivetrain.ROTATION_KP)),
+                    new RobotConfig(
+                        Constants.kDrivetrain.MASS,
+                        Constants.kDrivetrain.MOMENT_OF_INERTIA,
+                        new ModuleConfig(
+                            Constants.kDrivetrain.WHEEL_DIAMETER / 2,
+                            Constants.kDrivetrain.MAX_LINEAR_VELOCITY,
+                            Constants.kDrivetrain.WHEEL_COEFFICIENT_OF_FRICTION,
+                            DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
+                            Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
+                            1),
+                        Constants.kDrivetrain.kSwerveKinematics.getModules()),
+                    () -> DriverStation.getAlliance().get() == Alliance.Red,
+                    m_simDrivetrain);
+
+            }
+
             JSONObject autoJSON = (JSONObject) new JSONParser().parse(new FileReader(new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoRoutine.get().getName() + ".auto")));
             JSONArray autoCommands = (JSONArray) ((JSONObject) ((JSONObject) (autoJSON.get("command"))).get("data")).get("commands");
-            
-            prevAutoPose = m_drivetrain.getPose();
 
+            SequentialCommandGroup autoSequence = new SequentialCommandGroup() {
+                @Override
+                public boolean runsWhenDisabled() {
+                    return true;
+                }
+            };
+            
             for (int i = 0; i < autoCommands.size(); i++) {
 
                 String pathName = (String) ((JSONObject) ((JSONObject) autoCommands.get(i)).get("data")).get("name");
 
-                AutoBuilder.pathfindToPoseFlipped(
-                    autoPoses.get(pathName),
+                autoSequence.addCommands(AutoBuilder.pathfindToPoseFlipped(
+                    autoPoses.get(pathName), 
                     Constants.kDrivetrain.PATH_CONSTRAINTS,
-                    0.5).initialize();
+                    0.5));
 
-                Pathfinding.setStartPosition(prevAutoPose.getTranslation());
+            }
+
+            autoSequence.schedule();
+
+            if (m_simDrivetrain != null) {
                 
-                Timer.delay(0.07);
-
-                m_drivetrain.setField2dTrajectory(
-                    Pathfinding.getCurrentPath(Constants.kDrivetrain.PATH_CONSTRAINTS, new GoalEndState(0.5, autoPoses.get(pathName).getRotation())).getPathPoses(), 
-                    pathName);
-
-                prevAutoPose = autoPoses.get(pathName);
+                AutoBuilder.configure(
+                    m_drivetrain::getPose,
+                    m_drivetrain::resetOdometry,
+                    m_drivetrain::getChassisSpeeds,
+                    m_drivetrain::runChassisSpeeds,
+                    new PPHolonomicDriveController(
+                        new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
+                        new PIDConstants(Constants.kDrivetrain.ROTATION_KP)),
+                    new RobotConfig(
+                        Constants.kDrivetrain.MASS,
+                        Constants.kDrivetrain.MOMENT_OF_INERTIA,
+                        new ModuleConfig(
+                            Constants.kDrivetrain.WHEEL_DIAMETER / 2,
+                            Constants.kDrivetrain.MAX_LINEAR_VELOCITY,
+                            Constants.kDrivetrain.WHEEL_COEFFICIENT_OF_FRICTION,
+                            DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
+                            Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
+                            1),
+                        Constants.kDrivetrain.kSwerveKinematics.getModules()),
+                    () -> DriverStation.getAlliance().get() == Alliance.Red,
+                    m_drivetrain);
 
             }
 
