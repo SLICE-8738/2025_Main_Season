@@ -21,6 +21,9 @@ public class MoveToLevel extends Command {
 
     public void initialize() {
         switch (ElevatorPositionSelector.getSelectedPosition()) {
+            case -1:
+                m_level = 0.02;
+                break;
             case 0:
                 m_level = 0.2735;
                 break;
@@ -59,10 +62,10 @@ public class MoveToLevel extends Command {
             finished = true;
         }
         // if (m_elevator.isAtTop() && movementDirection) {
-        //     finished = true;
+        // finished = true;
         // }
         // if (m_elevator.isAtBottom() && !movementDirection) {
-        //     finished = true;
+        // finished = true;
         // }
 
         return finished;
