@@ -111,6 +111,8 @@ public class RobotContainer {
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
 
+  public final CoralPositionSelector m_reefPositionSelector;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -161,13 +163,13 @@ public class RobotContainer {
         new boolean[] { true, false }, Constants.kElevator.KP, Constants.kElevator.KI, Constants.kElevator.KD,
         Constants.kElevator.POSITION_CONVERSION_FACTOR,
         Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
+    m_endEffector = new EndEffector();
 
     m_leds = new LEDs();
 
-    m_reefPositionSelector = new ReefPositionSelector();
+    m_reefPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_coralPositionSelector = new CoralPositionSelector();
-    m_elevatorPositionSelector = new ElevatorPositionSelector();
     //m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
     // ==========================

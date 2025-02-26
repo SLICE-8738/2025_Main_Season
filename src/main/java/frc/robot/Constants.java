@@ -347,5 +347,5 @@ public final class Constants {
         this.fieldPosition = fieldPosition;
         this.name = name;
       }
-
+  }
 }

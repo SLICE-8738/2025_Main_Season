@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
+import frc.slicelibs.config.CTREConfigs;
 
 public class EndEffector extends TalonFXPositionalSubsystem {
   private DutyCycleEncoder encoder;
@@ -38,7 +39,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   /** Creates a new EndEffector. */
   public EndEffector() {
-    super(new int[] {11}, new boolean[] {false}, 1.75, 0.025, 0.2, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR);
+    super(new int[] {11}, new boolean[] {false}, 1.75, 0.025, 0.2, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR, Constants.CTRE_CONFIGS.positionalFXConfig);
     // TODO enter parameters
     frontSensor = new DigitalInput(8);
     backSensor = new DigitalInput(9);

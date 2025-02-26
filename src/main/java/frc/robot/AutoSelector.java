@@ -39,6 +39,8 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import frc.robot.Constants.CoralPosition;
+
 /**
  * This class primarily manages the creation and updating of the autonomous mode
  * and starting position {@link SendableChooser sendable choosers} on Shuffleboard.
