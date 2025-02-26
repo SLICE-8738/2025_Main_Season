@@ -6,13 +6,14 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import frc.robot.Constants;
 
 public final class CTREConfigs {
+
     public final TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     public final TalonFXConfiguration elevatorFXConfig = new TalonFXConfiguration();
     public final Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
     public final TalonFXConfiguration positionalFXConfig = new TalonFXConfiguration();
 
     public CTREConfigs() {
-        /* Swerve Drive Motor Configuration */
+        //* Swerve Drive Motor Configuration *//
 
         /* Motor Invert and Neutral Mode */
         var driveMotorOutput = swerveDriveFXConfig.MotorOutput;
@@ -73,7 +74,7 @@ public final class CTREConfigs {
         positionalFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.CLOSED_LOOP_RAMP;
         positionalFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kTalonFXPositionalSubsystem.CLOSED_LOOP_RAMP;
 
-        /* elevatorFX Configuration */
+        //* Elevator Configuration *//
 
         /* Motor Invert and Neutral Mode */
         var elevatorFXMotorOutput = elevatorFXConfig.MotorOutput;
@@ -103,4 +104,5 @@ public final class CTREConfigs {
         elevatorFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kElevator.CLOSED_LOOP_RAMP;
         elevatorFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kElevator.CLOSED_LOOP_RAMP;
     }
+    
 }

@@ -210,7 +210,7 @@ public class AutoSelector {
 
             }
 
-            autoSequence.schedule();
+            //autoSequence.schedule();
 
             if (m_simDrivetrain != null) {
                 

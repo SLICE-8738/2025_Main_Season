@@ -2,23 +2,29 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
-import frc.slicelibs.config.CTREConfigs;
+//import frc.slicelibs.config.CTREConfigs;
 
 public class Elevator extends TalonFXPositionalSubsystem {
 
     // private DigitalInput bottomLimitSwitch;
     //private DigitalInput topLimitSwitch;
 
-    public Elevator(int[] ids, boolean[] inverted, double kP, double kI, double kD, double positionConversionFactor,
-            double velocityConversionFactor) {
-        super(ids, inverted, kP, kI, kD, GravityTypeValue.Elevator_Static, positionConversionFactor,
-                velocityConversionFactor, Constants.CTRE_CONFIGS.elevatorFXConfig);
-        setEncoderPosition(0);
+    public Elevator() {
+        super(
+            new int[] {Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID},
+            new boolean[] {true, false}, 
+            Constants.kElevator.KP, 
+            Constants.kElevator.KI, 
+            Constants.kElevator.KD,
+            GravityTypeValue.Elevator_Static,
+            Constants.kElevator.POSITION_CONVERSION_FACTOR,
+            Constants.kElevator.VELOCITY_CONVERSION_FACTOR, 
+            Constants.CTRE_CONFIGS.elevatorFXConfig);
+            setEncoderPosition(0);
 
         // this.bottomLimitSwitch = bottomLimitSwitch;
         // this.topLimitSwitch = topLimitSwitch;

@@ -31,7 +31,6 @@ import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
 import frc.robot.subsystems.drivetrain.SimSwerveModuleIO;
 import frc.robot.subsystems.drivetrain.SwerveModuleIO;
 import frc.robot.testing.routines.DrivetrainTest;
-import frc.slicelibs.config.CTREConfigs;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -120,7 +119,7 @@ public class RobotContainer {
     // Subsystems
     // ==========================
 
-    /*switch (Constants.ADVANTAGE_KIT_MODE) {
+    switch (Constants.ADVANTAGE_KIT_MODE) {
         case REAL:
           // Real robot, instantiate hardware IO implementations
           m_drivetrain =
@@ -155,32 +154,40 @@ public class RobotContainer {
               new SwerveModuleIO() {});
           m_autoSelector = new AutoSelector(m_drivetrain, null);
           break;
-    }*/
+    }
     
-    m_elevator = new Elevator(new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID },
-        new boolean[] { true, false }, Constants.kElevator.KP, Constants.kElevator.KI, Constants.kElevator.KD,
-        Constants.kElevator.POSITION_CONVERSION_FACTOR,
-        Constants.kElevator.VELOCITY_CONVERSION_FACTOR);
+
+    m_elevator = new Elevator();
+    m_endEffector = new EndEffector();
 
     m_leds = new LEDs();
 
-    m_reefPositionSelector = new ReefPositionSelector();
-    m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
-    //m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
+    m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
 
     // ==========================
     // Commands
     // ==========================
 
-    // /* Drivetrain */
-    // m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
-    // m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController,
-    //     false);
-    // m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
-    // m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-    // m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    /* Drivetrain */
+    m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
+    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
+    m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
+    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+    m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+    m_reefAlign = new DeferredCommand(
+      () -> AutoBuilder.pathfindToPoseFlipped(
+          CoralPositionSelector.getSelectedReefFieldPosition(),
+          Constants.kDrivetrain.PATH_CONSTRAINTS,
+          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)),
+      Set.of(m_drivetrain));
+    m_coralStationAlign = new DeferredCommand(
+      () -> AutoBuilder.pathfindToPoseFlipped(
+          CoralPositionSelector.getSelectedCoralStationFieldPosition(),
+          Constants.kDrivetrain.PATH_CONSTRAINTS,
+          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
+      Set.of(m_drivetrain));
 
     /* End Effector */
     m_indexCoral = new IndexCommand(m_endEffector);
@@ -189,28 +196,6 @@ public class RobotContainer {
     m_prepareEndEffectorAngle1 = new PrepareEndEffector(m_endEffector, 45);
     m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 85);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
-
-    // /* Tests */
-    // m_drivetrainTest = new DrivetrainTest(m_drivetrain);
-    
-    /* Drivetrain */
-    /*m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
-    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
-    m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
-    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-    m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    m_reefAlign = new DeferredCommand(
-        () -> AutoBuilder.pathfindToPoseFlipped(
-            CoralPositionSelector.getSelectedReefFieldPosition(),
-            Constants.kDrivetrain.PATH_CONSTRAINTS,
-            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)),
-        Set.of(m_drivetrain));
-    m_coralStationAlign = new DeferredCommand(
-        () -> AutoBuilder.pathfindToPoseFlipped(
-            CoralPositionSelector.getSelectedCoralStationFieldPosition(),
-            Constants.kDrivetrain.PATH_CONSTRAINTS,
-            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
-        Set.of(m_drivetrain));*/
 
     /* Elevator */
 
@@ -222,6 +207,9 @@ public class RobotContainer {
     m_setLevelThree = new SetElevatorLevel(3);
     m_setLevelFour = new SetElevatorLevel(4);
     m_elevatorToStow = new ElevatorToStow(m_elevator, Constants.kElevator.THRESHOLD);
+
+    /* Tests */
+    m_drivetrainTest = new DrivetrainTest(m_drivetrain);
 
     // Configure the trigger bindings
     configureBindings();
