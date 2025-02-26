@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants.kDrivetrain.CoralPosition;
@@ -24,7 +23,6 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -136,12 +134,10 @@ public class AutoSelector {
 
             NamedCommands.registerCommand(
                 "Go To " + position.name, 
-                new DeferredCommand(
-                    () -> AutoBuilder.pathfindToPoseFlipped(
-                        position.fieldPosition,
-                        Constants.kDrivetrain.PATH_CONSTRAINTS,
-                        0.5).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)), 
-                    Set.of(drivetrain)));
+                AutoBuilder.pathfindToPoseFlipped(
+                    position.fieldPosition,
+                    Constants.kDrivetrain.PATH_CONSTRAINTS,
+                    0.5).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)));
 
             autoPoses.put("Go To " + position.name, position.fieldPosition);
 

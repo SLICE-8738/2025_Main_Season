@@ -35,15 +35,15 @@ public class IndexCommand extends Command {
     frontSensor = sensorGroup[0];
     //middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    endEffector.setVelocity(-0.1);
+    endEffector.setPlacementMotor(-0.1);
+    endEffector.antiGravity();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    endEffector.set(0);
-    endEffector.setVelocity(0);
+    endEffector.setPlacementMotor(0);
 
   }
 

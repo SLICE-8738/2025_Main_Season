@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.BumpAlgae;
 import frc.robot.commands.IndexCommand;
+import frc.robot.commands.IntakeAlgae;
 import frc.robot.commands.ManualEndEffector;
+import frc.robot.commands.OutakeAlgae;
 import frc.robot.commands.PrepareEndEffector;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.Drivetrain.*;
@@ -83,6 +85,9 @@ public class RobotContainer {
   public final ManualEndEffector m_manualEndEffector;
   public final PrepareEndEffector m_prepareEndEffectorAngle1;
   public final PrepareEndEffector m_prepareEndEffectorAngle2;
+
+  public final IntakeAlgae m_IntakeAlgae;
+  public final OutakeAlgae m_OutakeAlgae;
 
 
   // /* Tests */
@@ -197,6 +202,9 @@ public class RobotContainer {
     m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 85);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
 
+    m_IntakeAlgae = new IntakeAlgae(m_endEffector);
+    m_OutakeAlgae = new OutakeAlgae(m_endEffector);
+
     /* Elevator */
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
@@ -214,7 +222,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
     m_endEffector.setDefaultCommand(m_manualEndEffector);
     m_elevator.setDefaultCommand(m_manualElevator);
 
@@ -241,10 +249,10 @@ public class RobotContainer {
     // ================
 
     // /* Drivetrain */
-    /*Button.triangle1.onTrue(m_resetFieldOrientedHeading);
+    Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftBumper1.whileTrue(m_reefAlign);
-    Button.rightBumper1.whileTrue(m_coralStationAlign);*/
+    Button.rightBumper1.whileTrue(m_coralStationAlign);
     /* Elevator */
     Button.rightTrigger1.onTrue(m_toLevel.withTimeout(2.0));
     Button.psButton1.onTrue(m_elevatorToStow);
@@ -253,11 +261,15 @@ public class RobotContainer {
     // Operator Controls
     // ==================
 
+    /* End Effector */
     Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
     Button.triangle2.onTrue(m_bumpAlgae);
     Button.square2.onTrue(m_scoreCoral);
     Button.circle2.onTrue(m_prepareEndEffectorAngle1);
     Button.rightBumper2.onTrue(m_prepareEndEffectorAngle2);
+
+    Button.rightTrigger2.whileTrue(m_IntakeAlgae);
+    Button.leftTrigger2.whileTrue(m_OutakeAlgae);
 
     /* Elevator */
     Button.controlPadDown2.onTrue(m_setLevelOne);

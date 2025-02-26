@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
-import frc.slicelibs.config.CTREConfigs;
 
 public class EndEffector extends TalonFXPositionalSubsystem {
   private DutyCycleEncoder encoder;
@@ -33,16 +33,28 @@ public class EndEffector extends TalonFXPositionalSubsystem {
    */
   private static DigitalInput frontSensor;
   private static DigitalInput backSensor; // this one
+  private TalonFX placementMotor;
   //private static DigitalInput middleSensor;
 
   // TODO fix static error
 
   /** Creates a new EndEffector. */
   public EndEffector() {
-    super(new int[] {11}, new boolean[] {false}, 1.75, 0.025, 0.2, GravityTypeValue.Arm_Cosine, Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR, Constants.CTRE_CONFIGS.positionalFXConfig);
+    super(
+      new int[] {Constants.kEndEffector.ROTATION_MOTOR_ID}, 
+      new boolean[] {false}, 
+      1.75, 
+      0.025, 
+      0.2, 
+      GravityTypeValue.Arm_Cosine, 
+      Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, 
+      Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR, 
+      Constants.CTRE_CONFIGS.positionalFXConfig);
+  
     // TODO enter parameters
     frontSensor = new DigitalInput(8);
     backSensor = new DigitalInput(9);
+    placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     //middleSensor = new DigitalInput(3);
 
     encoder = new DutyCycleEncoder(6, 360, 0);
@@ -60,12 +72,24 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     return Rotation2d.fromDegrees(encoder.get());
   }
 
+  public void setPlacementMotor(double speed) {
+    placementMotor.set(speed);
+  }
+
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = !frontSensor.get();
     //sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = !backSensor.get();
     return sensorStatuses;
+  }
+
+  public void antiGravity() {
+    if (frontSensor.get() || backSensor.get()) {
+      set(.028 * getAngle().getCos());
+    } else {
+      set(.02 * getAngle().getCos());
+    }
   }
 
   public void resetRelativeEncoder() {
