@@ -18,6 +18,7 @@ public class SetLevel extends Command {
   public SetLevel(Level level, EndEffector endEffector) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.level = level;
+    this.endEffector = endEffector;
   }
 
   // Called when the command is initially scheduled.

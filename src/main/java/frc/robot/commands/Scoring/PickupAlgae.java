@@ -20,6 +20,6 @@ public class PickupAlgae extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    addCommands(new ElevatorToAlgae(elevator, level), new IntakeAlgae(endEffector));
+    addCommands(new ElevatorToAlgae(elevator, level, endEffector), new IntakeAlgae(endEffector));
   }
 }

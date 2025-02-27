@@ -35,7 +35,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private static DigitalInput frontSensor;
   private static DigitalInput backSensor; // this one
   private TalonFX placementMotor;
-  private Level m_angle;
+  private Level m_angle = Level.STOW;
   // private static DigitalInput middleSensor;
 
   // TODO fix static error

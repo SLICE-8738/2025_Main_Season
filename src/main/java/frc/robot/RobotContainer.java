@@ -216,7 +216,7 @@ public class RobotContainer {
     m_setLevelTwo = new SetLevel(Level.LEVEL2, m_endEffector);
     m_setLevelThree = new SetLevel(Level.LEVEL3, m_endEffector);
     m_setLevelFour = new SetLevel(Level.LEVEL4, m_endEffector);
-    m_elevatorToStow = new ElevatorToStow(m_elevator, Constants.kElevator.THRESHOLD);
+    m_elevatorToStow = new ElevatorToStow(m_endEffector, m_elevator);
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
 
     /* Tests */
