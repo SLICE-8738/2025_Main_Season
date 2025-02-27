@@ -6,13 +6,14 @@ package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.ElevatorPositionSelector;
+import frc.robot.Constants.kElevator.Level;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetElevatorLevel extends Command {
-  private int level;
+  private Level level;
 
   /** Creates a new SetElevatorLevel. */
-  public SetElevatorLevel(int level) {
+  public SetElevatorLevel(Level level) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.level = level;
   }

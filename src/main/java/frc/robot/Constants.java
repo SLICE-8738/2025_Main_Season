@@ -154,7 +154,6 @@ public final class Constants {
     /* Absolute Angle Encoder Invert */
     public static final boolean ABSOLUTE_ENCODER_INVERT = false; // TODO: Determine whether to invert
 
-    
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public final class Mod0 {
@@ -163,12 +162,12 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 2;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(273.3);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-          DRIVE_MOTOR_ID, 
+          DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, 
+          ABSOLUTE_ENCODER_ID,
           ANGLE_OFFSET);
     }
-    
+
     /* Front Right Module - Module 1 */
     public final class Mod1 {
       public static final int DRIVE_MOTOR_ID = 1;
@@ -176,12 +175,12 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 1;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(295.2);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-          DRIVE_MOTOR_ID, 
+          DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, 
+          ABSOLUTE_ENCODER_ID,
           ANGLE_OFFSET);
     }
-    
+
     /* Back Right Module - Module 2 */
     public final class Mod2 {
       public static final int DRIVE_MOTOR_ID = 2;
@@ -189,12 +188,12 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 3;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.6);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-          DRIVE_MOTOR_ID, 
+          DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, 
+          ABSOLUTE_ENCODER_ID,
           ANGLE_OFFSET);
     }
-    
+
     /* Back Left Module - Module 3 */
     public final class Mod3 {
       public static final int DRIVE_MOTOR_ID = 3;
@@ -202,9 +201,9 @@ public final class Constants {
       public static final int ABSOLUTE_ENCODER_ID = 0;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(82.1);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-          DRIVE_MOTOR_ID, 
+          DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
-          ABSOLUTE_ENCODER_ID, 
+          ABSOLUTE_ENCODER_ID,
           ANGLE_OFFSET);
     }
 
@@ -306,19 +305,31 @@ public final class Constants {
     public static final double ELEVATORFX_KI = 0.001;
     public static final double ELEVATORFX_KD = 0.01;
 
+    /* Elevator Levels */
+    public enum Level {
+      STOW,
+      LEVEL1,
+      SOURCE,
+      LEVEL2,
+      ALGAE1,
+      LEVEL3,
+      ALGAE2,
+      LEVEL4;
+    }
+
   }
 
   public final class kLEDs {
     public static final int LED_PWM_PORT = 1;
     public static final int LED_LENGTH = 300;
   }
-  
+
   public final class kEndEffector {
-    
+
     public static final int ROTATION_MOTOR_ID = 11;
     public static final int PLACEMENT_MOTOR_ID = 12;
 
-    public static final double POSITIONAL_CONVERSION_FACTOR = 360.0*(8.0/70.0)*(15.0/36.0);
+    public static final double POSITIONAL_CONVERSION_FACTOR = 360.0 * (8.0 / 70.0) * (15.0 / 36.0);
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
     public static final double ENCODER_OFFSET = 296;
@@ -351,7 +362,7 @@ public final class Constants {
     public static final double POSITIONALFX_KP = 0.1;
     public static final double POSITIONALFX_KI = 0.001;
     public static final double POSITIONALFX_KD = 0.01;
-    
+
   }
 
 }

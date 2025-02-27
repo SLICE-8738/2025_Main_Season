@@ -5,6 +5,7 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.subsystems.Elevator;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -14,6 +15,6 @@ public class ElevatorToStow extends SequentialCommandGroup {
 
   /** Creates a new ElevatorToSource. */
   public ElevatorToStow(Elevator elevator, double threshold) {
-    addCommands(new SetElevatorLevel(-1), new MoveToLevel(elevator, threshold));
+    addCommands(new SetElevatorLevel(Level.STOW), new MoveToLevel(elevator, threshold));
   }
 }

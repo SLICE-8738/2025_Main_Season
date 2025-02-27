@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.BumpAlgae;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.IntakeAlgae;
@@ -56,7 +56,7 @@ public class RobotContainer {
   // public final LEDs m_leds;
 
   // public final AutoSelector m_autoSelector;
-  //public final ShuffleboardData m_shuffleboardData;
+  // public final ShuffleboardData m_shuffleboardData;
   public final Drivetrain m_drivetrain;
   public final Elevator m_elevator;
   public final EndEffector m_endEffector;
@@ -89,10 +89,9 @@ public class RobotContainer {
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
 
-
   // /* Tests */
   // public final DrivetrainTest m_drivetrainTest;
-  
+
   /* Drivetrain */
   public final DriveCommand m_swerveDriveOpenLoop;
   public final DriveCommand m_swerveDriveClosedLoop;
@@ -125,42 +124,42 @@ public class RobotContainer {
     // ==========================
 
     switch (Constants.ADVANTAGE_KIT_MODE) {
-        case REAL:
-          // Real robot, instantiate hardware IO implementations
-          m_drivetrain =
+      case REAL:
+        // Real robot, instantiate hardware IO implementations
+        m_drivetrain = new Drivetrain(
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
+            new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
+        m_autoSelector = new AutoSelector(
+            m_drivetrain,
             new Drivetrain(
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
-                new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-          m_autoSelector = new AutoSelector(
-            m_drivetrain, 
-            new Drivetrain(
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO()));
-          break;
-        case SIM:
-          m_drivetrain =
-            new Drivetrain(
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO());
-          m_autoSelector = new AutoSelector(m_drivetrain, null);
-          break;
-        default:
-          m_drivetrain =
-            new Drivetrain(
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {},
-              new SwerveModuleIO() {});
-          m_autoSelector = new AutoSelector(m_drivetrain, null);
-          break;
+                new SimSwerveModuleIO(),
+                new SimSwerveModuleIO(),
+                new SimSwerveModuleIO(),
+                new SimSwerveModuleIO()));
+        break;
+      case SIM:
+        m_drivetrain = new Drivetrain(
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO());
+        m_autoSelector = new AutoSelector(m_drivetrain, null);
+        break;
+      default:
+        m_drivetrain = new Drivetrain(
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            });
+        m_autoSelector = new AutoSelector(m_drivetrain, null);
+        break;
     }
-    
 
     m_elevator = new Elevator();
     m_endEffector = new EndEffector();
@@ -182,17 +181,17 @@ public class RobotContainer {
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
-      () -> AutoBuilder.pathfindToPoseFlipped(
-          CoralPositionSelector.getSelectedReefFieldPosition(),
-          Constants.kDrivetrain.PATH_CONSTRAINTS,
-          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)),
-      Set.of(m_drivetrain));
+        () -> AutoBuilder.pathfindToPoseFlipped(
+            CoralPositionSelector.getSelectedReefFieldPosition(),
+            Constants.kDrivetrain.PATH_CONSTRAINTS,
+            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)),
+        Set.of(m_drivetrain));
     m_coralStationAlign = new DeferredCommand(
-      () -> AutoBuilder.pathfindToPoseFlipped(
-          CoralPositionSelector.getSelectedCoralStationFieldPosition(),
-          Constants.kDrivetrain.PATH_CONSTRAINTS,
-          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
-      Set.of(m_drivetrain));
+        () -> AutoBuilder.pathfindToPoseFlipped(
+            CoralPositionSelector.getSelectedCoralStationFieldPosition(),
+            Constants.kDrivetrain.PATH_CONSTRAINTS,
+            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
+        Set.of(m_drivetrain));
 
     /* End Effector */
     m_indexCoral = new IndexCommand(m_endEffector);
@@ -209,11 +208,11 @@ public class RobotContainer {
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
     m_toLevel = new MoveToLevel(m_elevator, Constants.kElevator.THRESHOLD);
-    m_setLevelSource = new SetElevatorLevel(0);
-    m_setLevelOne = new SetElevatorLevel(1);
-    m_setLevelTwo = new SetElevatorLevel(2);
-    m_setLevelThree = new SetElevatorLevel(3);
-    m_setLevelFour = new SetElevatorLevel(4);
+    m_setLevelSource = new SetElevatorLevel(Level.SOURCE);
+    m_setLevelOne = new SetElevatorLevel(Level.LEVEL1);
+    m_setLevelTwo = new SetElevatorLevel(Level.LEVEL2);
+    m_setLevelThree = new SetElevatorLevel(Level.LEVEL3);
+    m_setLevelFour = new SetElevatorLevel(Level.LEVEL4);
     m_elevatorToStow = new ElevatorToStow(m_elevator, Constants.kElevator.THRESHOLD);
 
     /* Tests */
@@ -278,7 +277,7 @@ public class RobotContainer {
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
     Button.psButton2.onTrue(m_elevatorToStow);
-    
+
   }
 
   /**
@@ -288,7 +287,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    //return m_autoSelector.getAutoRoutine();
+    // return m_autoSelector.getAutoRoutine();
     return null;
   }
 
