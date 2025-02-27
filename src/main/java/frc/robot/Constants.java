@@ -307,14 +307,22 @@ public final class Constants {
 
     /* Elevator Levels */
     public enum Level {
-      STOW,
-      LEVEL1,
-      SOURCE,
-      LEVEL2,
-      ALGAE1,
-      LEVEL3,
-      ALGAE2,
-      LEVEL4;
+      STOW(0.02, 88),
+      LEVEL1(0.254, 45),
+      SOURCE(0.2735, 88),
+      ALGAE1(0.3, 20),
+      LEVEL2(0.51, 85),
+      ALGAE2(0.6, 20),
+      LEVEL3(0.915, 85),
+      LEVEL4(1.625, 55);
+
+      public double height;
+      public double angle;
+
+      private Level(double height, double angle) {
+        this.height = height;
+        this.angle = angle;
+      }
     }
 
   }

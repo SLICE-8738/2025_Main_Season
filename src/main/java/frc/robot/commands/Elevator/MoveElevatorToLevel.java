@@ -1,49 +1,27 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.ElevatorPositionSelector;
 import frc.robot.subsystems.Elevator;
+import frc.robot.Constants.kElevator;
 
-public class MoveToLevel extends Command {
+public class MoveElevatorToLevel extends Command {
     private final Elevator m_elevator;
+    private final double m_elevatorThreshold;
     private double m_level;
-    private final double m_threshold;
 
     /// true is upwards movement. false is downwards movement.
     private boolean movementDirection = false;
 
-    public MoveToLevel(Elevator elevator, double threshold) {
+    public MoveElevatorToLevel(Elevator elevator) {
         addRequirements(elevator);
 
         m_elevator = elevator;
-        m_threshold = threshold;
+        m_elevatorThreshold = kElevator.THRESHOLD;
     }
 
     public void initialize() {
-        switch (ElevatorPositionSelector.getSelectedPosition()) {
-            case STOW:
-                m_level = 0.02;
-                break;
-            case SOURCE:
-                m_level = 0.2735;
-                break;
-            case LEVEL1:
-                m_level = 0.254;
-                break;
-            case LEVEL2:
-                m_level = 0.51;
-                break;
-            case LEVEL3:
-                m_level = 0.915;
-                break;
-            case LEVEL4:
-                m_level = 1.625;
-                break;
-            default:
-                m_level = 0;
-                break;
-        }
+        m_level = ElevatorPositionSelector.getSelectedPosition().height;
         if (m_level > m_elevator.getPosition()[0]) {
             movementDirection = true;
         }
@@ -59,7 +37,7 @@ public class MoveToLevel extends Command {
 
     public boolean isFinished() {
         boolean finished = false;
-        if (m_elevator.atTarget(m_threshold)) {
+        if (m_elevator.atTarget(m_elevatorThreshold)) {
             finished = true;
         }
         // if (m_elevator.isAtTop() && movementDirection) {

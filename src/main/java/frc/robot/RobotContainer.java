@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -18,8 +19,7 @@ import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Elevator.ElevatorToStow;
 import frc.robot.commands.Elevator.ManualElevator;
-import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.commands.Elevator.SetElevatorLevel;
+import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.EndEffector.BumpAlgae;
 import frc.robot.commands.EndEffector.IndexCommand;
 import frc.robot.commands.EndEffector.IntakeAlgae;
@@ -27,6 +27,10 @@ import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.commands.EndEffector.ScoreCoral;
+import frc.robot.commands.Scoring.MoveToLevel;
+import frc.robot.commands.Scoring.PickupAlgae;
+import frc.robot.commands.Scoring.ScoreAlgae;
+import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
@@ -83,8 +87,6 @@ public class RobotContainer {
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
-  public final PrepareEndEffector m_prepareEndEffectorAngle1;
-  public final PrepareEndEffector m_prepareEndEffectorAngle2;
 
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
@@ -103,13 +105,15 @@ public class RobotContainer {
 
   /* Elevator */
   public final ManualElevator m_manualElevator;
-  public final MoveToLevel m_toLevel;
-  public final SetElevatorLevel m_setLevelSource;
-  public final SetElevatorLevel m_setLevelOne;
-  public final SetElevatorLevel m_setLevelTwo;
-  public final SetElevatorLevel m_setLevelThree;
-  public final SetElevatorLevel m_setLevelFour;
+  public final SetLevel m_setLevelSource;
+  public final SetLevel m_setLevelOne;
+  public final SetLevel m_setLevelTwo;
+  public final SetLevel m_setLevelThree;
+  public final SetLevel m_setLevelFour;
   public final ElevatorToStow m_elevatorToStow;
+  public final ScoreAlgae m_scoreAlgae;
+  public final MoveToLevel m_moveUpToLevel;
+  public final MoveToLevel m_moveDownToLevel;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -197,8 +201,6 @@ public class RobotContainer {
     m_indexCoral = new IndexCommand(m_endEffector);
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
-    m_prepareEndEffectorAngle1 = new PrepareEndEffector(m_endEffector, 45);
-    m_prepareEndEffectorAngle2 = new PrepareEndEffector(m_endEffector, 85);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
 
     m_IntakeAlgae = new IntakeAlgae(m_endEffector);
@@ -207,13 +209,15 @@ public class RobotContainer {
     /* Elevator */
 
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
-    m_toLevel = new MoveToLevel(m_elevator, Constants.kElevator.THRESHOLD);
-    m_setLevelSource = new SetElevatorLevel(Level.SOURCE);
-    m_setLevelOne = new SetElevatorLevel(Level.LEVEL1);
-    m_setLevelTwo = new SetElevatorLevel(Level.LEVEL2);
-    m_setLevelThree = new SetElevatorLevel(Level.LEVEL3);
-    m_setLevelFour = new SetElevatorLevel(Level.LEVEL4);
+    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, false);
+    m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, true);
+    m_setLevelSource = new SetLevel(Level.SOURCE, m_endEffector);
+    m_setLevelOne = new SetLevel(Level.LEVEL1, m_endEffector);
+    m_setLevelTwo = new SetLevel(Level.LEVEL2, m_endEffector);
+    m_setLevelThree = new SetLevel(Level.LEVEL3, m_endEffector);
+    m_setLevelFour = new SetLevel(Level.LEVEL4, m_endEffector);
     m_elevatorToStow = new ElevatorToStow(m_elevator, Constants.kElevator.THRESHOLD);
+    m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -253,7 +257,8 @@ public class RobotContainer {
     Button.leftBumper1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
     /* Elevator */
-    Button.rightTrigger1.onTrue(m_toLevel.withTimeout(2.0));
+    Button.rightTrigger1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
+        () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
     Button.psButton1.onTrue(m_elevatorToStow);
 
     // ==================
@@ -264,8 +269,6 @@ public class RobotContainer {
     Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
     Button.triangle2.onTrue(m_bumpAlgae);
     Button.square2.onTrue(m_scoreCoral);
-    Button.circle2.onTrue(m_prepareEndEffectorAngle1);
-    Button.rightBumper2.onTrue(m_prepareEndEffectorAngle2);
 
     Button.rightTrigger2.whileTrue(m_IntakeAlgae);
     Button.leftTrigger2.whileTrue(m_OutakeAlgae);

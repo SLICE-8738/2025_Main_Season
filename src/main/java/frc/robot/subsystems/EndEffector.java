@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 
@@ -34,33 +35,34 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private static DigitalInput frontSensor;
   private static DigitalInput backSensor; // this one
   private TalonFX placementMotor;
-  //private static DigitalInput middleSensor;
+  private Level m_angle;
+  // private static DigitalInput middleSensor;
 
   // TODO fix static error
 
   /** Creates a new EndEffector. */
   public EndEffector() {
     super(
-      new int[] {Constants.kEndEffector.ROTATION_MOTOR_ID}, 
-      new boolean[] {false}, 
-      1.75, 
-      0.025, 
-      0.2, 
-      GravityTypeValue.Arm_Cosine, 
-      Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR, 
-      Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR, 
-      Constants.CTRE_CONFIGS.positionalFXConfig);
-  
+        new int[] { Constants.kEndEffector.ROTATION_MOTOR_ID },
+        new boolean[] { false },
+        1.75,
+        0.025,
+        0.2,
+        GravityTypeValue.Arm_Cosine,
+        Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR,
+        Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR,
+        Constants.CTRE_CONFIGS.positionalFXConfig);
+
     // TODO enter parameters
     frontSensor = new DigitalInput(8);
     backSensor = new DigitalInput(9);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
-    //middleSensor = new DigitalInput(3);
+    // middleSensor = new DigitalInput(3);
 
     encoder = new DutyCycleEncoder(6, 360, 0);
     encoder.setInverted(true);
   }
- 
+
   public void setAngle(Rotation2d angle) {
   }
 
@@ -72,6 +74,14 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     return Rotation2d.fromDegrees(encoder.get());
   }
 
+  public Level getSelectedAngle() {
+    return m_angle;
+  }
+
+  public void setSelectedLevel(Level angle) {
+    m_angle = angle;
+  }
+
   public void setPlacementMotor(double speed) {
     placementMotor.set(speed);
   }
@@ -79,7 +89,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = !frontSensor.get();
-    //sensorStatuses[1] = middleSensor.get();
+    // sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = !backSensor.get();
     return sensorStatuses;
   }
@@ -95,7 +105,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   public void resetRelativeEncoder() {
     if (encoder.get() < 60) {
       setEncoderPosition(360 + encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
-    }else {
+    } else {
       setEncoderPosition(encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
     }
   }

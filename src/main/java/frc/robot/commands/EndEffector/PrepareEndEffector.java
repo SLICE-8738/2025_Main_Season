@@ -15,10 +15,10 @@ public class PrepareEndEffector extends Command {
   // true = up false = down
   private boolean movementDirection;
 
-  public PrepareEndEffector(EndEffector endEffector, double angle) {
+  public PrepareEndEffector(EndEffector endEffector) {
     addRequirements(endEffector);
     this.endEffector = endEffector;
-    this.angle = angle;
+    this.angle = endEffector.getSelectedAngle().angle;
   }
 
   // Called when the command is initially scheduled.
