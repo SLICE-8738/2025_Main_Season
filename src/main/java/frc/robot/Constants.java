@@ -64,7 +64,7 @@ public final class Constants {
 
     /* Gyro */
     public static final NavXComType NAVX_PORT = NavXComType.kUSB1;
-    public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
+    public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW-
 
     /* Swerve Physics */
     public static final double TRACK_WIDTH = Units.inchesToMeters(23.729); // TODO: Find track width and wheel base length
