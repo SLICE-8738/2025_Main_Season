@@ -2,40 +2,51 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.EndEffector;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class MotorIntakeAlgae extends Command {
-  /** Creates a new EndEffectorCommand. */
-
+public class ManualEndEffector extends Command {
+  /** Creates a new ManualEndEffector. */
   EndEffector endEffector;
+  GenericHID controller;
 
-  public MotorIntakeAlgae(EndEffector endEffector) {
-    this.endEffector = endEffector;
+  public ManualEndEffector(EndEffector endEffector, GenericHID controller) {
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(endEffector);
-
+    this.endEffector = endEffector;
+    this.controller = controller;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    endEffector.resetRelativeEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    endEffector.setPlacementMotor(0.125);
-    endEffector.set(.045 * endEffector.getAngle().getCos());
+    double axis = MathUtil.applyDeadband(controller.getRawAxis(0) * .5, .1);
+    if (axis < 0 && endEffector.getAngle().getDegrees() <= 0) {
+      axis = 0;
+    }
+    if (axis > 0 && endEffector.getAngle().getDegrees() >= 88) {
+      axis = 0;
+    }
+    if (axis == 0) {
+      axis = .02 * endEffector.getAngle().getCos();
+    }
+    endEffector.set(axis);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    endEffector.setPlacementMotor(0);
 
   }
 
@@ -44,6 +55,4 @@ public class MotorIntakeAlgae extends Command {
   public boolean isFinished() {
     return false;
   }
-
-  // && middleSensor == true
 }

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
@@ -11,7 +11,7 @@ import frc.robot.subsystems.EndEffector;
 public class ScoreCoral extends Command {
   EndEffector endEffector;
   Boolean frontSensor;
-  //Boolean middleSensor;
+  // Boolean middleSensor;
   Boolean backSensor;
 
   /** Creates a new ScoreCoral. */
@@ -24,7 +24,8 @@ public class ScoreCoral extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -32,7 +33,7 @@ public class ScoreCoral extends Command {
     Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
 
     frontSensor = sensorGroup[0];
-    //middleSensor = sensorGroup[1];
+    // middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
     endEffector.setPlacementMotor(-0.5);
 
