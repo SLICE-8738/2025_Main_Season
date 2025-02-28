@@ -227,7 +227,7 @@ public class RobotContainer {
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
-    m_antiGravityTest = new InstantCommand(() -> m_endEffector.set(-m_endEffector.normalKG), m_endEffector);
+    m_antiGravityTest = new InstantCommand(() -> m_endEffector.setVoltage(-m_endEffector.normalKG), m_endEffector);
 
     // Configure the trigger bindings
     configureBindings();

@@ -37,7 +37,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private TalonFX placementMotor;
   private Level m_angle = Level.STOW;
   // private static DigitalInput middleSensor;
-  public double normalKG = 0.15;
+  public double normalKG = 2;
 
   // TODO fix static error
 

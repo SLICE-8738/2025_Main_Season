@@ -57,6 +57,12 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         }
     }
 
+    public void setVoltage(double volts) {
+        for (TalonFX motor : motors) {
+            motor.setVoltage(volts);
+        }
+    }
+
     public void setVelocity(double velocity) {
         VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
 

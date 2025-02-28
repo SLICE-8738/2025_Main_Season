@@ -10,7 +10,6 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.kElevator.Level;
 
@@ -22,21 +21,11 @@ public class ElevatorPositionSelector {
         private static Level level;
 
         public ElevatorPositionSelector() {
-                positions.add(
-                                driverTab.add("Level 1", true).withPosition(13, 8)
-                                                .withWidget(BuiltInWidgets.kToggleButton).getEntry());
-                positions.add(
-                                driverTab.add("Source", false).withPosition(13, 6)
-                                                .withWidget(BuiltInWidgets.kToggleButton).getEntry());
-                positions.add(
-                                driverTab.add("Level 2", false).withPosition(13, 4)
-                                                .withWidget(BuiltInWidgets.kToggleButton).getEntry());
-                positions.add(
-                                driverTab.add("Level 3", false).withPosition(13, 2)
-                                                .withWidget(BuiltInWidgets.kToggleButton).getEntry());
-                positions.add(
-                                driverTab.add("Level 4", false).withPosition(13, 0)
-                                                .withWidget(BuiltInWidgets.kToggleButton).getEntry());
+                positions.add(driverTab.add("Level 1", true).withPosition(13, 8).withWidget(BuiltInWidgets.kToggleButton).getEntry());
+                positions.add(driverTab.add("Source", false).withPosition(13, 6).withWidget(BuiltInWidgets.kToggleButton).getEntry());
+                positions.add(driverTab.add("Level 2", false).withPosition(13, 4).withWidget(BuiltInWidgets.kToggleButton).getEntry());
+                positions.add(driverTab.add("Level 3", false).withPosition(13, 2).withWidget(BuiltInWidgets.kToggleButton).getEntry());
+                positions.add(driverTab.add("Level 4", false).withPosition(13, 0).withWidget(BuiltInWidgets.kToggleButton).getEntry());
 
                 selectedPosition = positions.get(0);
                 level = Level.STOW;
@@ -63,6 +52,8 @@ public class ElevatorPositionSelector {
                                 selectedPosition.setBoolean(false);
                                 selectedPosition = positions.get(3);
                                 selectedPosition.setBoolean(true);
+                                break;
+                        default:
                                 break;
                 }
                 ElevatorPositionSelector.level = level;
