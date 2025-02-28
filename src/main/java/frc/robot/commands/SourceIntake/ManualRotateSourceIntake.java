@@ -32,10 +32,10 @@ public class ManualRotateSourceIntake extends Command {
   public void execute() {
     axis = m_controller.getRightX();
     m_sourceIntake.set(axis);
-    if(m_sourceIntake.getPosition() <= m_sourceIntake.getDefaultPosition() && axis < 0){
+    if(m_sourceIntake.getPosition()[0] <= m_sourceIntake.getDefaultPosition() && axis < 0){
       m_sourceIntake.set(0);
     }
-    if(m_sourceIntake.getPosition() >= 180 && axis > 0){
+    if(m_sourceIntake.getPosition()[0] >= 180 && axis > 0){
       m_sourceIntake.set(0);
     }
     
