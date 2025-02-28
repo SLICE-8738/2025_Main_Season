@@ -8,6 +8,7 @@ import frc.robot.Constants;
 public final class CTREConfigs {
 
     public final TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
+    public final TalonFXConfiguration climberFXConfig = new TalonFXConfiguration();
     public final TalonFXConfiguration elevatorFXConfig = new TalonFXConfiguration();
     public final Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
     public final TalonFXConfiguration positionalFXConfig = new TalonFXConfiguration();
@@ -42,6 +43,25 @@ public final class CTREConfigs {
 
         swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
         swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
+
+        /* =========================== */
+        /* Climber Motor Configuration */
+        /* =========================== */
+
+            /* Motor Invert and Neutral Mode */
+            var climbMotorOutput = climberFXConfig.MotorOutput;
+            climbMotorOutput.Inverted = Constants.kClimber.CLIMB_INVERT;
+            climbMotorOutput.NeutralMode = Constants.kClimber.CLIMB_IDLE_MODE;
+
+            /* Current Limiting */
+            var climbCurrentLimits = climberXConfig.CurrentLimits;
+            climbCurrentLimits.SupplyCurrentLimitEnable = Constants.kClimber.CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT;
+            climbCurrentLimits.SupplyCurrentLimit = Constants.kClimber.CLIMB_SUPPLY_CURRENT_LIMIT;
+            climbCurrentLimits.SupplyCurrentLowerLimit = Constants.kClimber.CLIMB_SUPPLY_CURRENT_LOWER_LIMIT;
+            climbCurrentLimits.SupplyCurrentLowerTime = Constants.kClimber.CLIMB_SUPPLY_CURRENT_LOWER_TIME;
+
+            climbCurrentLimits.StatorCurrentLimitEnable = Constants.kClimber.CLIMB_ENABLE_STATOR_CURRENT_LIMIT;
+            climbCurrentLimits.StatorCurrentLimit = Constants.kClimber.CLIMB_STATOR_CURRENT_LIMIT;
 
         /* Pigeon 2 Gyro Configuration */
         pigeon2Config.GyroTrim.GyroScalarZ = Constants.kDrivetrain.INVERT_GYRO ? -1 : 1;

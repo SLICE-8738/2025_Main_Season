@@ -13,9 +13,13 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Climber.ClimbCommand;
+import frc.robot.commands.Climber.ManualClimberCommand;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Elevator.ElevatorToStow;
@@ -63,6 +67,7 @@ public class RobotContainer {
   // public final AutoSelector m_autoSelector;
   // public final ShuffleboardData m_shuffleboardData;
   public final Drivetrain m_drivetrain;
+  public final Climber m_climber;
   public final Elevator m_elevator;
   public final EndEffector m_endEffector;
   public final LEDs m_leds;
@@ -97,6 +102,9 @@ public class RobotContainer {
   public final MoveToLevel m_moveUpToLevel;
   public final MoveToLevel m_moveDownToLevel;
 
+  /* Climber */
+  public final ManualClimberCommand m_manualClimb;
+  public final SequentialCommandGroup m_climb;
   /* End Effector */
   public final IndexCommand m_indexCoral;
   public final BumpAlgae m_bumpAlgae;
@@ -157,6 +165,7 @@ public class RobotContainer {
         break;
     }
 
+    m_climber = new Climber();
     m_elevator = new Elevator();
     m_endEffector = new EndEffector();
 
@@ -209,6 +218,12 @@ public class RobotContainer {
     m_setLevelFour = new SetLevel(Level.LEVEL4, m_endEffector);
     m_elevatorToStow = new ElevatorToStow(m_endEffector, m_elevator);
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
+    
+    /* Climber */
+    m_manualClimb = new ManualClimberCommand(m_climber, Button.controller2);
+    // The climb command is created with a WaitCommand before it so that the climber won't immediately activate when the button is pressed. 
+    //This prevents accidental damage to the climber by running it when there isn't a cage.
+    m_climb = new SequentialCommandGroup(new WaitCommand(0.5), new ClimbCommand(m_climber));
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -218,6 +233,7 @@ public class RobotContainer {
     configureBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_climber.setDefaultCommand(m_manualClimb);
     m_endEffector.setDefaultCommand(m_manualEndEffector);
     m_elevator.setDefaultCommand(m_manualElevator);
 
