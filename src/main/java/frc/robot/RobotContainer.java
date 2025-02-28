@@ -12,9 +12,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.commands.Climber.ClimbCommand;
+import frc.robot.commands.Climber.ManualClimberCommand;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -42,6 +45,7 @@ public class RobotContainer {
   // ==========================
 
   public final Drivetrain m_drivetrain;
+  public final Climber m_climber;
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
@@ -58,6 +62,10 @@ public class RobotContainer {
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
   public final Command m_reefAlign;
+
+  /* Climber */
+  public final ManualClimberCommand m_manualClimb;
+  public final SequentialCommandGroup m_climb;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -99,6 +107,7 @@ public class RobotContainer {
           break;
     }
 
+    m_climber = new Climber();
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain);
@@ -123,6 +132,12 @@ public class RobotContainer {
         .until(() -> LimelightHelpers.getTV("limelight-slice")).andThen(new ReefAlignCommand(m_drivetrain, driverController)), 
       Set.of(m_drivetrain));
 
+      /* Climber */
+      m_manualClimb = new ManualClimberCommand(m_climber, Button.controller2);
+      // The climb command is created with a WaitCommand before it so that the climber won't immediately activate when the button is pressed. 
+      //This prevents accidental damage to the climber by running it when there isn't a cage.
+      m_climb = new SequentialCommandGroup(new WaitCommand(0.5), new ClimbCommand(m_climber));
+
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
@@ -131,6 +146,7 @@ public class RobotContainer {
     configureBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_climber.setDefaultCommand(m_manualClimb);
 
   }
 

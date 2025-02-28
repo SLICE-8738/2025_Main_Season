@@ -206,6 +206,28 @@ public final class Constants {
   public final class kClimber {
 
     public static final int MOTOR_ID = 14;
+    public static final int ABSOLUTE_ENCODER_ID = 7;
+
+    public static final double ENCODER_OFFSET = 0;
+
+    public static final double POSITIONAL_CONVERSION_FACTOR = 1.0/45.0;
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
+
+    /** The angle of the climber hook, in degrees, when it is fully climbed */
+    public static final double CLIMB_POSITION = 140;
+
+    /* Motor Configs */
+      public static final InvertedValue CLIMB_INVERT = InvertedValue.CounterClockwise_Positive;
+      public static final NeutralModeValue CLIMB_IDLE_MODE = NeutralModeValue.Brake;
+
+      /* Climber Current Limiting */
+      public static final boolean CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+      public static final int CLIMB_SUPPLY_CURRENT_LIMIT = 40;
+      public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+      public static final double CLIMB_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+
+      public static final boolean CLIMB_ENABLE_STATOR_CURRENT_LIMIT = true;
+      public static final double CLIMB_STATOR_CURRENT_LIMIT = 65;
 
   }
 
