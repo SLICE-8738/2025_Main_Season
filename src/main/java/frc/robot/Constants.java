@@ -347,11 +347,11 @@ public final class Constants {
       /* Climber Current Limiting */
       public static final boolean CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT = true;
       public static final int CLIMB_SUPPLY_CURRENT_LIMIT = 40;
-      public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+      public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 70;
       public static final double CLIMB_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
       public static final boolean CLIMB_ENABLE_STATOR_CURRENT_LIMIT = true;
-      public static final double CLIMB_STATOR_CURRENT_LIMIT = 65;
+      public static final double CLIMB_STATOR_CURRENT_LIMIT = 70;
 
   }
 
