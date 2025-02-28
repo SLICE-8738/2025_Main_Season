@@ -49,12 +49,12 @@ public final class CTREConfigs {
         /* =========================== */
 
             /* Motor Invert and Neutral Mode */
-            var climbMotorOutput = swerveDriveFXConfig.MotorOutput;
+            var climbMotorOutput = climberFXConfig.MotorOutput;
             climbMotorOutput.Inverted = Constants.kClimber.CLIMB_INVERT;
             climbMotorOutput.NeutralMode = Constants.kClimber.CLIMB_IDLE_MODE;
 
             /* Current Limiting */
-            var climbCurrentLimits = swerveDriveFXConfig.CurrentLimits;
+            var climbCurrentLimits = climberXConfig.CurrentLimits;
             climbCurrentLimits.SupplyCurrentLimitEnable = Constants.kClimber.CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT;
             climbCurrentLimits.SupplyCurrentLimit = Constants.kClimber.CLIMB_SUPPLY_CURRENT_LIMIT;
             climbCurrentLimits.SupplyCurrentLowerLimit = Constants.kClimber.CLIMB_SUPPLY_CURRENT_LOWER_LIMIT;
