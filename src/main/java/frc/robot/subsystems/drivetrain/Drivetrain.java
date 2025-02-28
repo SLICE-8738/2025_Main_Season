@@ -5,7 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.ReefPosition;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -29,6 +29,8 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
+import java.util.List;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -41,6 +43,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class Drivetrain extends SubsystemBase {
 
+
   private final SwerveModule[] swerveMods;
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -52,7 +55,7 @@ public class Drivetrain extends SubsystemBase {
     };
   private final SwerveDrivePoseEstimator m_odometry;
   private final Pigeon2 m_gyro;
-  private final StatusSignal<Angle> gyroYawSignal;
+private final StatusSignal<Angle> gyroYawSignal;
   private final StatusSignal<AngularVelocity> gyroYawVelocitySignal;
   public final Field2d m_field2d;
 
@@ -62,8 +65,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
-
-  public final SendableChooser<ReefPosition> branchChooser;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -101,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
         Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
-        m_field2d.getObject("Trajectory").setPoses(path);
+        setField2dTrajectory(path, "Trajectory");
       }
     );
     PathPlannerLogging.setLogTargetPoseCallback(
@@ -132,17 +133,6 @@ public class Drivetrain extends SubsystemBase {
     sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.dynamic(Direction.kReverse)
       .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
 
-    branchChooser = new SendableChooser<ReefPosition>();
-
-    for (ReefPosition position : ReefPosition.values()) {
-      if (position.ordinal() == 0) {
-        branchChooser.setDefaultOption(position.name(), position);
-      }
-      else {
-        branchChooser.addOption(position.name(), position);
-      }
-    }
-
   }
 
   @Override
@@ -158,10 +148,12 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
     m_field2d.setRobotPose(getPose());
 
-    BaseStatusSignal.refreshAll(
+  BaseStatusSignal.refreshAll(
       gyroYawSignal,
       gyroYawVelocitySignal
     );
+
+    SmartDashboard.putNumber("Rotational Velocity", getRotationalVelocity().getDegrees());
 
   }
 
@@ -208,18 +200,18 @@ public class Drivetrain extends SubsystemBase {
     }
 
     SwerveModuleState[] states = Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(
-          ChassisSpeeds.discretize(
-            isFieldRelative ?
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                transform.getX(),
-                transform.getY(),
-                transform.getRotation().getRadians(),
-                rotationWithOffset)
-              : new ChassisSpeeds(
-                transform.getX(), 
-                transform.getY(),
-                transform.getRotation().getRadians()),
-            0.02));    
+      ChassisSpeeds.discretize(
+        isFieldRelative ?
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+            transform.getX(),
+            transform.getY(),
+            transform.getRotation().getRadians(),
+            rotationWithOffset)
+          : new ChassisSpeeds(
+            transform.getX(), 
+            transform.getY(),
+            transform.getRotation().getRadians()),
+      0.02));      
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
@@ -246,7 +238,7 @@ public class Drivetrain extends SubsystemBase {
 
         Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-slice").getTranslation();
 
-        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 4.5) {
+        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
         
           m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
         
@@ -270,6 +262,12 @@ public class Drivetrain extends SubsystemBase {
   public Pose2d getPose() {
 
     return m_odometry.getEstimatedPosition();
+
+  }
+
+  public void setField2dTrajectory(List<Pose2d> poses, String trajectoryName) {
+
+    m_field2d.getObject(trajectoryName).setPoses(poses);
 
   }
 
@@ -419,7 +417,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Drivetrain/Heading")
+@AutoLogOutput(key = "Drivetrain/Heading")
   /**
    * Obtains and returns the current heading of the robot as a Rotation2d from the
    * gyro object.
@@ -444,7 +442,7 @@ public class Drivetrain extends SubsystemBase {
         moduleDeltas[mod.moduleNumber] = 
           new SwerveModulePosition(
             modulePositions[mod.moduleNumber].distanceMeters - lastModulePositions[mod.moduleNumber].distanceMeters,
-            modulePositions[mod.moduleNumber].angle.minus(lastModulePositions[mod.moduleNumber].angle)
+            modulePositions[mod.moduleNumber].angle
           );
         lastModulePositions[mod.moduleNumber] = modulePositions[mod.moduleNumber];
 
@@ -479,7 +477,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Drivetrain/Chassis Speeds")
+@AutoLogOutput(key = "Drivetrain/Chassis Speeds")
   /**
    * Calculates and returns the current chassis speeds of the drivetrain using
    * the average forward and sideways velocities of the individual swerve modules
@@ -565,18 +563,6 @@ public class Drivetrain extends SubsystemBase {
   public Command getSysIDDriveRoutine() {
 
     return sysIDChooser.getSelected();
-
-  }
-
-  public double getReefBranchXPosition() {
-
-    return branchChooser.getSelected().branchXPosition;
-
-  }
-
-  public Pose2d getReefFieldPosition() {
-
-    return branchChooser.getSelected().fieldPosition;
 
   }
 
