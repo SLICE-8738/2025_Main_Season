@@ -73,8 +73,8 @@ public final class Constants {
     public static final double DRIVE_BASE_RADIUS = Math.hypot(WHEEL_BASE / 2, TRACK_WIDTH / 2);
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.95);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
-    public static final double MASS = 25; // TODO: Find mass (kg)
-    public static final double MOMENT_OF_INERTIA = 3; // TODO: Find MOI (kg*m^2)
+    public static final double MASS = 65.77; // (kg)
+    public static final double MOMENT_OF_INERTIA = 8.22; // (kg*m^2)
     public static final double WHEEL_COEFFICIENT_OF_FRICTION = 0.7; // (Vex Griplocks)
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
@@ -152,7 +152,7 @@ public final class Constants {
     public static final boolean ANGLE_INVERT = false;
 
     /* Absolute Angle Encoder Invert */
-    public static final boolean ABSOLUTE_ENCODER_INVERT = false; // TODO: Determine whether to invert
+    public static final boolean ABSOLUTE_ENCODER_INVERT = false;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
@@ -300,13 +300,13 @@ public final class Constants {
     public static final double CLOSED_LOOP_RAMP = 0.0;
 
     /* PID */
-    // TODO: Tune PIDs
     public static final double ELEVATORFX_KP = 0.1;
     public static final double ELEVATORFX_KI = 0.001;
     public static final double ELEVATORFX_KD = 0.01;
 
     /* Elevator Levels */
     public enum Level {
+
       STOW(0.02, 88),
       LEVEL1(0.254, 45),
       SOURCE(0.2735, 88),
@@ -323,6 +323,7 @@ public final class Constants {
         this.height = height;
         this.angle = angle;
       }
+
     }
 
   }
@@ -369,6 +370,10 @@ public final class Constants {
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
     public static final double ENCODER_OFFSET = 296;
+
+    public static final double NORMAL_KG = 0.02;
+    public static final double CORAL_KG = 0.028;
+    public static final double ALGAE_KG = 0.045;
 
   }
 

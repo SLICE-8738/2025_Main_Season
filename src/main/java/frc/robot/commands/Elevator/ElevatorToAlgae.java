@@ -5,7 +5,6 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.SetLevel;

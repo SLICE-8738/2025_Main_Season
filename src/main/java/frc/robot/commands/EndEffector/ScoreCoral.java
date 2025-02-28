@@ -37,7 +37,7 @@ public class ScoreCoral extends Command {
     backSensor = sensorGroup[2];
     endEffector.setPlacementMotor(-0.5);
 
-    endEffector.antiGravity();
+    endEffector.maintainPosition();
   }
 
   // Called once the command ends or is interrupted.

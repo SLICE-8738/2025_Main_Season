@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climber.ClimbCommand;
@@ -80,25 +81,6 @@ public class RobotContainer {
   // Commands
   // ==========================
 
-  // /* Drivetrain */
-  // public final DriveCommand m_swerveDriveOpenLoop;
-  // public final DriveCommand m_swerveDriveClosedLoop;
-  // public final RunDutyCycleCommand m_setDrivePercentOutput;
-  // public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
-  // public final Command m_sysIDDriveRoutine;
-
-  /* End Effector */
-  public final IndexCommand m_indexCoral;
-  public final BumpAlgae m_bumpAlgae;
-  public final ScoreCoral m_scoreCoral;
-  public final ManualEndEffector m_manualEndEffector;
-
-  public final IntakeAlgae m_IntakeAlgae;
-  public final OutakeAlgae m_OutakeAlgae;
-
-  // /* Tests */
-  // public final DrivetrainTest m_drivetrainTest;
-
   /* Drivetrain */
   public final DriveCommand m_swerveDriveOpenLoop;
   public final DriveCommand m_swerveDriveClosedLoop;
@@ -123,9 +105,18 @@ public class RobotContainer {
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
   public final SequentialCommandGroup m_climb;
+  /* End Effector */
+  public final IndexCommand m_indexCoral;
+  public final BumpAlgae m_bumpAlgae;
+  public final ScoreCoral m_scoreCoral;
+  public final ManualEndEffector m_manualEndEffector;
+  
+  public final IntakeAlgae m_IntakeAlgae;
+  public final OutakeAlgae m_OutakeAlgae;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
+  public final InstantCommand m_antiGravityTest;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -182,7 +173,7 @@ public class RobotContainer {
 
     m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
-    m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
+    m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_endEffector, m_autoSelector);
 
     // ==========================
     // Commands
@@ -217,7 +208,6 @@ public class RobotContainer {
     m_OutakeAlgae = new OutakeAlgae(m_endEffector);
 
     /* Elevator */
-
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
     m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, false);
     m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, true);
@@ -237,6 +227,7 @@ public class RobotContainer {
 
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
+    m_antiGravityTest = new InstantCommand(() -> m_endEffector.set(-m_endEffector.normalKG), m_endEffector);
 
     // Configure the trigger bindings
     configureBindings();
@@ -277,6 +268,7 @@ public class RobotContainer {
     Button.rightTrigger1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
     Button.psButton1.onTrue(m_elevatorToStow);
+    Button.square1.whileTrue(m_antiGravityTest);
 
     // ==================
     // Operator Controls

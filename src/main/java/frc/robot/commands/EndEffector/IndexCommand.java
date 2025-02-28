@@ -36,7 +36,7 @@ public class IndexCommand extends Command {
     // middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
     endEffector.setPlacementMotor(-0.1);
-    endEffector.antiGravity();
+    endEffector.maintainPosition();
 
   }
 
