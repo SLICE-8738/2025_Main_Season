@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 /** Add your docs here. */
 public class TalonFXPositionalSubsystem extends SubsystemBase {
@@ -24,13 +23,13 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
     private double velocityTargetReference;
 
     public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
-            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor) {
+            GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor, TalonFXConfiguration motorConfigs) {
         if (ids.length != inverted.length)
             throw new IllegalArgumentException("ids and inverted must be the same length");
 
         motors = new TalonFX[ids.length];
         for (int i = 0; i < ids.length; i++) {
-            TalonFXConfiguration configs = Constants.CTRE_CONFIGS.positionalFXConfig;
+            TalonFXConfiguration configs = motorConfigs;
 
             if (inverted[i]) {
                 configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -73,8 +72,8 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         for (TalonFX motor : motors) {
             motor.setControl(request.withPosition(position / positionConversionFactor));
         }
+      
         positionTargetReference = position;
-        SmartDashboard.putNumber("Elevator Target", position);
     }
 
     public void setEncoderPosition(double position) {
