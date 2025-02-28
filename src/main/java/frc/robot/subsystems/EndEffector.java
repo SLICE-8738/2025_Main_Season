@@ -45,7 +45,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     super(
         new int[] { Constants.kEndEffector.ROTATION_MOTOR_ID },
         new boolean[] { false },
-        1.75,
+        4.0,
         0.025,
         0.2,
         GravityTypeValue.Arm_Cosine,
@@ -116,6 +116,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     SmartDashboard.putNumber("Relative End Effector Angle", getPosition()[0]);
     SmartDashboard.putBoolean("SensorFront", frontSensor.get());
     SmartDashboard.putBoolean("SensorBack", backSensor.get());
+    SmartDashboard.putNumber("Target", getSelectedAngle().angle);
 
     // This method will be called once per scheduler run
   }

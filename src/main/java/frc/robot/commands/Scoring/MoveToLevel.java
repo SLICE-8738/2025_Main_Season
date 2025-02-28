@@ -19,9 +19,9 @@ public class MoveToLevel extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     if (endEffectorFirst) {
-      addCommands(new PrepareEndEffector(endEffector), new MoveElevatorToLevel(elevator));
+      addCommands(new PrepareEndEffector(endEffector).withTimeout(2.0), new MoveElevatorToLevel(elevator).withTimeout(2.0));
     } else {
-      addCommands(new MoveElevatorToLevel(elevator), new PrepareEndEffector(endEffector));
+      addCommands(new MoveElevatorToLevel(elevator).withTimeout(2.0), new PrepareEndEffector(endEffector).withTimeout(2.0));
     }
   }
 }

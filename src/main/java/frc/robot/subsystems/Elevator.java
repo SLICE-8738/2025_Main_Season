@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.ElevatorPositionSelector;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 //import frc.slicelibs.config.CTREConfigs;
 
@@ -45,5 +46,6 @@ public class Elevator extends TalonFXPositionalSubsystem {
     public void periodic() {
         double[] positions = this.getPosition();
         SmartDashboard.putNumber("Elevator Height", (positions[0] + positions[1]) / 2.0);
+        SmartDashboard.putNumber("Target Height", ElevatorPositionSelector.getSelectedPosition().height);
     }
 }

@@ -32,7 +32,7 @@ public class MoveElevatorToLevel extends Command {
     }
 
     public void end() {
-
+        m_elevator.set(0);
     }
 
     public boolean isFinished() {

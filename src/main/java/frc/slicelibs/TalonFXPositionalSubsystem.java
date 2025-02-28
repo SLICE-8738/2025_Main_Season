@@ -74,7 +74,6 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         }
       
         positionTargetReference = position;
-        SmartDashboard.putNumber("Elevator Target", position);
     }
 
     public void setEncoderPosition(double position) {

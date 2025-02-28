@@ -18,14 +18,14 @@ public class PrepareEndEffector extends Command {
   public PrepareEndEffector(EndEffector endEffector) {
     addRequirements(endEffector);
     this.endEffector = endEffector;
-    this.angle = endEffector.getSelectedAngle().angle;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    this.angle = endEffector.getSelectedAngle().angle;
     endEffector.setPosition(angle);
-    if (endEffector.getAngle().getDegrees() < angle) {
+    if (endEffector.getAngle().getDegrees() < angle) { 
       movementDirection = true;
     }
     if (endEffector.getAngle().getDegrees() > angle) {

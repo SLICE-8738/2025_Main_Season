@@ -50,6 +50,8 @@ public final class CTREConfigs {
         var positionalFXMotorOutput = positionalFXConfig.MotorOutput;
         positionalFXMotorOutput.Inverted = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_INVERT;
         positionalFXMotorOutput.NeutralMode = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_IDLE;
+        positionalFXMotorOutput.PeakForwardDutyCycle = Constants.kTalonFXPositionalSubsystem.DUTYCYCLE_FORWARD_PEAK;
+        positionalFXMotorOutput.PeakReverseDutyCycle = Constants.kTalonFXPositionalSubsystem.DUTYCYCLE_REVERSE_PEAK;
 
         /* Current Limiting */
         var positionalFXCurrentLimits = positionalFXConfig.CurrentLimits;
@@ -57,6 +59,7 @@ public final class CTREConfigs {
         positionalFXCurrentLimits.SupplyCurrentLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LIMIT;
         positionalFXCurrentLimits.SupplyCurrentLowerLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT;
         positionalFXCurrentLimits.SupplyCurrentLowerTime = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME;
+        
 
         positionalFXCurrentLimits.StatorCurrentLimitEnable = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT;
         positionalFXCurrentLimits.StatorCurrentLimit = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_STATOR_CURRENT_LIMIT;

@@ -39,7 +39,7 @@ public class ManualEndEffector extends Command {
       axis = 0;
     }
     if (axis == 0) {
-      axis = .02 * endEffector.getAngle().getCos();
+      axis = .015 * endEffector.getAngle().times(2/3).getCos();
     }
     endEffector.set(axis);
   }

@@ -358,6 +358,8 @@ public final class Constants {
     public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 35;
     public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 50;
     public static final double POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+    public static final double DUTYCYCLE_FORWARD_PEAK = 0.5;
+    public static final double DUTYCYCLE_REVERSE_PEAK = -0.5;
 
     public static final boolean POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT = true;
     public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 50;
