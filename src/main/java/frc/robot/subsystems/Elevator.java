@@ -32,7 +32,7 @@ public class Elevator extends TalonFXPositionalSubsystem {
     }
 
     public void moveTo(double height) {
-        setPosition(height);
+        setPosition(height, 0);
     }
 
     // public boolean isAtBottom() {

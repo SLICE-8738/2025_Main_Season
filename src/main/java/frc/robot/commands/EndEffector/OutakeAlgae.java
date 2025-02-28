@@ -29,7 +29,7 @@ public class OutakeAlgae extends Command {
   @Override
   public void execute() {
     endEffector.setPlacementMotor(-0.1);
-    endEffector.antiGravity();
+    endEffector.maintainPosition();
 
   }
 

@@ -9,7 +9,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-
+import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
@@ -17,7 +17,7 @@ public class ShuffleboardData {
 
     private final ShuffleboardTab /*driverTab,*/ debugTab, swerveTab, autoTab;
 
-    public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector) {
+    public ShuffleboardData(Drivetrain drivetrain, EndEffector endEffector, AutoSelector autoSelector) {
 
         //driverTab = Shuffleboard.getTab("Driver");
         debugTab = Shuffleboard.getTab("Debug");
@@ -167,6 +167,13 @@ public class ShuffleboardData {
         withPosition(3, 2).
         withSize(3, 1);
 
+        // ==========================
+        // End Effector
+        // ==========================
+
+        ShuffleboardTuner.create(
+            value -> endEffector.normalKG = value,
+            "End Effector kG");
     }
 
 }

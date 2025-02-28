@@ -11,7 +11,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Add your docs here. */
@@ -67,10 +66,10 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         velocityTargetReference = velocity;
     }
 
-    public void setPosition(double position) {
+    public void setPosition(double position, double feedForward) {
         PositionVoltage request = new PositionVoltage(0).withSlot(0);
         for (TalonFX motor : motors) {
-            motor.setControl(request.withPosition(position / positionConversionFactor));
+            motor.setControl(request.withPosition(position / positionConversionFactor).withFeedForward(feedForward));
         }
       
         positionTargetReference = position;
@@ -118,5 +117,9 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
             }
         }
         return true;
+    }
+
+    public double getPositionTargetReference() {
+        return positionTargetReference;
     }
 }

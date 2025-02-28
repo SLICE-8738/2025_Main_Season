@@ -37,6 +37,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private TalonFX placementMotor;
   private Level m_angle = Level.STOW;
   // private static DigitalInput middleSensor;
+  public double normalKG = 0.15;
 
   // TODO fix static error
 
@@ -63,15 +64,27 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     encoder.setInverted(true);
   }
 
-  public void setAngle(Rotation2d angle) {
+  /**
+   * Sets the given position as a PID setpoint
+   * and automatically applies anti-gravity feedforward
+   * @param position
+   */
+  public void setPosition(double position) {
+    super.setPosition(position, getAntiGravity());
+  }
+
+  /**
+   * Sets the current position as a PID setpoint
+   * and automatically applies anti-gravity feedforward
+   */
+  public void maintainPosition() {
+    if (getPositionTargetReference() != getAngle().getDegrees()) {
+      setPosition(getAngle().getDegrees());
+    }
   }
 
   public Rotation2d getAngle() {
     return Rotation2d.fromDegrees(getPosition()[0]);
-  }
-
-  public Rotation2d getAbsoluteAngle() {
-    return Rotation2d.fromDegrees(encoder.get());
   }
 
   public Level getSelectedAngle() {
@@ -94,11 +107,14 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     return sensorStatuses;
   }
 
-  public void antiGravity() {
+  private double getAntiGravity() {
     if (frontSensor.get() || backSensor.get()) {
-      set(.028 * getAngle().getCos());
-    } else {
-      set(.02 * getAngle().getCos());
+      return Constants.kEndEffector.CORAL_KG * getAngle().plus(Rotation2d.fromDegrees(4)).getCos();
+    } else if (getCurrentCommand().getName() == "IntakeAlgae") {
+      return Constants.kEndEffector.ALGAE_KG * getAngle().plus(Rotation2d.fromDegrees(4)).getCos();
+    }
+    else {
+      return Constants.kEndEffector.NORMAL_KG * getAngle().plus(Rotation2d.fromDegrees(4)).getCos();
     }
   }
 
