@@ -308,6 +308,7 @@ public final class Constants {
     public enum Level {
 
       STOW(0.02, 88),
+      PROCESSER(0.03, 0),
       LEVEL1(0.254, 45),
       SOURCE(0.2735, 88),
       ALGAE1(0.3, 20),
@@ -335,24 +336,24 @@ public final class Constants {
 
     public static final double ENCODER_OFFSET = 0;
 
-    public static final double POSITIONAL_CONVERSION_FACTOR = 1.0/45.0;
+    public static final double POSITIONAL_CONVERSION_FACTOR = 1.0 / 45.0;
     public static final double VELOCITY_CONVERSION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
     /** The angle of the climber hook, in degrees, when it is fully climbed */
     public static final double CLIMB_POSITION = 140;
 
     /* Motor Configs */
-      public static final InvertedValue CLIMB_INVERT = InvertedValue.CounterClockwise_Positive;
-      public static final NeutralModeValue CLIMB_IDLE_MODE = NeutralModeValue.Brake;
+    public static final InvertedValue CLIMB_INVERT = InvertedValue.CounterClockwise_Positive;
+    public static final NeutralModeValue CLIMB_IDLE_MODE = NeutralModeValue.Brake;
 
-      /* Climber Current Limiting */
-      public static final boolean CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-      public static final int CLIMB_SUPPLY_CURRENT_LIMIT = 40;
-      public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 70;
-      public static final double CLIMB_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+    /* Climber Current Limiting */
+    public static final boolean CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int CLIMB_SUPPLY_CURRENT_LIMIT = 40;
+    public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 70;
+    public static final double CLIMB_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
-      public static final boolean CLIMB_ENABLE_STATOR_CURRENT_LIMIT = true;
-      public static final double CLIMB_STATOR_CURRENT_LIMIT = 70;
+    public static final boolean CLIMB_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double CLIMB_STATOR_CURRENT_LIMIT = 70;
 
   }
 
