@@ -22,16 +22,14 @@ import frc.robot.commands.Climber.ClimbCommand;
 import frc.robot.commands.Climber.ManualClimberCommand;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.*;
-import frc.robot.commands.Elevator.ElevatorToStow;
 import frc.robot.commands.Elevator.ManualElevator;
-import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.EndEffector.BumpAlgae;
 import frc.robot.commands.EndEffector.IndexCommand;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
-import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.commands.EndEffector.ScoreCoral;
+import frc.robot.commands.Scoring.ToStow;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.PickupAlgae;
 import frc.robot.commands.Scoring.ScoreAlgae;
@@ -92,15 +90,21 @@ public class RobotContainer {
 
   /* Elevator */
   public final ManualElevator m_manualElevator;
+  public final ToStow m_elevatorToStow;
+
+  /* Scoring */
   public final SetLevel m_setLevelSource;
   public final SetLevel m_setLevelOne;
   public final SetLevel m_setLevelTwo;
   public final SetLevel m_setLevelThree;
   public final SetLevel m_setLevelFour;
-  public final ElevatorToStow m_elevatorToStow;
-  public final ScoreAlgae m_scoreAlgae;
   public final MoveToLevel m_moveUpToLevel;
   public final MoveToLevel m_moveDownToLevel;
+  public final PickupAlgae m_pickupAlgaeUp1;
+  public final PickupAlgae m_pickupAlgaeDown1;
+  public final PickupAlgae m_pickupAlgaeUp2;
+  public final PickupAlgae m_pickupAlgaeDown2;
+  public final ScoreAlgae m_scoreAlgae;
 
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
@@ -110,7 +114,7 @@ public class RobotContainer {
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
-  
+
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
 
@@ -209,6 +213,8 @@ public class RobotContainer {
 
     /* Elevator */
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
+
+    /* Scoring */
     m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, false);
     m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, true);
     m_setLevelSource = new SetLevel(Level.SOURCE, m_endEffector);
@@ -216,13 +222,19 @@ public class RobotContainer {
     m_setLevelTwo = new SetLevel(Level.LEVEL2, m_endEffector);
     m_setLevelThree = new SetLevel(Level.LEVEL3, m_endEffector);
     m_setLevelFour = new SetLevel(Level.LEVEL4, m_endEffector);
-    m_elevatorToStow = new ElevatorToStow(m_endEffector, m_elevator);
+    m_elevatorToStow = new ToStow(m_endEffector, m_elevator);
+    m_pickupAlgaeUp1 = new PickupAlgae(m_elevator, Level.ALGAE1, m_endEffector, false);
+    m_pickupAlgaeDown1 = new PickupAlgae(m_elevator, Level.ALGAE1, m_endEffector, true);
+    m_pickupAlgaeUp2 = new PickupAlgae(m_elevator, Level.ALGAE2, m_endEffector, false);
+    m_pickupAlgaeDown2 = new PickupAlgae(m_elevator, Level.ALGAE2, m_endEffector, true);
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
-    
+
     /* Climber */
     m_manualClimb = new ManualClimberCommand(m_climber, Button.controller2);
-    // The climb command is created with a WaitCommand before it so that the climber won't immediately activate when the button is pressed. 
-    //This prevents accidental damage to the climber by running it when there isn't a cage.
+    // The climb command is created with a WaitCommand before it so that the climber
+    // won't immediately activate when the button is pressed.
+    // This prevents accidental damage to the climber by running it when there isn't
+    // a cage.
     m_climb = new SequentialCommandGroup(new WaitCommand(0.5), new ClimbCommand(m_climber));
 
     /* Tests */
@@ -265,19 +277,28 @@ public class RobotContainer {
     Button.leftBumper1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
     /* Elevator */
-    Button.rightTrigger1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
-        () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
     Button.psButton1.onTrue(m_elevatorToStow);
     Button.square1.whileTrue(m_antiGravityTest);
+
+    /* Scoring */
+    Button.controlPadDown1.onTrue(m_scoreAlgae);
+    Button.controlPadRight1.onTrue(new ConditionalCommand(m_pickupAlgaeDown1, m_pickupAlgaeUp1,
+        () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
+    Button.controlPadUp1.onTrue(new ConditionalCommand(m_pickupAlgaeDown2, m_pickupAlgaeUp2,
+        () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
+
+    Button.square1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
+        () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
+
+    Button.cross1.onTrue(m_indexCoral);
+    Button.circle1.onTrue(m_scoreCoral);
 
     // ==================
     // Operator Controls
     // ==================
 
     /* End Effector */
-    Button.cross2.onTrue(m_indexCoral.until(Button.circle2));
     Button.triangle2.onTrue(m_bumpAlgae);
-    Button.square2.onTrue(m_scoreCoral);
 
     Button.rightTrigger2.whileTrue(m_IntakeAlgae);
     Button.leftTrigger2.whileTrue(m_OutakeAlgae);
