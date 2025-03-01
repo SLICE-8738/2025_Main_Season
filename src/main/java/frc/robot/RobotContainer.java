@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.Set;
 
+import javax.xml.transform.Source;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -31,6 +33,8 @@ import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.PickupAlgae;
 import frc.robot.commands.Scoring.ScoreAlgae;
 import frc.robot.commands.Scoring.SetLevel;
+import frc.robot.commands.SourceIntake.ManualRotateSourceIntake;
+import frc.robot.commands.SourceIntake.RotateSourceIntake;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
@@ -65,6 +69,7 @@ public class RobotContainer {
   public final Elevator m_elevator;
   public final EndEffector m_endEffector;
   public final LEDs m_leds;
+  public final SourceIntake m_sourceIntake;
 
   public final AutoSelector m_autoSelector;
   public final CoralPositionSelector m_coralPositionSelector;
@@ -114,6 +119,11 @@ public class RobotContainer {
   public final ScoreAlgae m_scoreAlgae;
   public final MoveToLevel m_moveUpToLevel;
   public final MoveToLevel m_moveDownToLevel;
+
+  /* Source Intake */
+  public final ManualRotateSourceIntake m_manualRotateSourceIntake;
+  public final RotateSourceIntake m_rotateSourceIntakeToStow;
+  public final RotateSourceIntake m_rotateSourceIntaketoIntake;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -167,6 +177,7 @@ public class RobotContainer {
 
     m_elevator = new Elevator();
     m_endEffector = new EndEffector();
+    m_sourceIntake = new SourceIntake();
 
     m_leds = new LEDs();
 
@@ -219,6 +230,12 @@ public class RobotContainer {
     m_elevatorToStow = new ElevatorToStow(m_endEffector, m_elevator);
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
 
+    /* End Effector */
+    m_manualRotateSourceIntake = new ManualRotateSourceIntake(m_sourceIntake, driverController);
+    m_rotateSourceIntakeToStow = new RotateSourceIntake(m_sourceIntake, 0.2, 90);
+    m_rotateSourceIntaketoIntake = new RotateSourceIntake(m_sourceIntake, 0.2, 0);
+
+
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
 
@@ -228,6 +245,7 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
     m_endEffector.setDefaultCommand(m_manualEndEffector);
     m_elevator.setDefaultCommand(m_manualElevator);
+    m_sourceIntake.setDefaultCommand(m_manualRotateSourceIntake);
 
   }
 
@@ -280,6 +298,11 @@ public class RobotContainer {
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
     Button.psButton2.onTrue(m_elevatorToStow);
+
+    /* Source Intake */
+    Button.leftTrigger2.onTrue(m_rotateSourceIntakeToStow);
+    Button.rightTrigger2.onTrue(m_rotateSourceIntaketoIntake);
+    
 
   }
 

@@ -398,6 +398,9 @@ public final class Constants {
     public static final double SOURCE_KP = 1.0;
     public static final double SOURCE_KI = 0;//0.01;
     public static final double SOURCE_KD = 0;//0.1;
+
+    public static final double SOURCE_INTAKE_POSITIONAL_CONVERSION_FACTOR = 360 * (1.0/5.0) * (20.00/66.00) * (1.0/3.0);
+    public static final double SOURCE_INTAKE_VELOCITY_CONVERSION_FACTOR = SOURCE_INTAKE_POSITIONAL_CONVERSION_FACTOR;
     
   }
   

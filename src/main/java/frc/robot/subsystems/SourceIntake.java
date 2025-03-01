@@ -17,8 +17,9 @@ public class SourceIntake extends TalonFXPositionalSubsystem {
 private final double DEFAULT_POSITION = -35;
 
   /** Creates a new SourceIntake. */
-  public SourceIntake(int[] ids, boolean[] inverted, double kP, double kI, double kD, double positionConversionFactor, double velocityConversionFactor) {
-    super(ids, inverted, kP, kI, kD, GravityTypeValue.Arm_Cosine, positionConversionFactor, velocityConversionFactor, Constants.CTRE_CONFIGS.sourceIntakeFXConfig);
+  //TODO find actual IDs of Source Intake motors
+  public SourceIntake() {
+    super(new int[] {0, 1}, new boolean[] {true, false}, Constants.kSourceIntake.SOURCE_KP, Constants.kSourceIntake.SOURCE_KI, Constants.kSourceIntake.SOURCE_KD, GravityTypeValue.Arm_Cosine, Constants.kSourceIntake.SOURCE_INTAKE_POSITIONAL_CONVERSION_FACTOR, Constants.kSourceIntake.SOURCE_INTAKE_VELOCITY_CONVERSION_FACTOR, Constants.CTRE_CONFIGS.sourceIntakeFXConfig);
     setEncoderPosition(DEFAULT_POSITION);
 
   }
