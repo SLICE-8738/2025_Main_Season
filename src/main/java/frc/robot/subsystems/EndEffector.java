@@ -46,9 +46,9 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     super(
         new int[] { Constants.kEndEffector.ROTATION_MOTOR_ID },
         new boolean[] { false },
-        4.0,
-        0.025,
-        0.2,
+        1.75,//4.0,
+        1.0,
+        0.175,
         Constants.kEndEffector.KG,
         Constants.kEndEffector.SENSOR_TO_MECHANISM_RATIO,
         GravityTypeValue.Arm_Cosine,

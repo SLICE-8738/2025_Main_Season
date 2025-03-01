@@ -76,9 +76,9 @@ public class CoralPositionSelector {
 
     }
 
-    public static double getSelectedReefXAlignPosition() {
+    public static String getSelectedReefSide() {
 
-        return CoralPosition.values()[reefPositions.indexOf(selectedReefPosition)].xAlignPosition;
+        return CoralPosition.values()[reefPositions.indexOf(selectedReefPosition)].side;
 
     }
 
@@ -88,9 +88,9 @@ public class CoralPositionSelector {
 
     }
 
-    public static double getSelectedCoralStationXAlignPosition() {
+    public static String getSelectedCoralStationSide() {
 
-        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12].xAlignPosition;
+        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12].side;
 
     }
 

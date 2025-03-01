@@ -4,18 +4,22 @@
 
 package frc.robot.commands.SourceIntake;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.SourceIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualRotateSourceIntake extends Command {
   private final SourceIntake m_sourceIntake;
-  private final PS4Controller m_controller;
+  private final GenericHID m_controller;
   private double axis;
+  private boolean maintaining;
 
   /** Creates a new ManualRotateSourceIntake. */
-  public ManualRotateSourceIntake(SourceIntake intake, PS4Controller controller) {
+  public ManualRotateSourceIntake(SourceIntake intake, GenericHID controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
 
@@ -25,20 +29,31 @@ public class ManualRotateSourceIntake extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    maintaining = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    axis = m_controller.getRightX();
-    m_sourceIntake.set(axis);
-    if(m_sourceIntake.getPosition()[0] <= m_sourceIntake.getDefaultPosition() && axis < 0){
-      m_sourceIntake.set(0);
+    axis =MathUtil.applyDeadband(m_controller.getRawAxis(2),0.1);
+    if (axis == 0) {
+      if (!maintaining) {
+        m_sourceIntake.maintainPosition();
+      }
+      maintaining = true;
+    } 
+    else {
+      maintaining = false;
+      if(m_sourceIntake.getPosition()[0] <= m_sourceIntake.getDefaultPosition() + 3 && axis < 0){
+        m_sourceIntake.set(0);
+      }
+      else if(m_sourceIntake.getPosition()[0] >= 85 && axis > 0){
+        m_sourceIntake.set(0);
+      }else {
+        m_sourceIntake.set(axis);
+      }
     }
-    if(m_sourceIntake.getPosition()[0] >= 180 && axis > 0){
-      m_sourceIntake.set(0);
-    }
-    
   }
 
   // Called once the command ends or is interrupted.

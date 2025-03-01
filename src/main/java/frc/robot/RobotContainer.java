@@ -28,8 +28,12 @@ import frc.robot.commands.EndEffector.IndexCommand;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
+import frc.robot.commands.EndEffector.PrepareEndEffector;
+import frc.robot.commands.EndEffector.ReverseCoral;
 import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.commands.Scoring.ToStow;
+import frc.robot.commands.SourceIntake.ManualRotateSourceIntake;
+import frc.robot.commands.SourceIntake.RotateSourceIntake;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.PickupAlgae;
 import frc.robot.commands.Scoring.ScoreAlgae;
@@ -68,6 +72,7 @@ public class RobotContainer {
   public final Climber m_climber;
   public final Elevator m_elevator;
   public final EndEffector m_endEffector;
+  public final SourceIntake m_sourceIntake;
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
@@ -114,9 +119,15 @@ public class RobotContainer {
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
+  public final PrepareEndEffector m_testEndEffector;
 
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
+
+  /* Source Intake */
+  public final ManualRotateSourceIntake m_manualSourceIntake;
+  public final RotateSourceIntake m_goToSourceIntakeAngle1;
+  public final RotateSourceIntake m_goToSourceIntakeAngle2;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -172,6 +183,8 @@ public class RobotContainer {
     m_climber = new Climber();
     m_elevator = new Elevator();
     m_endEffector = new EndEffector();
+    m_sourceIntake = new SourceIntake();
+    
 
     m_leds = new LEDs();
 
@@ -207,12 +220,19 @@ public class RobotContainer {
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
+    m_testEndEffector = new PrepareEndEffector(m_endEffector);
 
     m_IntakeAlgae = new IntakeAlgae(m_endEffector);
     m_OutakeAlgae = new OutakeAlgae(m_endEffector);
 
     /* Elevator */
     m_manualElevator = new ManualElevator(m_elevator, operatorController);
+
+    /* Source Intake */
+    m_manualSourceIntake = new ManualRotateSourceIntake(m_sourceIntake, operatorController);
+    m_goToSourceIntakeAngle1 = new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE);
+    m_goToSourceIntakeAngle2 = new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.CLIMB_ANGLE);
+
 
     /* Scoring */
     m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, false);
@@ -248,6 +268,7 @@ public class RobotContainer {
     m_climber.setDefaultCommand(m_manualClimb);
     m_endEffector.setDefaultCommand(m_manualEndEffector);
     m_elevator.setDefaultCommand(m_manualElevator);
+    m_sourceIntake.setDefaultCommand(m_manualSourceIntake);
 
   }
 
@@ -274,11 +295,10 @@ public class RobotContainer {
     // /* Drivetrain */
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
-    Button.leftBumper1.whileTrue(m_reefAlign);
+    Button.leftTrigger1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
     /* Elevator */
     Button.psButton1.onTrue(m_elevatorToStow);
-    Button.square1.whileTrue(m_antiGravityTest);
 
     /* Scoring */
     Button.controlPadDown1.onTrue(m_scoreAlgae);
@@ -289,8 +309,10 @@ public class RobotContainer {
     Button.square1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
 
-    Button.cross1.onTrue(m_indexCoral);
+    Button.cross1.onTrue(m_indexCoral.andThen(new ReverseCoral(m_endEffector)));
     Button.circle1.onTrue(m_scoreCoral);
+
+    Button.rightTrigger1.onTrue(m_testEndEffector.withTimeout(2.0));
 
     // ==================
     // Operator Controls
@@ -308,7 +330,10 @@ public class RobotContainer {
     Button.controlPadLeft2.onTrue(m_setLevelTwo);
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
-    Button.psButton2.onTrue(m_elevatorToStow);
+    Button.square2.onTrue(m_elevatorToStow);
+
+    Button.cross2.onTrue(m_goToSourceIntakeAngle1);
+    Button.circle2.onTrue(m_goToSourceIntakeAngle2);
 
   }
 
@@ -321,6 +346,10 @@ public class RobotContainer {
 
     // return m_autoSelector.getAutoRoutine();
     return null;
+  }
+
+  public Command getTeleopInitCommand() {
+    return m_goToSourceIntakeAngle1;
   }
 
 }

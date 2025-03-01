@@ -25,7 +25,7 @@ public class IndexCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    endEffector.maintainPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +36,6 @@ public class IndexCommand extends Command {
     // middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
     endEffector.setPlacementMotor(-0.1);
-    endEffector.maintainPosition();
 
   }
 

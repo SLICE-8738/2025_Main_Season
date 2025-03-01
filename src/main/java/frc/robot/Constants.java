@@ -207,8 +207,8 @@ public final class Constants {
           ANGLE_OFFSET);
     }
 
-    public static final double LEFT_BRANCH_X_POSITION = -0.1651;
-    public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
+    //public static final double LEFT_BRANCH_X_POSITION = -0.1651;
+    //public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
 
     public static final double CORAL_STATION_LEFT_X_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_X_POSITION = 0.25;
@@ -218,47 +218,47 @@ public final class Constants {
     public static enum CoralPosition {
 
       /* Reef Positions */
-      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
+      BACK_MIDDLE_LEFT_BRANCH("left", new Pose2d(2.434, 4.055, new Rotation2d()),
           "Back Middle Left Branch"),
-      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_RIGHT_BRANCH("right", new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
           "Back Left Right Branch"),
-      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_LEFT_BRANCH("left", new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
           "Back Left Left Branch"),
-      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_RIGHT_BRANCH("right", new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
           "Front Left Right Branch"),
-      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_LEFT_BRANCH("left", new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
           "Front Left Left Branch"),
-      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_RIGHT_BRANCH("right", new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
           "Front Middle Right Branch"),
-      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_LEFT_BRANCH("left", new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
           "Front Middle Left Branch"),
-      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_RIGHT_BRANCH("right", new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
           "Front Right Right Branch"),
-      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_LEFT_BRANCH("left", new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
           "Front Right Left Branch"),
-      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_RIGHT_BRANCH("right", new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
           "Back Right Right Branch"),
-      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_X_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_LEFT_BRANCH("left", new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
           "Back Right Left Branch"),
-      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_X_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
+      BACK_MIDDLE_RIGHT_BRANCH("right", new Pose2d(2.434, 4.055, new Rotation2d()),
           "Back Middle Right Branch"),
 
       /* Coral Station Positions */
-      LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
+      LEFT_CORAL_STATION_RIGHT("right", new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
           "Left Coral Station Right"),
-      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
+      LEFT_CORAL_STATION_LEFT("left", new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
           "Left Coral Station Left"),
-      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
+      RIGHT_CORAL_STATION_RIGHT("right", new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
           "Right Coral Station Right"),
-      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_X_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
+      RIGHT_CORAL_STATION_LEFT("left", new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
           "Right Coral Station Left");
 
-      public final double xAlignPosition;
+      public final String side;
       public final Pose2d fieldPosition;
       public final String name;
 
-      CoralPosition(double xAlignPosition, Pose2d fieldPosition, String name) {
-        this.xAlignPosition = xAlignPosition;
+      CoralPosition(String side, Pose2d fieldPosition, String name) {
+        this.side = side;
         this.fieldPosition = fieldPosition;
         this.name = name;
       }
@@ -276,7 +276,7 @@ public final class Constants {
                                                                                          // divided by gear ratio.
     public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
     public static final double KP = 2.85;
-    public static final double KI = 0.06;
+    public static final double KI = 0.14;
     public static final double KD = 0.25;
     public static final double KG = 0.24;
     public static final double THRESHOLD = .01;
@@ -310,12 +310,12 @@ public final class Constants {
 
       STOW(0.02, 84),
       PROCESSER(0.03, -4),
-      LEVEL1(0.254, 41),
-      SOURCE(0.2735, 84),
-      ALGAE1(0.3, 16),
-      LEVEL2(0.51, 81),
-      ALGAE2(0.6, 16),
-      LEVEL3(0.915, 81),
+      SOURCE(0.2507, 66),
+      LEVEL1(0.294, 41),
+      ALGAE1(0.34, 16),
+      LEVEL2(0.41, 81),
+      ALGAE2(0.75, 16),
+      LEVEL3(0.818, 81),
       LEVEL4(1.625, 51);
 
       public double height;
@@ -350,11 +350,11 @@ public final class Constants {
     /* Climber Current Limiting */
     public static final boolean CLIMB_ENABLE_SUPPLY_CURRENT_LIMIT = true;
     public static final int CLIMB_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 70;
-    public static final double CLIMB_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+    public static final int CLIMB_SUPPLY_CURRENT_LOWER_LIMIT = 90;
+    public static final double CLIMB_SUPPLY_CURRENT_LOWER_TIME = 0.15;
 
     public static final boolean CLIMB_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double CLIMB_STATOR_CURRENT_LIMIT = 70;
+    public static final double CLIMB_STATOR_CURRENT_LIMIT = 90;
 
   }
 
@@ -393,8 +393,8 @@ public final class Constants {
     public static final int POSITIONALFX_SUPPLY_CURRENT_LIMIT = 35;
     public static final int POSITIONALFX_SUPPLY_CURRENT_LOWER_LIMIT = 50;
     public static final double POSITIONALFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
-    public static final double DUTYCYCLE_FORWARD_PEAK = 0.5;
-    public static final double DUTYCYCLE_REVERSE_PEAK = -0.5;
+    public static final double VOLTAGE_FORWARD_PEAK = 16;
+    public static final double VOLTAGE_REVERSE_PEAK = -16;
 
     public static final boolean POSITIONALFX_ENABLE_STATOR_CURRENT_LIMIT = true;
     public static final double POSITIONALFX_STATOR_CURRENT_LIMIT = 50;
@@ -413,27 +413,33 @@ public final class Constants {
 
   public final class kSourceIntake {
 
-    public static final int SOURCE_INTAKE_MOTOR_PORT = 0; //TODO find actual motor port number
+    public static final int MOTOR_PORT = 13; //TODO find actual motor port number
+
+    public static final double INTAKE_ANGLE = 25;
+    public static final double CLIMB_ANGLE = 94;
 
     /* Motor Configs */
-    public static final InvertedValue SOURCE_INTAKE_INVERT = InvertedValue.CounterClockwise_Positive;
-    public static final NeutralModeValue SOURCE_INTAKE_IDLE_MODE = NeutralModeValue.Brake;
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
+    public static final NeutralModeValue MOTOR_IDLE_MODE = NeutralModeValue.Brake;
+    public static final double POSITION_CONVERSION_FACTOR = 360.0;
+    public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
+    public static final double SENSOR_TO_MECHANISM_RATIO = 49.5;
 
     /* Current Limiting */
     // TODO: Find current limits
-    public static final boolean SOURCE_INTAKE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-    public static final int SOURCE_INTAKE_SUPPLY_CURRENT_LIMIT = 35;
-    public static final int SOURCE_INTAKE_SUPPLY_CURRENT_LOWER_LIMIT = 50;
-    public static final double SOURCE_INTAKE_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+    public static final boolean ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int SUPPLY_CURRENT_LIMIT = 35;
+    public static final int SUPPLY_CURRENT_LOWER_LIMIT = 50;
+    public static final double SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
-    public static final boolean SOURCE_INTAKE_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double SOURCE_INTAKE_STATOR_CURRENT_LIMIT = 50;
+    public static final boolean ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double STATOR_CURRENT_LIMIT = 50;
 
     /* PID */
-    public static final double SOURCE_KP = 1.0;
-    public static final double SOURCE_KI = 0;//0.01;
-    public static final double SOURCE_KD = 0;//0.1;
-    
+    public static final double KP = 1.0;
+    public static final double KI = 0;//0.01;
+    public static final double KD = 0;//0.1;
+
   }
   
 }

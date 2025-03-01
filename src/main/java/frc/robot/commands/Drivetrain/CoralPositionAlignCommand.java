@@ -24,6 +24,7 @@ public class CoralPositionAlignCommand extends Command {
   private final Drivetrain m_drivetrain;
   private final PS4Controller m_driverController;
   private final boolean m_alignWithReef;
+  private String side;
 
   private final PolarJoystickFilter translationFilter, rotationFilter;
 
@@ -63,6 +64,7 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void initialize() {
 
+    side = m_alignWithReef ? CoralPositionSelector.getSelectedReefSide() : CoralPositionSelector.getSelectedCoralStationSide();
     aligningWithAprilTag.setBoolean(true);
 
   }
@@ -75,12 +77,12 @@ public class CoralPositionAlignCommand extends Command {
     double translationY;
     double rotation;
 
-    if (LimelightHelpers.getTV("limelight-right")) {
+    if (LimelightHelpers.getTV("limelight-" + side)) {
       translationX = translationFilter.filter(-m_driverController.getRawAxis(1), 0)[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
       translationY = -xAlignController.calculate(
-        LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getX(), 
-        m_alignWithReef ? CoralPositionSelector.getSelectedReefXAlignPosition() : CoralPositionSelector.getSelectedCoralStationXAlignPosition());
-      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getRotation().getY(), 0);
+        LimelightHelpers.getTX("limelight-" + side), 
+        m_alignWithReef ? 0 : 0);
+      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-" + side).getRotation().getY(), 0);
     }
     else {
       double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));

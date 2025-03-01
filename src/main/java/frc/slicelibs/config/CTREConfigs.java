@@ -8,12 +8,11 @@ import frc.robot.Constants;
 public final class CTREConfigs {
 
     public final TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
-    public final TalonFXConfiguration elevatorFXConfig = new TalonFXConfiguration();
-    public final TalonFXConfiguration sourceIntakeFXConfig = new TalonFXConfiguration();
     public final Pigeon2Configuration pigeon2Config = new Pigeon2Configuration();
     public final TalonFXConfiguration positionalFXConfig = new TalonFXConfiguration();
     public final TalonFXConfiguration climberFXConfig = new TalonFXConfiguration();
     public final TalonFXConfiguration elevatorFXConfig = new TalonFXConfiguration();
+    public final TalonFXConfiguration sourceIntakeFXConfig = new TalonFXConfiguration();
 
     public CTREConfigs() {
         /* ================================ */
@@ -59,8 +58,9 @@ public final class CTREConfigs {
             var positionalFXMotorOutput = positionalFXConfig.MotorOutput;
             positionalFXMotorOutput.Inverted = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_INVERT;
             positionalFXMotorOutput.NeutralMode = Constants.kTalonFXPositionalSubsystem.POSITIONALFX_IDLE;
-            positionalFXMotorOutput.PeakForwardDutyCycle = Constants.kTalonFXPositionalSubsystem.DUTYCYCLE_FORWARD_PEAK;
-            positionalFXMotorOutput.PeakReverseDutyCycle = Constants.kTalonFXPositionalSubsystem.DUTYCYCLE_REVERSE_PEAK;
+
+            positionalFXConfig.Voltage.PeakForwardVoltage = Constants.kTalonFXPositionalSubsystem.VOLTAGE_FORWARD_PEAK;
+            positionalFXConfig.Voltage.PeakReverseVoltage = Constants.kTalonFXPositionalSubsystem.VOLTAGE_REVERSE_PEAK;
 
             /* Current Limiting */
             var positionalFXCurrentLimits = positionalFXConfig.CurrentLimits;
@@ -138,28 +138,28 @@ public final class CTREConfigs {
             elevatorFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kElevator.CLOSED_LOOP_RAMP;
 
         /* ================================ */
-        /* Swerve Drive Motor Configuration */
+        /* Source Intake Motor Configuration */
         /* ================================ */
 
         /* Motor Invert and Neutral Mode */
         var sourceIntakeMotorOutput = sourceIntakeFXConfig.MotorOutput;
-        sourceIntakeMotorOutput.Inverted = Constants.kSourceIntake.SOURCE_INTAKE_INVERT;
-        sourceIntakeMotorOutput.NeutralMode = Constants.kSourceIntake.SOURCE_INTAKE_IDLE_MODE;
+        sourceIntakeMotorOutput.Inverted = Constants.kSourceIntake.MOTOR_INVERT;
+        sourceIntakeMotorOutput.NeutralMode = Constants.kSourceIntake.MOTOR_IDLE_MODE;
 
         /* Current Limiting */
         var sourceIntakeCurrentLimits = sourceIntakeFXConfig.CurrentLimits;
-        sourceIntakeCurrentLimits.SupplyCurrentLimitEnable = Constants.kSourceIntake.SOURCE_INTAKE_ENABLE_SUPPLY_CURRENT_LIMIT;
-        sourceIntakeCurrentLimits.SupplyCurrentLimit = Constants.kSourceIntake.SOURCE_INTAKE_SUPPLY_CURRENT_LIMIT;
-        sourceIntakeCurrentLimits.SupplyCurrentLowerLimit = Constants.kSourceIntake.SOURCE_INTAKE_SUPPLY_CURRENT_LOWER_LIMIT;
-        sourceIntakeCurrentLimits.SupplyCurrentLowerTime = Constants.kSourceIntake.SOURCE_INTAKE_SUPPLY_CURRENT_LOWER_TIME;
+        sourceIntakeCurrentLimits.SupplyCurrentLimitEnable = Constants.kSourceIntake.ENABLE_SUPPLY_CURRENT_LIMIT;
+        sourceIntakeCurrentLimits.SupplyCurrentLimit = Constants.kSourceIntake.SUPPLY_CURRENT_LIMIT;
+        sourceIntakeCurrentLimits.SupplyCurrentLowerLimit = Constants.kSourceIntake.SUPPLY_CURRENT_LOWER_LIMIT;
+        sourceIntakeCurrentLimits.SupplyCurrentLowerTime = Constants.kSourceIntake.SUPPLY_CURRENT_LOWER_TIME;
 
-        sourceIntakeCurrentLimits.StatorCurrentLimitEnable = Constants.kSourceIntake.SOURCE_INTAKE_ENABLE_STATOR_CURRENT_LIMIT;
-        sourceIntakeCurrentLimits.StatorCurrentLimit = Constants.kSourceIntake.SOURCE_INTAKE_STATOR_CURRENT_LIMIT;
+        sourceIntakeCurrentLimits.StatorCurrentLimitEnable = Constants.kSourceIntake.ENABLE_STATOR_CURRENT_LIMIT;
+        sourceIntakeCurrentLimits.StatorCurrentLimit = Constants.kSourceIntake.STATOR_CURRENT_LIMIT;
 
         var sourceIntakeFXSlot0 = sourceIntakeFXConfig.Slot0;
-        sourceIntakeFXSlot0.kP = Constants.kSourceIntake.SOURCE_KP;
-        sourceIntakeFXSlot0.kI = Constants.kSourceIntake.SOURCE_KI;
-        sourceIntakeFXSlot0.kD = Constants.kSourceIntake.SOURCE_KD;
+        sourceIntakeFXSlot0.kP = Constants.kSourceIntake.KP;
+        sourceIntakeFXSlot0.kI = Constants.kSourceIntake.KI;
+        sourceIntakeFXSlot0.kD = Constants.kSourceIntake.KD;
 
     }
     

@@ -15,6 +15,8 @@ public class ManualEndEffector extends Command {
   private final EndEffector m_endEffector;
   private final GenericHID m_controller;
 
+  private boolean maintaining;
+
   public ManualEndEffector(EndEffector endEffector, GenericHID controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(endEffector);
@@ -26,19 +28,25 @@ public class ManualEndEffector extends Command {
   @Override
   public void initialize() {
     m_endEffector.resetRelativeEncoder();
+    maintaining = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double axis = MathUtil.applyDeadband(m_controller.getRawAxis(0) * .5, .1);
-    if ((axis < 0 && m_endEffector.getAngle().getDegrees() <= 0) || (axis > 0 && m_endEffector.getAngle().getDegrees() >= 88)) {
-      axis = 0;
+    if ((axis < 0 && m_endEffector.getAngle().getDegrees() <= 0) || (axis > 0 && m_endEffector.getAngle().getDegrees() >= 84)) {
+      m_endEffector.set(0);
+      maintaining = false;
     }
     else if (axis == 0) {
-      m_endEffector.maintainPosition();
+      if (!maintaining) {
+        m_endEffector.maintainPosition();
+        maintaining = true;
+      }
     }
     else {
+      maintaining = false;
       m_endEffector.set(axis);
     }
   }

@@ -17,6 +17,7 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class AutonomousCoralPositionAlignCommand extends Command {
 
   private final Drivetrain m_drivetrain;
+  private final String side;
 
   private final PIDController xAlignController, zAlignController, rotationAlignController;
 
@@ -27,12 +28,13 @@ public class AutonomousCoralPositionAlignCommand extends Command {
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
+    side = reefPosition.side;
 
     xAlignController = new PIDController(2.5, 0, 0);
     zAlignController = new PIDController(1, 0, 0);
     rotationAlignController = new PIDController(2.5, 0, 0);
 
-    xAlignController.setSetpoint(reefPosition.xAlignPosition);
+    xAlignController.setSetpoint(0);
     zAlignController.setSetpoint(Constants.kDrivetrain.ROBOT_FLUSH_SURFACE_Z_POSITION);
     rotationAlignController.setSetpoint(0);
 
@@ -50,10 +52,10 @@ public class AutonomousCoralPositionAlignCommand extends Command {
     double translationY = 0;
     double rotation = 0;
 
-    if (LimelightHelpers.getTV("limelight-right")) {
-      translationY = -xAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getX());
-      translationX = -zAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getZ());
-      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getRotation().getY());
+    if (LimelightHelpers.getTV("limelight-" + side)) {
+      translationY = -xAlignController.calculate(LimelightHelpers.getTX("limelight-" + side));
+      translationX = -zAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-" + side).getZ());
+      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-" + side).getRotation().getY());
     }
 
     m_drivetrain.drive(
