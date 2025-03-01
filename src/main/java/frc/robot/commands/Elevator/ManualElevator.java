@@ -33,9 +33,6 @@ public class ManualElevator extends Command {
   public void execute() {
     double axis = MathUtil.applyDeadband(-m_controller.getRawAxis(1), 0.1);
 
-    if(axis == 0){
-      axis = 0.02;
-    }
     m_elevator.set(axis);
     // if (m_elevator.isAtBottom() && (axis > 0)) {
     //   m_elevator.set(0);

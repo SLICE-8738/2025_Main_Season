@@ -49,6 +49,8 @@ public class EndEffector extends TalonFXPositionalSubsystem {
         4.0,
         0.025,
         0.2,
+        Constants.kEndEffector.KG,
+        Constants.kEndEffector.SENSOR_TO_MECHANISM_RATIO,
         GravityTypeValue.Arm_Cosine,
         Constants.kEndEffector.POSITIONAL_CONVERSION_FACTOR,
         Constants.kEndEffector.VELOCITY_CONVERSTION_FACTOR,
@@ -62,15 +64,6 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
     encoder = new DutyCycleEncoder(6, 360, 0);
     encoder.setInverted(true);
-  }
-
-  /**
-   * Sets the given position as a PID setpoint
-   * and automatically applies anti-gravity feedforward
-   * @param position
-   */
-  public void setPosition(double position) {
-    super.setPosition(position, getAntiGravity());
   }
 
   /**
@@ -105,17 +98,6 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     // sensorStatuses[1] = middleSensor.get();
     sensorStatuses[2] = !backSensor.get();
     return sensorStatuses;
-  }
-
-  private double getAntiGravity() {
-    if (frontSensor.get() || backSensor.get()) {
-      return Constants.kEndEffector.CORAL_KG * getAngle().plus(Rotation2d.fromDegrees(4)).getCos();
-    } else if (getCurrentCommand().getName() == "IntakeAlgae") {
-      return Constants.kEndEffector.ALGAE_KG * getAngle().plus(Rotation2d.fromDegrees(4)).getCos();
-    }
-    else {
-      return Constants.kEndEffector.NORMAL_KG * getAngle().plus(Rotation2d.fromDegrees(4)).getCos();
-    }
   }
 
   public void resetRelativeEncoder() {

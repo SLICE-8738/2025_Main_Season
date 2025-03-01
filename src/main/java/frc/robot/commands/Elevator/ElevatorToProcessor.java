@@ -26,7 +26,7 @@ public class ElevatorToProcessor extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevator.setVelocity(0.1);
+    m_elevator.set(-0.1);
   }
 
   // Called once the command ends or is interrupted.

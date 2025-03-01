@@ -21,7 +21,7 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
     private double positionTargetReference;
     private double velocityTargetReference;
 
-    public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD,
+    public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD, double kG, double sensorToMechRatio,
             GravityTypeValue gravityType, double positionConversionFactor, double velocityConversionFactor, TalonFXConfiguration motorConfigs) {
         if (ids.length != inverted.length)
             throw new IllegalArgumentException("ids and inverted must be the same length");
@@ -36,10 +36,12 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
             else{
                 configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
             }
-            configs.Slot0.kP = kP;
-            configs.Slot0.kI = kI;
-            configs.Slot0.kD = kD;
+            configs.Slot0.kP = kP /** sensorToMechRatio*/;
+            configs.Slot0.kI = kI /** sensorToMechRatio*/;
+            configs.Slot0.kD = kD /** sensorToMechRatio*/;
+            configs.Slot0.kG = kG;
             configs.Slot0.GravityType = gravityType;
+            configs.Feedback.SensorToMechanismRatio = sensorToMechRatio;
 
             motors[i] = new TalonFX(ids[i]);
             motors[i].getConfigurator().apply(configs);
@@ -72,10 +74,10 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         velocityTargetReference = velocity;
     }
 
-    public void setPosition(double position, double feedForward) {
+    public void setPosition(double position) {
         PositionVoltage request = new PositionVoltage(0).withSlot(0);
         for (TalonFX motor : motors) {
-            motor.setControl(request.withPosition(position / positionConversionFactor).withFeedForward(feedForward));
+            motor.setControl(request.withPosition(position / positionConversionFactor));
         }
       
         positionTargetReference = position;

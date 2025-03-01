@@ -19,7 +19,7 @@ public class PickupAlgae extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    if (level != Level.ALGAE1 || level != Level.ALGAE2) {
+    if (level != Level.ALGAE1 && level != Level.ALGAE2) {
       throw new IllegalArgumentException("Argument must be ALGAE1 or ALGAE2");
     }
     if (endEffectorFirst) {

@@ -21,6 +21,8 @@ public class Elevator extends TalonFXPositionalSubsystem {
             Constants.kElevator.KP, 
             Constants.kElevator.KI, 
             Constants.kElevator.KD,
+            Constants.kElevator.KG,
+            1,
             GravityTypeValue.Elevator_Static,
             Constants.kElevator.POSITION_CONVERSION_FACTOR,
             Constants.kElevator.VELOCITY_CONVERSION_FACTOR, 
@@ -32,7 +34,7 @@ public class Elevator extends TalonFXPositionalSubsystem {
     }
 
     public void moveTo(double height) {
-        setPosition(height, 0);
+        setPosition(height);
     }
 
     // public boolean isAtBottom() {

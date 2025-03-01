@@ -278,6 +278,7 @@ public final class Constants {
     public static final double KP = 2.85;
     public static final double KI = 0.06;
     public static final double KD = 0.25;
+    public static final double KG = 0.24;
     public static final double THRESHOLD = .01;
 
     /* Motor Invert */
@@ -307,15 +308,15 @@ public final class Constants {
     /* Elevator Levels */
     public enum Level {
 
-      STOW(0.02, 88),
-      PROCESSER(0.03, 0),
-      LEVEL1(0.254, 45),
-      SOURCE(0.2735, 88),
-      ALGAE1(0.3, 20),
-      LEVEL2(0.51, 85),
-      ALGAE2(0.6, 20),
-      LEVEL3(0.915, 85),
-      LEVEL4(1.625, 55);
+      STOW(0.02, 84),
+      PROCESSER(0.03, -4),
+      LEVEL1(0.254, 41),
+      SOURCE(0.2735, 84),
+      ALGAE1(0.3, 16),
+      LEVEL2(0.51, 81),
+      ALGAE2(0.6, 16),
+      LEVEL3(0.915, 81),
+      LEVEL4(1.625, 51);
 
       public double height;
       public double angle;
@@ -367,14 +368,14 @@ public final class Constants {
     public static final int ROTATION_MOTOR_ID = 11;
     public static final int PLACEMENT_MOTOR_ID = 12;
 
-    public static final double POSITIONAL_CONVERSION_FACTOR = 360.0 * (8.0 / 70.0) * (15.0 / 36.0);
+    public static final double POSITIONAL_CONVERSION_FACTOR = 360.0;
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
-    public static final double ENCODER_OFFSET = 296;
+    public static final double SENSOR_TO_MECHANISM_RATIO = (70.0 /8.0) * (36.0 / 15.0);
 
-    public static final double NORMAL_KG = 0.02;
-    public static final double CORAL_KG = 0.028;
-    public static final double ALGAE_KG = 0.045;
+    public static final double ENCODER_OFFSET = 300;
+
+    public static final double KG = 0.24;
 
   }
 
