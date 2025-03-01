@@ -410,4 +410,33 @@ public final class Constants {
 
   }
 
+
+  public final class kSourceIntake {
+
+    public static final int SOURCE_INTAKE_MOTOR_PORT = 0; //TODO find actual motor port number
+
+    /* Motor Configs */
+    public static final InvertedValue SOURCE_INTAKE_INVERT = InvertedValue.CounterClockwise_Positive;
+    public static final NeutralModeValue SOURCE_INTAKE_IDLE_MODE = NeutralModeValue.Brake;
+
+    /* Current Limiting */
+    // TODO: Find current limits
+    public static final boolean SOURCE_INTAKE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int SOURCE_INTAKE_SUPPLY_CURRENT_LIMIT = 35;
+    public static final int SOURCE_INTAKE_SUPPLY_CURRENT_LOWER_LIMIT = 50;
+    public static final double SOURCE_INTAKE_SUPPLY_CURRENT_LOWER_TIME = 0.1;
+
+    public static final boolean SOURCE_INTAKE_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double SOURCE_INTAKE_STATOR_CURRENT_LIMIT = 50;
+
+    /* PID */
+    public static final double SOURCE_KP = 1.0;
+    public static final double SOURCE_KI = 0;//0.01;
+    public static final double SOURCE_KD = 0;//0.1;
+    
+  }
+  
 }
+
+
+
