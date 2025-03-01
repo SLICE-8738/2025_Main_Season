@@ -50,10 +50,10 @@ public class AutonomousCoralPositionAlignCommand extends Command {
     double translationY = 0;
     double rotation = 0;
 
-    if (LimelightHelpers.getTV("limelight-slice")) {
-      translationY = -xAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX());
-      translationX = -zAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getZ());
-      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getRotation().getY());
+    if (LimelightHelpers.getTV("limelight-right")) {
+      translationY = -xAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getX());
+      translationX = -zAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getZ());
+      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getRotation().getY());
     }
 
     m_drivetrain.drive(

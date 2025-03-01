@@ -231,12 +231,12 @@ private final StatusSignal<Angle> gyroYawSignal;
 
     if (!DriverStation.isAutonomousEnabled()) {
 
-      LimelightHelpers.SetRobotOrientation("limelight-slice", getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
-      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-slice");
+      LimelightHelpers.SetRobotOrientation("limelight-right", getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right");
 
       if (estimate.tagCount >= 1) {
 
-        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-slice").getTranslation();
+        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-right").getTranslation();
 
         if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
         

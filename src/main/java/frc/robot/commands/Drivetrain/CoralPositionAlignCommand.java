@@ -75,12 +75,12 @@ public class CoralPositionAlignCommand extends Command {
     double translationY;
     double rotation;
 
-    if (LimelightHelpers.getTV("limelight-slice")) {
+    if (LimelightHelpers.getTV("limelight-right")) {
       translationX = translationFilter.filter(-m_driverController.getRawAxis(1), 0)[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
       translationY = -xAlignController.calculate(
-        LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getX(), 
+        LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getX(), 
         m_alignWithReef ? CoralPositionSelector.getSelectedReefXAlignPosition() : CoralPositionSelector.getSelectedCoralStationXAlignPosition());
-      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-slice").getRotation().getY(), 0);
+      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-right").getRotation().getY(), 0);
     }
     else {
       double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));
