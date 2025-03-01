@@ -90,7 +90,6 @@ public class RobotContainer {
 
   /* Elevator */
   public final ManualElevator m_manualElevator;
-  public final ToStow m_elevatorToStow;
 
   /* Scoring */
   public final SetLevel m_setLevelSource;
@@ -105,6 +104,7 @@ public class RobotContainer {
   public final PickupAlgae m_pickupAlgaeUp2;
   public final PickupAlgae m_pickupAlgaeDown2;
   public final ScoreAlgae m_scoreAlgae;
+  public final ToStow m_elevatorToStow;
 
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
@@ -286,7 +286,6 @@ public class RobotContainer {
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
     Button.controlPadUp1.onTrue(new ConditionalCommand(m_pickupAlgaeDown2, m_pickupAlgaeUp2,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
-
     Button.square1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
 
