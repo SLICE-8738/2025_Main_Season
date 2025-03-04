@@ -9,24 +9,24 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
+//import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants.kDrivetrain.CoralPosition;
-import frc.robot.commands.Drivetrain.AutonomousCoralPositionAlignCommand;
+import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
-import java.io.File;
-import java.io.FileReader;
+//import java.io.File;
+//import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -137,7 +137,7 @@ public class AutoSelector {
                 AutoBuilder.pathfindToPoseFlipped(
                     position.fieldPosition,
                     Constants.kDrivetrain.PATH_CONSTRAINTS,
-                    0.5).andThen(new AutonomousCoralPositionAlignCommand(drivetrain, position)));
+                    0.5).andThen(new CoralPositionAlignCommand(drivetrain, position)));
 
             autoPoses.put("Go To " + position.name, position.fieldPosition);
 
@@ -159,7 +159,7 @@ public class AutoSelector {
                 m_drivetrain.getPose() 
                 : new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
 
-            if (m_simDrivetrain != null) {
+            /*if (m_simDrivetrain != null) {
 
                 AutoBuilder.configure(
                     m_simDrivetrain::getPose,
@@ -232,7 +232,7 @@ public class AutoSelector {
                     () -> DriverStation.getAlliance().get() == Alliance.Red,
                     m_drivetrain);
 
-            }
+            }*/
 
         }
         catch (Exception e) {

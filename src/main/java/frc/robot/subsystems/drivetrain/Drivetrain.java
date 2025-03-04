@@ -43,7 +43,6 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class Drivetrain extends SubsystemBase {
 
-
   private final SwerveModule[] swerveMods;
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -55,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
     };
   private final SwerveDrivePoseEstimator m_odometry;
   private final Pigeon2 m_gyro;
-private final StatusSignal<Angle> gyroYawSignal;
+  private final StatusSignal<Angle> gyroYawSignal;
   private final StatusSignal<AngularVelocity> gyroYawVelocitySignal;
   public final Field2d m_field2d;
 
@@ -93,7 +92,7 @@ private final StatusSignal<Angle> gyroYawSignal;
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getModulePositions(), 
-      LimelightHelpers.getBotPose2d_wpiBlue("limelight"),
+      new Pose2d(0, 0, Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 180 : 0)),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.1, 0.1, 0.1));
 
@@ -102,7 +101,7 @@ private final StatusSignal<Angle> gyroYawSignal;
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
         Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
-        setField2dTrajectory(path, "Trajectory");
+        addField2dTrajectory(path, "Trajectory");
       }
     );
     PathPlannerLogging.setLogTargetPoseCallback(
@@ -148,12 +147,10 @@ private final StatusSignal<Angle> gyroYawSignal;
     updateOdometry();
     m_field2d.setRobotPose(getPose());
 
-  BaseStatusSignal.refreshAll(
+    BaseStatusSignal.refreshAll(
       gyroYawSignal,
       gyroYawVelocitySignal
     );
-
-    SmartDashboard.putNumber("Rotational Velocity", getRotationalVelocity().getDegrees());
 
   }
 
@@ -231,17 +228,21 @@ private final StatusSignal<Angle> gyroYawSignal;
 
     if (!DriverStation.isAutonomousEnabled()) {
 
-      LimelightHelpers.SetRobotOrientation("limelight-right", getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
-      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right");
+      for (String side : new String[] {"left", "right"}) {
 
-      if (estimate.tagCount >= 1) {
+        LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
 
-        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-right").getTranslation();
+        if (estimate.tagCount >= 1) {
 
-        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
-        
-          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
-        
+          Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
+
+          if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
+          
+            m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
+          
+          }
+
         }
 
       }
@@ -265,9 +266,15 @@ private final StatusSignal<Angle> gyroYawSignal;
 
   }
 
-  public void setField2dTrajectory(List<Pose2d> poses, String trajectoryName) {
+  public void addField2dTrajectory(List<Pose2d> poses, String trajectoryName) {
 
     m_field2d.getObject(trajectoryName).setPoses(poses);
+
+  }
+
+  public void addField2dPose(Pose2d pose, String poseName) {
+
+    m_field2d.getObject(poseName).setPose(pose);
 
   }
 

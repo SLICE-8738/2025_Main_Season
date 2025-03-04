@@ -5,58 +5,41 @@
 package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.math.geometry.Translation2d;
+
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
-import frc.robot.CoralPositionSelector;
+import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.slicelibs.PolarJoystickFilter;
-import frc.slicelibs.config.JoystickFilterConfig;
 
 public class CoralPositionAlignCommand extends Command {
 
   private final Drivetrain m_drivetrain;
-  private final PS4Controller m_driverController;
-  private final boolean m_alignWithReef;
-  private String side;
+  private final Pose2d targetPose;
 
-  private final PolarJoystickFilter translationFilter, rotationFilter;
+  private final PIDController distanceController, rotationController;
 
-  private final PIDController xAlignController, rotationAlignController;
-
-  private static final GenericEntry aligningWithAprilTag = 
-    Shuffleboard.getTab("Driver").add("Aligning with April Tag", false)
-    .withPosition(0,0).withSize(2, 2).getEntry();
-
-  /** Creates a new ReefAlignCommand. */
-  public CoralPositionAlignCommand(Drivetrain drivetrain, PS4Controller driverController, boolean alignWithReef) {
+  /** Creates a new CoralPositionAlignCommand. */
+  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
-    m_driverController = driverController;
-    m_alignWithReef = alignWithReef;
 
-    translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
-      0.07,
-      0.6,
-      Constants.OperatorConstants.DRIVE_EXPONENT,
-      Constants.OperatorConstants.DRIVE_EXPONENT_PERCENT));
-    rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
-      0.07,
-      0.6,
-      Constants.OperatorConstants.TURN_EXPONENT,
-      Constants.OperatorConstants.TURN_EXPONENT_PERCENT));
+    distanceController = new PIDController(3.5, 0, 0);
+    rotationController = new PIDController(2.5, 0, 0);
 
-    xAlignController = new PIDController(2.5, 0, 0);
-    rotationAlignController = new PIDController(2.5, 0, 0);
+    distanceController.setSetpoint(0);
+    rotationController.setSetpoint(position.fieldPosition.getRotation().getDegrees());
+    rotationController.enableContinuousInput(0, 360);
+
+    targetPose = position.fieldPosition.plus(new Transform2d(
+      new Translation2d(Constants.kDrivetrain.X_DISTANCE_TO_REEF, position.yAlignPosition), 
+      new Rotation2d()));
 
   }
 
@@ -64,8 +47,7 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void initialize() {
 
-    side = m_alignWithReef ? CoralPositionSelector.getSelectedReefSide() : CoralPositionSelector.getSelectedCoralStationSide();
-    aligningWithAprilTag.setBoolean(true);
+    m_drivetrain.addField2dPose(targetPose, "Auto Align Target Pose");
 
   }
 
@@ -73,29 +55,15 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void execute() {
 
-    double translationX;
-    double translationY;
-    double rotation;
+    Transform2d difference = targetPose.minus(m_drivetrain.getPose());
+    double distanceFeedback = Math.abs(distanceController.calculate(difference.getTranslation().getDistance(new Translation2d())));
 
-    if (LimelightHelpers.getTV("limelight-" + side)) {
-      translationX = translationFilter.filter(-m_driverController.getRawAxis(1), 0)[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-      translationY = -xAlignController.calculate(
-        LimelightHelpers.getTX("limelight-" + side), 
-        m_alignWithReef ? 0 : 0);
-      rotation = -rotationAlignController.calculate(LimelightHelpers.getBotPose3d_TargetSpace("limelight-" + side).getRotation().getY(), 0);
-    }
-    else {
-      double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));
-      translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-      translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-      rotation = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * Constants.kDrivetrain.MAX_ANGULAR_VELOCITY;
-    }
-
-    SmartDashboard.putNumber("Reef Align X Error", xAlignController.getError());
-    SmartDashboard.putNumber("Reef Align Rotation Error", rotationAlignController.getError());
+    double translationX = difference.getTranslation().getAngle().getCos() * distanceFeedback;
+    double translationY = difference.getTranslation().getAngle().getSin() * distanceFeedback;
+    double rotation = rotationController.calculate(m_drivetrain.getPose().getRotation().getDegrees());
 
     m_drivetrain.drive(
-      new Transform2d(translationX, translationY, new Rotation2d(rotation)), 
+      new Transform2d(translationX, translationY, Rotation2d.fromDegrees(rotation)), 
       false, 
       false);
 
@@ -110,8 +78,6 @@ public class CoralPositionAlignCommand extends Command {
       false,
       false);
     
-    aligningWithAprilTag.setBoolean(false);
-
   }
 
   // Returns true when the command should end.

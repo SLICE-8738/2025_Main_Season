@@ -22,6 +22,7 @@
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Autonomous/Auto Mode": "String Chooser",
       "/Shuffleboard/Autonomous/Starting Position": "String Chooser",
+      "/Shuffleboard/Debug Tab/End Effector kG/Update": "Command",
       "/Shuffleboard/Debug/Field": "Field2d",
       "/Shuffleboard/Debug/SysID Routine": "String Chooser",
       "/Shuffleboard/Driver/Reef Branch Align": "String Chooser",

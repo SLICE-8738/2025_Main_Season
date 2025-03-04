@@ -2,7 +2,6 @@ package frc.robot;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -76,27 +75,15 @@ public class CoralPositionSelector {
 
     }
 
-    public static String getSelectedReefSide() {
+    public static CoralPosition getSelectedReefPosition() {
 
-        return CoralPosition.values()[reefPositions.indexOf(selectedReefPosition)].side;
-
-    }
-
-    public static Pose2d getSelectedReefFieldPosition() {
-
-        return CoralPosition.values()[reefPositions.indexOf(selectedReefPosition)].fieldPosition;
+        return CoralPosition.values()[reefPositions.indexOf(selectedReefPosition)];
 
     }
 
-    public static String getSelectedCoralStationSide() {
+    public static CoralPosition getSelectedCoralStationPosition() {
 
-        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12].side;
-
-    }
-
-    public static Pose2d getSelectedCoralStationFieldPosition() {
-
-        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12].fieldPosition;
+        return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12];
 
     }
 

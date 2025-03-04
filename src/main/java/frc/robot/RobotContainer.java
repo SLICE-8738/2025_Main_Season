@@ -152,11 +152,12 @@ public class RobotContainer {
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
         m_autoSelector = new AutoSelector(
             m_drivetrain,
-            new Drivetrain(
+            /*new Drivetrain(
                 new SimSwerveModuleIO(),
                 new SimSwerveModuleIO(),
                 new SimSwerveModuleIO(),
-                new SimSwerveModuleIO()));
+                new SimSwerveModuleIO())*/
+                null);
         break;
       case SIM:
         m_drivetrain = new Drivetrain(
@@ -168,14 +169,10 @@ public class RobotContainer {
         break;
       default:
         m_drivetrain = new Drivetrain(
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            });
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {});
         m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
@@ -203,17 +200,17 @@ public class RobotContainer {
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
-        () -> AutoBuilder.pathfindToPoseFlipped(
-            CoralPositionSelector.getSelectedReefFieldPosition(),
-            Constants.kDrivetrain.PATH_CONSTRAINTS,
-            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, true)),
-        Set.of(m_drivetrain));
+      () -> AutoBuilder.pathfindToPoseFlipped(
+          CoralPositionSelector.getSelectedReefPosition().fieldPosition,
+          Constants.kDrivetrain.PATH_CONSTRAINTS,
+          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedReefPosition())),
+      Set.of(m_drivetrain));
     m_coralStationAlign = new DeferredCommand(
-        () -> AutoBuilder.pathfindToPoseFlipped(
-            CoralPositionSelector.getSelectedCoralStationFieldPosition(),
-            Constants.kDrivetrain.PATH_CONSTRAINTS,
-            0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, driverController, false)),
-        Set.of(m_drivetrain));
+      () -> AutoBuilder.pathfindToPoseFlipped(
+          CoralPositionSelector.getSelectedCoralStationPosition().fieldPosition,
+          Constants.kDrivetrain.PATH_CONSTRAINTS,
+          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedCoralStationPosition())),
+      Set.of(m_drivetrain));
 
     /* End Effector */
     m_indexCoral = new IndexCommand(m_endEffector);
@@ -292,11 +289,12 @@ public class RobotContainer {
     // Driver Controls
     // ================
 
-    // /* Drivetrain */
+    /* Drivetrain */
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_reefAlign);
     Button.rightBumper1.whileTrue(m_coralStationAlign);
+
     /* Elevator */
     Button.psButton1.onTrue(m_elevatorToStow);
 
@@ -309,7 +307,7 @@ public class RobotContainer {
     Button.square1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
 
-    Button.cross1.onTrue(m_indexCoral.andThen(new ReverseCoral(m_endEffector)));
+    Button.cross1.onTrue(m_indexCoral/*.andThen(new ReverseCoral(m_endEffector))*/);
     Button.circle1.onTrue(m_scoreCoral);
 
     Button.rightTrigger1.onTrue(m_testEndEffector.withTimeout(2.0));

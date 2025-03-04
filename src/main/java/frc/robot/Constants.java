@@ -207,58 +207,60 @@ public final class Constants {
           ANGLE_OFFSET);
     }
 
-    //public static final double LEFT_BRANCH_X_POSITION = -0.1651;
-    //public static final double RIGHT_BRANCH_X_POSITION = 0.1651;
+    public static final double LEFT_BRANCH_Y_POSITION = 0.1651;
+    public static final double RIGHT_BRANCH_Y_POSITION = -0.1651;
 
-    public static final double CORAL_STATION_LEFT_X_POSITION = -0.25;
-    public static final double CORAL_STATION_RIGHT_X_POSITION = 0.25;
+    public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
+    public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
 
-    public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
+    public static final double X_DISTANCE_TO_REEF = 0.507; // Robot-relative x distance from pathfinding target field position to reef wall
+
+    //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
     public static enum CoralPosition {
 
       /* Reef Positions */
-      BACK_MIDDLE_LEFT_BRANCH("left", new Pose2d(2.434, 4.055, new Rotation2d()),
+      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
           "Back Middle Left Branch"),
-      BACK_LEFT_RIGHT_BRANCH("right", new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
           "Back Left Right Branch"),
-      BACK_LEFT_LEFT_BRANCH("left", new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
           "Back Left Left Branch"),
-      FRONT_LEFT_RIGHT_BRANCH("right", new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
           "Front Left Right Branch"),
-      FRONT_LEFT_LEFT_BRANCH("left", new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
           "Front Left Left Branch"),
-      FRONT_MIDDLE_RIGHT_BRANCH("right", new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
           "Front Middle Right Branch"),
-      FRONT_MIDDLE_LEFT_BRANCH("left", new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
           "Front Middle Left Branch"),
-      FRONT_RIGHT_RIGHT_BRANCH("right", new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
           "Front Right Right Branch"),
-      FRONT_RIGHT_LEFT_BRANCH("left", new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
           "Front Right Left Branch"),
-      BACK_RIGHT_RIGHT_BRANCH("right", new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
           "Back Right Right Branch"),
-      BACK_RIGHT_LEFT_BRANCH("left", new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
           "Back Right Left Branch"),
-      BACK_MIDDLE_RIGHT_BRANCH("right", new Pose2d(2.434, 4.055, new Rotation2d()),
+      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
           "Back Middle Right Branch"),
 
       /* Coral Station Positions */
-      LEFT_CORAL_STATION_RIGHT("right", new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
+      LEFT_CORAL_STATION_RIGHT(RIGHT_BRANCH_Y_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
           "Left Coral Station Right"),
-      LEFT_CORAL_STATION_LEFT("left", new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
+      LEFT_CORAL_STATION_LEFT(LEFT_BRANCH_Y_POSITION, new Pose2d(1.427, 6.764, Rotation2d.fromDegrees(126)),
           "Left Coral Station Left"),
-      RIGHT_CORAL_STATION_RIGHT("right", new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
+      RIGHT_CORAL_STATION_RIGHT(RIGHT_BRANCH_Y_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
           "Right Coral Station Right"),
-      RIGHT_CORAL_STATION_LEFT("left", new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
+      RIGHT_CORAL_STATION_LEFT(LEFT_BRANCH_Y_POSITION, new Pose2d(1.427, 1.31, Rotation2d.fromDegrees(234)),
           "Right Coral Station Left");
 
-      public final String side;
+      public final double yAlignPosition;
       public final Pose2d fieldPosition;
       public final String name;
 
-      CoralPosition(String side, Pose2d fieldPosition, String name) {
-        this.side = side;
+      private CoralPosition(double yAlignPosition, Pose2d fieldPosition, String name) {
+        this.yAlignPosition = yAlignPosition;
         this.fieldPosition = fieldPosition;
         this.name = name;
       }
