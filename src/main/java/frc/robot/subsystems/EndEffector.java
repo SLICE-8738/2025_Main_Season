@@ -93,9 +93,22 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   public void setPlacementMotor(double speed) {
     placementMotor.set(speed);
   }
+  
+  public void alignCoral() {
+    boolean[] sensors = checkSensorsIndexing();
+    boolean backSensor = sensors[2];
+    boolean middleSensor = sensors[1];
+    if (backSensor) {
+      setPlacementMotor(-0.05);
+    }else if (!middleSensor) {
+      setPlacementMotor(0.05);
+    }else {
+      setPlacementMotor(0);
+    }
+  }
 
-  public Boolean[] checkSensorsIndexing() {
-    Boolean[] sensorStatuses = new Boolean[3];
+  public boolean[] checkSensorsIndexing() {
+    boolean[] sensorStatuses = new boolean[3];
     sensorStatuses[0] = !frontSensor.get();
     sensorStatuses[1] = !middleSensor.get();
     sensorStatuses[2] = !backSensor.get();

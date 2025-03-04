@@ -213,7 +213,7 @@ public final class Constants {
     public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
 
-    public static final double X_DISTANCE_TO_REEF = 0.507; // Robot-relative x distance from pathfinding target field position to reef wall
+    public static final double X_DISTANCE_TO_REEF = 0.634; // Robot-relative x distance from pathfinding target field position to reef wall
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 

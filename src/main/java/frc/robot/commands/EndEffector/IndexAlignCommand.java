@@ -4,6 +4,7 @@
 
 package frc.robot.commands.EndEffector;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
@@ -12,38 +13,34 @@ public class IndexAlignCommand extends Command {
   /** Creates a new EndEffectorCommand. */
 
   EndEffector endEffector;
-  Boolean frontSensor;
-  Boolean middleSensor;
-  Boolean backSensor;
+  boolean frontSensor;
+  boolean middleSensor;
+  boolean backSensor;
+
+  Timer timer;
 
   public IndexAlignCommand(EndEffector endEffector) {
     this.endEffector = endEffector;
     addRequirements(endEffector);
+
+    timer = new Timer();
 
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
+    boolean[] sensorGroup = endEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
     middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    if (backSensor) {
-      endEffector.setPlacementMotor(-0.05);
-    }else if (!middleSensor) {
-      endEffector.setPlacementMotor(0.05);
-    }else {
-      endEffector.setPlacementMotor(0);
-    }
-    endEffector.maintainPosition();
-
+    endEffector.alignCoral();
   }
 
   // Called once the command ends or is interrupted.
@@ -56,6 +53,10 @@ public class IndexAlignCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Don't allow the command to end for the first 0.5 seconds
+    if (timer.get() < 0.5) {
+      return false;
+    }
     if (backSensor == false && frontSensor == true && middleSensor == true) {
       return true;
     }

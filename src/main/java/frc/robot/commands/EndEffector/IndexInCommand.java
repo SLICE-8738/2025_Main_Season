@@ -12,9 +12,9 @@ public class IndexInCommand extends Command {
   /** Creates a new EndEffectorCommand. */
 
   EndEffector endEffector;
-  Boolean frontSensor;
-  Boolean middleSensor;
-  Boolean backSensor;
+  boolean frontSensor;
+  boolean middleSensor;
+  boolean backSensor;
 
   public IndexInCommand(EndEffector endEffector) {
     this.endEffector = endEffector;
@@ -25,18 +25,17 @@ public class IndexInCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    endEffector.maintainPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
+    boolean[] sensorGroup = endEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
     middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
     endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
-    endEffector.maintainPosition();
 
   }
 
