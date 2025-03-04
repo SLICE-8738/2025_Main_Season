@@ -24,12 +24,11 @@ import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.BumpAlgae;
-import frc.robot.commands.EndEffector.IndexCommand;
+import frc.robot.commands.EndEffector.IndexSequence;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.PrepareEndEffector;
-import frc.robot.commands.EndEffector.ReverseCoral;
 import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.commands.Scoring.ToStow;
 import frc.robot.commands.SourceIntake.ManualRotateSourceIntake;
@@ -115,7 +114,7 @@ public class RobotContainer {
   public final ManualClimberCommand m_manualClimb;
   public final SequentialCommandGroup m_climb;
   /* End Effector */
-  public final IndexCommand m_indexCoral;
+  public final IndexSequence m_indexCoral;
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
@@ -216,7 +215,7 @@ public class RobotContainer {
         Set.of(m_drivetrain));
 
     /* End Effector */
-    m_indexCoral = new IndexCommand(m_endEffector);
+    m_indexCoral = new IndexSequence(m_endEffector);
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
@@ -309,7 +308,7 @@ public class RobotContainer {
     Button.square1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPosition()[0] < 0)));
 
-    Button.cross1.onTrue(m_indexCoral.andThen(new ReverseCoral(m_endEffector)));
+    Button.cross1.onTrue(m_indexCoral);
     Button.circle1.onTrue(m_scoreCoral);
 
     Button.rightTrigger1.onTrue(m_testEndEffector.withTimeout(2.0));

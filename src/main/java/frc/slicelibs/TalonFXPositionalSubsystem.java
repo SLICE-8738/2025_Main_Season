@@ -31,7 +31,7 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
      * @param kP the p gain of the subsystem (in volts per unit).
      * @param kI the i gain of the subsystem (in volts per unit seconds).
      * @param kD the d gain of the subsystem (in volts per units per second).
-     * @param kG the g gain of the subsystem (in volts).
+     * @param kG the g gain of the subsystem (in volts). 
      * @param sensorToMechRatio the ratio from the output shaft of the motor to the output of the mechanism. >1 is a reduction. This should be used for gear ratios, not unit conversions.
      * @param positionConversionFactor the number that, when multiplied by the mechanism's rotations, gives the position of the mechanism in desired units. This should be used for unit conversions, not gear ratios.
      * @param velocityConversionFactor the number that, when multiplied by the mechanism's rotations per second, gives the velocity of the mechanism in desired units. This should be used for unit conversions, not gear ratios.
