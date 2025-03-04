@@ -33,7 +33,8 @@ public class EndEffector extends TalonFXPositionalSubsystem {
    * Coral successfully indexed
    */
   private static DigitalInput frontSensor;
-  private static DigitalInput backSensor; // this one
+  private static DigitalInput backSensor; 
+  private static DigitalInput middleSensor;
   private TalonFX placementMotor;
   private Level m_angle = Level.STOW;
   // private static DigitalInput middleSensor;
@@ -59,6 +60,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     // TODO enter parameters
     frontSensor = new DigitalInput(8);
     backSensor = new DigitalInput(9);
+    middleSensor = new DigitalInput(5);
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     // middleSensor = new DigitalInput(3);
 
@@ -77,7 +79,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   }
 
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees(getPosition()[0]);
+    return Rotation2d.fromDegrees(getPositions()[0]);
   }
 
   public Level getSelectedAngle() {
@@ -95,7 +97,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   public Boolean[] checkSensorsIndexing() {
     Boolean[] sensorStatuses = new Boolean[3];
     sensorStatuses[0] = !frontSensor.get();
-    // sensorStatuses[1] = middleSensor.get();
+    sensorStatuses[1] = !middleSensor.get();
     sensorStatuses[2] = !backSensor.get();
     return sensorStatuses;
   }
@@ -111,10 +113,11 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Absolute End Effector Angle", encoder.get());
-    SmartDashboard.putNumber("Relative End Effector Angle", getPosition()[0]);
+    SmartDashboard.putNumber("Relative End Effector Angle", getPositions()[0]);
     SmartDashboard.putBoolean("SensorFront", frontSensor.get());
     SmartDashboard.putBoolean("SensorBack", backSensor.get());
-    SmartDashboard.putNumber("Target", getSelectedAngle().angle);
+    SmartDashboard.putBoolean("SensorMiddle", middleSensor.get());
+    SmartDashboard.putNumber("End Effector Target", getSelectedAngle().angle);
 
     // This method will be called once per scheduler run
   }

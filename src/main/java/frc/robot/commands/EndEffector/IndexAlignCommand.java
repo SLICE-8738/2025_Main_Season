@@ -8,15 +8,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IndexCommand extends Command {
+public class IndexAlignCommand extends Command {
   /** Creates a new EndEffectorCommand. */
 
   EndEffector endEffector;
   Boolean frontSensor;
-  // Boolean middleSensor;
+  Boolean middleSensor;
   Boolean backSensor;
 
-  public IndexCommand(EndEffector endEffector) {
+  public IndexAlignCommand(EndEffector endEffector) {
     this.endEffector = endEffector;
     addRequirements(endEffector);
 
@@ -25,7 +25,7 @@ public class IndexCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.maintainPosition();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,9 +33,16 @@ public class IndexCommand extends Command {
   public void execute() {
     Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
-    // middleSensor = sensorGroup[1];
+    middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    endEffector.setPlacementMotor(-0.1);
+    if (backSensor) {
+      endEffector.setPlacementMotor(-0.05);
+    }else if (!middleSensor) {
+      endEffector.setPlacementMotor(0.05);
+    }else {
+      endEffector.setPlacementMotor(0);
+    }
+    endEffector.maintainPosition();
 
   }
 
@@ -49,11 +56,10 @@ public class IndexCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (backSensor == false && frontSensor == true) {
+    if (backSensor == false && frontSensor == true && middleSensor == true) {
       return true;
     }
     return false;
   }
 
-  // && middleSensor == true
 }

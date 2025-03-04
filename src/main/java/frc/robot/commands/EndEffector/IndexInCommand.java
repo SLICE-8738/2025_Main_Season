@@ -8,36 +8,52 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ReverseCoral extends Command {
-  private EndEffector m_endEffector;
-  /** Creates a new ReverseCoral. */
-  public ReverseCoral(EndEffector endEffector) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class IndexInCommand extends Command {
+  /** Creates a new EndEffectorCommand. */
+
+  EndEffector endEffector;
+  Boolean frontSensor;
+  Boolean middleSensor;
+  Boolean backSensor;
+
+  public IndexInCommand(EndEffector endEffector) {
+    this.endEffector = endEffector;
     addRequirements(endEffector);
-    m_endEffector = endEffector;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_endEffector.setPlacementMotor(0.1);
+    Boolean[] sensorGroup = endEffector.checkSensorsIndexing();
+    frontSensor = sensorGroup[0];
+    middleSensor = sensorGroup[1];
+    backSensor = sensorGroup[2];
+    endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
+    endEffector.maintainPosition();
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    endEffector.setPlacementMotor(0);
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean finished = false;
-    if(m_endEffector.checkSensorsIndexing()[1] == true && m_endEffector.checkSensorsIndexing()[2] == false && m_endEffector.checkSensorsIndexing()[3] == true){
-      finished = true;
+    if (backSensor == false && frontSensor == true && middleSensor == true) {
+      return true;
     }
-    return finished;
+    return false;
   }
+
 }

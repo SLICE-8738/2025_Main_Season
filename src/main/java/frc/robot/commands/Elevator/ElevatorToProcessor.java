@@ -38,7 +38,7 @@ public class ElevatorToProcessor extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_elevator.getPosition()[0] <= .02) {
+    if (m_elevator.getPositions()[0] <= .02) {
       return true;
     }
     return false;

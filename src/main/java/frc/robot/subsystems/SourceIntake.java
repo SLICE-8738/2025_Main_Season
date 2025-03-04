@@ -45,14 +45,14 @@ private final double DEFAULT_POSITION = 0;
    * and automatically applies anti-gravity feedforward
    */
   public void maintainPosition() {
-    if (getPositionTargetReference() != getPosition()[0]) {
-      setPosition(getPosition()[0]);
+    if (getPositionTargetReference() != getPositions()[0]) {
+      setPosition(getPositions()[0]);
     }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Source Intake Relative Angle", getPosition()[0]);
+    SmartDashboard.putNumber("Source Intake Relative Angle", getPositions()[0]);
   }
 }

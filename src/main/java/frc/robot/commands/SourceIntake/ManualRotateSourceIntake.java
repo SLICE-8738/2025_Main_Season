@@ -45,10 +45,10 @@ public class ManualRotateSourceIntake extends Command {
     } 
     else {
       maintaining = false;
-      if(m_sourceIntake.getPosition()[0] <= m_sourceIntake.getDefaultPosition() + 3 && axis < 0){
+      if(m_sourceIntake.getPositions()[0] <= m_sourceIntake.getDefaultPosition() + 3 && axis < 0){
         m_sourceIntake.set(0);
       }
-      else if(m_sourceIntake.getPosition()[0] >= 85 && axis > 0){
+      else if(m_sourceIntake.getPositions()[0] >= 85 && axis > 0){
         m_sourceIntake.set(0);
       }else {
         m_sourceIntake.set(axis);
