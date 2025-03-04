@@ -1,9 +1,11 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.ElevatorPositionSelector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.Constants.kElevator;
+import frc.robot.Constants.kElevator.Level;
 
 public class MoveElevatorToLevel extends Command {
     private final Elevator m_elevator;
@@ -22,13 +24,17 @@ public class MoveElevatorToLevel extends Command {
 
     public void initialize() {
         m_level = ElevatorPositionSelector.getSelectedPosition().height;
-        if (m_level > m_elevator.getPosition()[0]) {
+        if (m_level > m_elevator.getPositions()[0]) {
             movementDirection = true;
         }
     }
 
     public void execute() {
         m_elevator.moveTo(m_level);
+        if (m_level == Level.STOW.height
+                && Constants.kElevator.ELEVATORFX_STATOR_CURRENT_LIMIT - m_elevator.getStatorCurrents()[0] <= 1) {
+            m_elevator.setEncoderPosition(0);
+        }
     }
 
     public void end() {
