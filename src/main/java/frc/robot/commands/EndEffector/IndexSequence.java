@@ -4,7 +4,13 @@
 
 package frc.robot.commands.EndEffector;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.kElevator.Level;
+import frc.robot.commands.Elevator.MoveElevatorToLevel;
+import frc.robot.commands.Scoring.SetLevel;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -12,9 +18,11 @@ import frc.robot.subsystems.EndEffector;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IndexSequence extends SequentialCommandGroup {
   /** Creates a new IndexSequence. */
-  public IndexSequence(EndEffector endEffector) {
+  public IndexSequence(EndEffector endEffector, Elevator elevator, GenericHID controller) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new IndexInCommand(endEffector), new IndexAlignCommand(endEffector));
+    addCommands(new SetLevel(Level.SOURCE, endEffector),
+        new ParallelCommandGroup(new MoveElevatorToLevel(elevator), new PrepareEndEffector(endEffector)),
+        new IndexInCommand(endEffector, controller), new IndexAlignCommand(endEffector));
   }
 }
