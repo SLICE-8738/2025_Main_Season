@@ -35,16 +35,17 @@ public class ManualElevator extends Command {
 
     if (axis == 0) {
       m_elevator.set(0.02);
-    }
-    else {
+    } else {
       m_elevator.set(axis);
     }
+
+    m_elevator.maintainPosition();
     // if (m_elevator.isAtBottom() && (axis > 0)) {
-    //   m_elevator.set(0);
+    // m_elevator.set(0);
     // } else if (m_elevator.isAtTop() && (axis < 0)) {
-    //   m_elevator.set(0);
+    // m_elevator.set(0);
     // }
-    
+
   }
 
   // Called once the command ends or is interrupted.

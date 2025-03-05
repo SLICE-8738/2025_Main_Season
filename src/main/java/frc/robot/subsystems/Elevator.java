@@ -12,22 +12,22 @@ import frc.slicelibs.TalonFXPositionalSubsystem;
 public class Elevator extends TalonFXPositionalSubsystem {
 
     // private DigitalInput bottomLimitSwitch;
-    //private DigitalInput topLimitSwitch;
+    // private DigitalInput topLimitSwitch;
 
     public Elevator() {
         super(
-            new int[] {Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID},
-            new boolean[] {true, false}, 
-            Constants.kElevator.KP, 
-            Constants.kElevator.KI, 
-            Constants.kElevator.KD,
-            Constants.kElevator.KG,
-            1,
-            GravityTypeValue.Elevator_Static,
-            Constants.kElevator.POSITION_CONVERSION_FACTOR,
-            Constants.kElevator.VELOCITY_CONVERSION_FACTOR, 
-            Constants.CTRE_CONFIGS.elevatorFXConfig);
-            setEncoderPosition(0);
+                new int[] { Constants.kElevator.LEFT_MOTOR_ID, Constants.kElevator.RIGHT_MOTOR_ID },
+                new boolean[] { true, false },
+                Constants.kElevator.KP,
+                Constants.kElevator.KI,
+                Constants.kElevator.KD,
+                Constants.kElevator.KG,
+                1,
+                GravityTypeValue.Elevator_Static,
+                Constants.kElevator.POSITION_CONVERSION_FACTOR,
+                Constants.kElevator.VELOCITY_CONVERSION_FACTOR,
+                Constants.CTRE_CONFIGS.elevatorFXConfig);
+        setEncoderPosition(0);
 
         // this.bottomLimitSwitch = bottomLimitSwitch;
         // this.topLimitSwitch = topLimitSwitch;
@@ -37,12 +37,19 @@ public class Elevator extends TalonFXPositionalSubsystem {
         setPosition(height);
     }
 
+    public void maintainPosition() {
+        if (Math.abs(ElevatorPositionSelector.getSelectedPosition().height - getPositions()[0]) > 0.01) {
+            setPosition(getPositions()[0]);
+        }
+
+    }
+
     // public boolean isAtBottom() {
-    //     return bottomLimitSwitch.get();
+    // return bottomLimitSwitch.get();
     // }
 
     // public boolean isAtTop() {
-    //     return topLimitSwitch.get();
+    // return topLimitSwitch.get();
     // }
 
     public void periodic() {
