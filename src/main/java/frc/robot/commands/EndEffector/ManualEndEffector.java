@@ -35,25 +35,27 @@ public class ManualEndEffector extends Command {
   @Override
   public void execute() {
     double axis = MathUtil.applyDeadband(m_controller.getRawAxis(0) * .5, .1);
-    if ((axis < 0 && m_endEffector.getAngle().getDegrees() <= 0) || (axis > 0 && m_endEffector.getAngle().getDegrees() >= 84)) {
+    if ((axis < 0 && m_endEffector.getAngle().getDegrees() <= 0)
+        || (axis > 0 && m_endEffector.getAngle().getDegrees() >= 84)) {
       m_endEffector.set(0);
       maintaining = false;
-    }
-    else if (axis == 0) {
+    } else if (axis == 0) {
       if (!maintaining) {
         m_endEffector.maintainPosition();
         maintaining = true;
       }
-    }
-    else {
+    } else {
       maintaining = false;
       m_endEffector.set(axis);
     }
+
+    m_endEffector.alignCoral();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
