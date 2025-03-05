@@ -15,8 +15,8 @@ public class CoralPositionSelector {
 
     private static final ArrayList<GenericEntry> reefPositions = new ArrayList<GenericEntry>();
     private static GenericEntry selectedReefPosition;
-    private static final ArrayList<GenericEntry> coralStationPositions = new ArrayList<GenericEntry>();
-    private static GenericEntry selectedCoralStationPosition;
+    //private static final ArrayList<GenericEntry> coralStationPositions = new ArrayList<GenericEntry>();
+    //private static GenericEntry selectedCoralStationPosition;
 
     public CoralPositionSelector() {
 
@@ -33,13 +33,13 @@ public class CoralPositionSelector {
         reefPositions.add(driverTab.add("          ", false).withPosition(7, 4).withWidget(BuiltInWidgets.kToggleButton).getEntry());
         reefPositions.add(driverTab.add("           ", false).withPosition(6, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
 
-        coralStationPositions.add(driverTab.add("            ", true).withPosition(0, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
+        /*coralStationPositions.add(driverTab.add("            ", true).withPosition(0, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
         coralStationPositions.add(driverTab.add("             ", false).withPosition(1, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
         coralStationPositions.add(driverTab.add("              ", false).withPosition(10, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
-        coralStationPositions.add(driverTab.add("               ", false).withPosition(11, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
+        coralStationPositions.add(driverTab.add("               ", false).withPosition(11, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());*/
 
         selectedReefPosition = reefPositions.get(0);
-        selectedCoralStationPosition = coralStationPositions.get(0);
+        //selectedCoralStationPosition = coralStationPositions.get(0);
 
     }
 
@@ -59,7 +59,7 @@ public class CoralPositionSelector {
 
         }
 
-        for (int i = 0; i < coralStationPositions.size(); i++) {
+        /*for (int i = 0; i < coralStationPositions.size(); i++) {
 
             GenericEntry currentPosition = coralStationPositions.get(i);
 
@@ -71,7 +71,7 @@ public class CoralPositionSelector {
 
             }
 
-        }
+        }*/
 
     }
 
@@ -81,10 +81,10 @@ public class CoralPositionSelector {
 
     }
 
-    public static CoralPosition getSelectedCoralStationPosition() {
+    /*public static CoralPosition getSelectedCoralStationPosition() {
 
         return CoralPosition.values()[coralStationPositions.indexOf(selectedCoralStationPosition) + 12];
 
-    }
+    }*/
 
 }

@@ -23,7 +23,7 @@ public class CoralPositionAlignCommand extends Command {
   private final PIDController distanceController, rotationController;
 
   /** Creates a new CoralPositionAlignCommand. */
-  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position) {
+  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, boolean scoreL4) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -38,7 +38,7 @@ public class CoralPositionAlignCommand extends Command {
     rotationController.enableContinuousInput(0, 360);
 
     targetPose = position.fieldPosition.plus(new Transform2d(
-      new Translation2d(Constants.kDrivetrain.X_DISTANCE_TO_REEF, position.yAlignPosition), 
+      new Translation2d(scoreL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, position.yAlignPosition), 
       new Rotation2d()));
 
   }

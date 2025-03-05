@@ -88,6 +88,7 @@ public class Drivetrain extends SubsystemBase {
     // Creates and pushes Field2d to SmartDashboard.
     SmartDashboard.putData(m_field2d);
 
+    DriverStation.waitForDsConnection(60);
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
@@ -570,6 +571,21 @@ public class Drivetrain extends SubsystemBase {
   public Command getSysIDDriveRoutine() {
 
     return sysIDChooser.getSelected();
+
+  }
+
+  public Rotation2d getClosestCoralStationRotation() {
+
+    if (DriverStation.getAlliance().get() == Alliance.Blue) {
+
+      return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 125 : 235);
+
+    }
+    else {
+
+      return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 55 : 305);
+
+    }
 
   }
 

@@ -202,14 +202,15 @@ public class RobotContainer {
       () -> AutoBuilder.pathfindToPoseFlipped(
           CoralPositionSelector.getSelectedReefPosition().fieldPosition,
           Constants.kDrivetrain.PATH_CONSTRAINTS,
-          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedReefPosition())),
+          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedReefPosition(), m_endEffector.getSelectedAngle() == Level.LEVEL4)),
       Set.of(m_drivetrain));
-    m_coralStationAlign = new DeferredCommand(
+    /*m_coralStationAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
           CoralPositionSelector.getSelectedCoralStationPosition().fieldPosition,
           Constants.kDrivetrain.PATH_CONSTRAINTS,
           0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedCoralStationPosition())),
-      Set.of(m_drivetrain));
+      Set.of(m_drivetrain));*/
+    m_coralStationAlign = new CoralStationAlignCommand(m_drivetrain, driverController);
 
     /* End Effector */
     m_indexCoral = new IndexSequence(m_endEffector);

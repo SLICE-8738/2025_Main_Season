@@ -4,32 +4,32 @@
 
 package frc.robot.commands.Drivetrain;
 
-import frc.robot.Button;
-import frc.robot.Constants;
-import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.slicelibs.PolarJoystickFilter;
-import frc.slicelibs.config.JoystickFilterConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class DriveCommand extends Command {
-  
-  /** Creates a new SwerveDriveCommand. */
+import frc.robot.Button;
+import frc.robot.Constants;
+import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.slicelibs.PolarJoystickFilter;
+import frc.slicelibs.config.JoystickFilterConfig;
+
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class CoralStationAlignCommand extends Command {
+
   private final Drivetrain m_drivetrain;
 
   private final PS4Controller m_driverController;
-  private final PolarJoystickFilter translationFilter, rotationFilter;
 
-  private final boolean m_isOpenLoop;
-  private boolean m_isFieldRelative;
+  private final PolarJoystickFilter translationFilter;
 
   private final PIDController rotationController;
 
-  public DriveCommand(Drivetrain drivetrain, PS4Controller driverController, boolean isOpenLoop) {
-    
+  /** Creates a new CoralStationAlignCommand. */
+  public CoralStationAlignCommand(Drivetrain drivetrain, PS4Controller driverController) {
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
@@ -37,20 +37,13 @@ public class DriveCommand extends Command {
 
     m_driverController = driverController;
 
-    m_isOpenLoop = isOpenLoop;
-
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
         0.6,
         Constants.OperatorConstants.DRIVE_EXPONENT,
         Constants.OperatorConstants.DRIVE_EXPONENT_PERCENT));
-    rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
-        0.07,
-        0.6,
-        Constants.OperatorConstants.TURN_EXPONENT,
-        Constants.OperatorConstants.TURN_EXPONENT_PERCENT));
 
-    rotationController = new PIDController(6, 0, 0);
+    rotationController = new PIDController(2.5, 0, 0);
 
   }
 
@@ -58,7 +51,7 @@ public class DriveCommand extends Command {
   @Override
   public void initialize() {
 
-    m_drivetrain.runDutyCycle(0, 0);
+    rotationController.setSetpoint(m_drivetrain.getClosestCoralStationRotation().getDegrees());
 
   }
 
@@ -68,29 +61,16 @@ public class DriveCommand extends Command {
 
     double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));
 
-    double multipler = Button.leftBumper1.getAsBoolean() ? 0.33 : 1;
+    double multipler = Button.leftBumper1.getAsBoolean()? 0.33 : 1;
 
     double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY * multipler;
     double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY * multipler;
-
-    double rotationFF = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * Constants.kDrivetrain.MAX_ANGULAR_VELOCITY * multipler;
-    double rotationFeedback = rotationFF == 0 ? 
-      rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF)
-      : 0;
-
-    m_isFieldRelative = !Button.rightBumper1.getAsBoolean();
-
-    if (!m_isFieldRelative) {
-      translationX *= -0.5;
-      translationY *= -0.5;
-      rotationFF *= 0.5;
-      rotationFeedback *= 0.5;
-    }
+    double rotation = rotationController.calculate(m_drivetrain.getPose().getRotation().getDegrees());
 
     m_drivetrain.drive(
-        new Transform2d(translationX, translationY, new Rotation2d(rotationFF /*+ rotationFeedback*/)),
-        m_isOpenLoop,
-        m_isFieldRelative);
+      new Transform2d(translationX, translationY, Rotation2d.fromDegrees(rotation)), 
+      false, 
+      true);
 
   }
 
@@ -100,17 +80,15 @@ public class DriveCommand extends Command {
 
     m_drivetrain.drive(
       new Transform2d(), 
-      m_isOpenLoop,
-      m_isFieldRelative);
+      false,
+      true);
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     return false;
-
   }
 
 }

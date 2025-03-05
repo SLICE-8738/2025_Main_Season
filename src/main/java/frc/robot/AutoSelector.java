@@ -132,16 +132,22 @@ public class AutoSelector {
 
         for (CoralPosition position : CoralPosition.values()) {
 
-            NamedCommands.registerCommand(
-                "Go To " + position.name, 
-                AutoBuilder.pathfindToPoseFlipped(
-                    position.fieldPosition,
-                    Constants.kDrivetrain.PATH_CONSTRAINTS,
-                    0.5).andThen(new CoralPositionAlignCommand(drivetrain, position)));
+            for (String level : new String[] {"L4, Non-L4"}) {
+            
+                NamedCommands.registerCommand(
+                    "Go To " + position.name + " " + level, 
+                    AutoBuilder.pathfindToPoseFlipped(
+                        position.fieldPosition,
+                        Constants.kDrivetrain.PATH_CONSTRAINTS,
+                        0.5).andThen(new CoralPositionAlignCommand(drivetrain, position, level == "L4")));
 
-            autoPoses.put("Go To " + position.name, position.fieldPosition);
+                autoPoses.put("Go To " + position.name + " " + level, position.fieldPosition);
+
+            }
 
         }
+
+        
 
     }
 

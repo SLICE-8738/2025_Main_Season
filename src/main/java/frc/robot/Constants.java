@@ -207,13 +207,14 @@ public final class Constants {
           ANGLE_OFFSET);
     }
 
-    public static final double LEFT_BRANCH_Y_POSITION = 0.1651;
-    public static final double RIGHT_BRANCH_Y_POSITION = -0.1651;
+    public static final double LEFT_BRANCH_Y_POSITION = 0.1351;
+    public static final double RIGHT_BRANCH_Y_POSITION = -0.1351;
 
     public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
 
-    public static final double X_DISTANCE_TO_REEF = 0.634; // Robot-relative x distance from pathfinding target field position to reef wall
+    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.634; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
+    public static final double L4_X_DISTANCE_TO_REEF = 0.743; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
@@ -315,7 +316,7 @@ public final class Constants {
       SOURCE(0.2507, 66),
       LEVEL1(0.294, 41),
       ALGAE1(0.34, 16),
-      LEVEL2(0.41, 81),
+      LEVEL2(0.44, 81),
       ALGAE2(0.75, 16),
       LEVEL3(0.818, 81),
       LEVEL4(1.625, 51);
