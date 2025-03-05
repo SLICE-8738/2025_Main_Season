@@ -4,6 +4,8 @@
 
 package frc.robot.commands.EndEffector;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
@@ -11,13 +13,16 @@ import frc.robot.subsystems.EndEffector;
 public class IndexInCommand extends Command {
   /** Creates a new EndEffectorCommand. */
 
-  EndEffector endEffector;
+  EndEffector m_endEffector;
+  GenericHID m_controller;
   boolean frontSensor;
   boolean middleSensor;
   boolean backSensor;
+  boolean maintaining;
 
-  public IndexInCommand(EndEffector endEffector) {
-    this.endEffector = endEffector;
+  public IndexInCommand(EndEffector endEffector, GenericHID controller) {
+    m_endEffector = endEffector;
+    m_controller = controller;
     addRequirements(endEffector);
 
   }
@@ -25,24 +30,40 @@ public class IndexInCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.maintainPosition();
+    m_endEffector.maintainPosition();
+    maintaining = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    boolean[] sensorGroup = endEffector.checkSensorsIndexing();
+    boolean[] sensorGroup = m_endEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
     middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
+    m_endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
 
+    // Manual control
+    double axis = MathUtil.applyDeadband(m_controller.getRawAxis(0) * .5, .1);
+    if ((axis < 0 && m_endEffector.getAngle().getDegrees() <= 0)
+        || (axis > 0 && m_endEffector.getAngle().getDegrees() >= 84)) {
+      m_endEffector.set(0);
+      maintaining = false;
+    } else if (axis == 0) {
+      if (!maintaining) {
+        m_endEffector.maintainPosition();
+        maintaining = true;
+      }
+    } else {
+      maintaining = false;
+      m_endEffector.set(axis);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    endEffector.setPlacementMotor(0);
+    m_endEffector.setPlacementMotor(0);
 
   }
 
