@@ -56,5 +56,6 @@ public class Elevator extends TalonFXPositionalSubsystem {
         double[] positions = this.getPositions();
         SmartDashboard.putNumber("Elevator Height", (positions[0] + positions[1]) / 2.0);
         SmartDashboard.putNumber("Target Height", ElevatorPositionSelector.getSelectedPosition().height);
+        SmartDashboard.putNumber("Elevator Current", getStatorCurrents()[0]);
     }
 }

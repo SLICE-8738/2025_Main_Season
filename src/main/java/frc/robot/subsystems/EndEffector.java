@@ -98,7 +98,12 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     boolean[] sensors = checkSensorsIndexing();
     boolean backSensor = sensors[2];
     boolean middleSensor = sensors[1];
-    if (backSensor) {
+    boolean frontSensor = sensors[0];
+    
+    if(!frontSensor){
+      setPlacementMotor(0);
+    }
+    else if (backSensor) {
       setPlacementMotor(-0.05);
     }else if (!middleSensor) {
       setPlacementMotor(0.05);

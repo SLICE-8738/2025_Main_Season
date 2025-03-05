@@ -578,12 +578,12 @@ public class Drivetrain extends SubsystemBase {
 
     if (DriverStation.getAlliance().get() == Alliance.Blue) {
 
-      return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 125 : 235);
+      return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 305 : 55);
 
     }
     else {
 
-      return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 55 : 305);
+      return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 235 : 125);
 
     }
 

@@ -22,6 +22,7 @@ public class ToAlgae extends SequentialCommandGroup {
 
     if (endEffector.getSelectedAngle() != Level.ALGAE1 && endEffector.getSelectedAngle() != Level.ALGAE2) {
       addCommands(new MoveToLevel(endEffector, elevator, endEffectorFirst));
+      System.out.println("BAD BAD BAD ALGAE");
     } else if (endEffectorFirst) {
       addCommands(new SetLevel(endEffector.getSelectedAngle(), endEffector),
           new MoveToLevel(endEffector, elevator, endEffectorFirst),

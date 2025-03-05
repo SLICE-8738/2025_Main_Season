@@ -6,8 +6,10 @@ package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.subsystems.Elevator;
@@ -21,8 +23,10 @@ public class IndexSequence extends SequentialCommandGroup {
   public IndexSequence(EndEffector endEffector, Elevator elevator, GenericHID controller) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    SequentialCommandGroup indexSequence = new SequentialCommandGroup(new IndexInCommand(endEffector, controller), new IndexAlignCommand(endEffector));
+    ParallelDeadlineGroup indexAndManualElevator = new ParallelDeadlineGroup(indexSequence, new ManualElevator(elevator, controller));
     addCommands(new SetLevel(Level.SOURCE, endEffector),
         new ParallelCommandGroup(new MoveElevatorToLevel(elevator), new PrepareEndEffector(endEffector)),
-        new IndexInCommand(endEffector, controller), new IndexAlignCommand(endEffector));
+        indexAndManualElevator);
   }
 }

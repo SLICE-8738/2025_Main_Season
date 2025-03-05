@@ -13,6 +13,7 @@ import frc.robot.subsystems.Elevator;
 public class ManualElevator extends Command {
   private final Elevator m_elevator;
   private final GenericHID m_controller;
+  private boolean maintaining;
 
   /** Creates a new ManualElevator. */
   public ManualElevator(Elevator elevator, GenericHID controller) {
@@ -26,6 +27,7 @@ public class ManualElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    maintaining = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,12 +36,15 @@ public class ManualElevator extends Command {
     double axis = MathUtil.applyDeadband(-m_controller.getRawAxis(1), 0.1);
 
     if (axis == 0) {
-      m_elevator.set(0.02);
+      if(!maintaining){
+        m_elevator.maintainPosition();
+        maintaining = true;
+      }
     } else {
       m_elevator.set(axis);
+      maintaining = false;
     }
 
-    m_elevator.maintainPosition();
     // if (m_elevator.isAtBottom() && (axis > 0)) {
     // m_elevator.set(0);
     // } else if (m_elevator.isAtTop() && (axis < 0)) {

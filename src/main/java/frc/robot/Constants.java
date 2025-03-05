@@ -313,7 +313,7 @@ public final class Constants {
 
       STOW(0.02, 84),
       PROCESSER(0.03, -4),
-      SOURCE(0.2507, 66),
+      SOURCE(0.2307, 66),
       LEVEL1(0.294, 41),
       ALGAE1(0.34, 16),
       LEVEL2(0.44, 81),

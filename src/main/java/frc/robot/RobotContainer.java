@@ -301,7 +301,7 @@ public class RobotContainer {
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_reefAlign);
-    Button.leftBumper1.whileTrue(m_coralStationAlign);
+    Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));
 
     /* Elevator */
     Button.psButton1.onTrue(m_elevatorToStow);
