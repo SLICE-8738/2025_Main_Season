@@ -22,7 +22,7 @@ public class ClampAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_endEffector.setPlacementMotor(0.125);
+    m_endEffector.setPlacementMotor(0.065);
     m_endEffector.set(0.1);
   }
 
@@ -34,11 +34,15 @@ public class ClampAlgae extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_endEffector.set(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(m_endEffector.getAngle().getDegrees() > 85){
+      return true;
+    }
     return false;
   }
 }

@@ -12,29 +12,33 @@ public class MotorIntakeAlgae extends Command {
   /** Creates a new EndEffectorCommand. */
 
   EndEffector endEffector;
+  private static boolean running;
 
   public MotorIntakeAlgae(EndEffector endEffector) {
     this.endEffector = endEffector;
     addRequirements(endEffector);
-
+    
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     endEffector.maintainPosition();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     endEffector.setPlacementMotor(0.125);
+    running = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     endEffector.setPlacementMotor(0);
+    running = false;
 
   }
 
@@ -44,5 +48,8 @@ public class MotorIntakeAlgae extends Command {
     return false;
   }
 
+  public static boolean isRunning(){
+    return running;
+  }
   // && middleSensor == true
 }

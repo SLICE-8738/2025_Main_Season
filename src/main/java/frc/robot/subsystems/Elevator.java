@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.ElevatorPositionSelector;
+import frc.robot.commands.EndEffector.MotorIntakeAlgae;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 //import frc.slicelibs.config.CTREConfigs;
 
@@ -57,5 +58,6 @@ public class Elevator extends TalonFXPositionalSubsystem {
         SmartDashboard.putNumber("Elevator Height", (positions[0] + positions[1]) / 2.0);
         SmartDashboard.putNumber("Target Height", ElevatorPositionSelector.getSelectedPosition().height);
         SmartDashboard.putNumber("Elevator Current", getStatorCurrents()[0]);
+        SmartDashboard.putBoolean("MotorIntakeAlgae Running", MotorIntakeAlgae.isRunning());
     }
 }

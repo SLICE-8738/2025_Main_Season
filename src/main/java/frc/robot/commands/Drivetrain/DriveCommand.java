@@ -96,14 +96,7 @@ public class DriveCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    m_drivetrain.drive(
-      new Transform2d(), 
-      m_isOpenLoop,
-      m_isFieldRelative);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

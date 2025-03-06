@@ -43,7 +43,7 @@ public class CoralStationAlignCommand extends Command {
         Constants.OperatorConstants.DRIVE_EXPONENT,
         Constants.OperatorConstants.DRIVE_EXPONENT_PERCENT));
 
-    rotationController = new PIDController(2.5, 0, 0);
+    rotationController = new PIDController(4, 0, 0);
     rotationController.enableContinuousInput(0, 360);
 
   }

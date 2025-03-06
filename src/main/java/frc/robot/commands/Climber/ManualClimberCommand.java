@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Climber;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
@@ -35,7 +36,7 @@ public class ManualClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = controller.getRawAxis(5);
+    double speed = MathUtil.applyDeadband(controller.getRawAxis(5), 0.02);
     climber.moveClimbMotor(speed);
   }
 

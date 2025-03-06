@@ -298,7 +298,7 @@ public class RobotContainer {
     // ================
 
     /* Drivetrain */
-    Button.triangle1.onTrue(m_resetFieldOrientedHeading);
+    Button.options.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_reefAlign);
     Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));
@@ -311,10 +311,8 @@ public class RobotContainer {
     Button.rightBumper1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPositions()[0] < 0)));
 
-    Button.circle1.onTrue(new ConditionalCommand(m_clampAlgae,
-        new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher,
-            () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPositions()[0] < 0)),
-        () -> (m_endEffector.getCurrentCommand().getClass() == MotorIntakeAlgae.class)));
+    Button.circle1.onTrue(new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher, () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPositions()[0] < 0)));
+    Button.triangle1.onTrue(m_clampAlgae);
 
     Button.cross1.onTrue(m_indexCoral);
     Button.rightTrigger1.onTrue(m_scoreCoral);

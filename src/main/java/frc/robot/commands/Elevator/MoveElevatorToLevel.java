@@ -32,7 +32,7 @@ public class MoveElevatorToLevel extends Command {
     public void execute() {
         m_elevator.moveTo(m_level);
         if (m_level == Level.STOW.height
-                && Math.abs(m_elevator.getStatorCurrents()[0]) >= 64 && m_elevator.getPositions()[0] <= 0.1 && Math.abs(m_elevator.getVelocity()[0]) <= 0.01) {
+                && Math.abs(m_elevator.getStatorCurrents()[0]) >= 55 && m_elevator.getPositions()[0] <= 0.1 && Math.abs(m_elevator.getVelocity()[0]) <= 0.01) {
             m_elevator.setEncoderPosition(0);
         }
     }

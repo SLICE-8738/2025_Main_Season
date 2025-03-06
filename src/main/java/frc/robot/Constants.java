@@ -207,13 +207,13 @@ public final class Constants {
           ANGLE_OFFSET);
     }
 
-    public static final double LEFT_BRANCH_Y_POSITION = 0.1351;
-    public static final double RIGHT_BRANCH_Y_POSITION = -0.1351;
+    public static final double LEFT_BRANCH_Y_POSITION = 0.165;
+    public static final double RIGHT_BRANCH_Y_POSITION = -0.165;
 
     public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
 
-    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.634; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
+    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.654; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
     public static final double L4_X_DISTANCE_TO_REEF = 0.743; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
@@ -221,7 +221,7 @@ public final class Constants {
     public static enum CoralPosition {
 
       /* Reef Positions */
-      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
+      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(2.434, 4.021, new Rotation2d()),
           "Back Middle Left Branch"),
       BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
           "Back Left Right Branch"),
@@ -243,7 +243,7 @@ public final class Constants {
           "Back Right Right Branch"),
       BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
           "Back Right Left Branch"),
-      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(2.434, 4.055, new Rotation2d()),
+      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(2.434, 4.021, new Rotation2d()),
           "Back Middle Right Branch"),
 
       /* Coral Station Positions */
@@ -318,7 +318,7 @@ public final class Constants {
       ALGAE1(0.34, 16),
       LEVEL2(0.44, 81),
       ALGAE2(0.75, 16),
-      LEVEL3(0.818, 81),
+      LEVEL3(0.838, 81),
       LEVEL4(1.625, 51);
 
       public double height;

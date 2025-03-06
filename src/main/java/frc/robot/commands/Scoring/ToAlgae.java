@@ -20,17 +20,10 @@ public class ToAlgae extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    if (endEffector.getSelectedAngle() != Level.ALGAE1 && endEffector.getSelectedAngle() != Level.ALGAE2) {
-      addCommands(new MoveToLevel(endEffector, elevator, endEffectorFirst));
-      System.out.println("BAD BAD BAD ALGAE");
-    } else if (endEffectorFirst) {
-      addCommands(new SetLevel(endEffector.getSelectedAngle(), endEffector),
-          new MoveToLevel(endEffector, elevator, endEffectorFirst),
-          new MotorIntakeAlgae(endEffector));
+    if (endEffectorFirst) {
+      addCommands(new MoveToLevel(endEffector, elevator, endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
     } else {
-      addCommands(new SetLevel(endEffector.getSelectedAngle(), endEffector),
-          new MoveToLevel(endEffector, elevator, endEffectorFirst),
-          new MotorIntakeAlgae(endEffector));
+      addCommands(new MoveToLevel(endEffector, elevator, endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
     }
   }
 }

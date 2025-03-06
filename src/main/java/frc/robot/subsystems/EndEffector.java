@@ -136,6 +136,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     SmartDashboard.putBoolean("SensorBack", backSensor.get());
     SmartDashboard.putBoolean("SensorMiddle", middleSensor.get());
     SmartDashboard.putNumber("End Effector Target", getSelectedAngle().angle);
+    SmartDashboard.putString("Last Command", getCurrentCommand() == null ? "null" : getCurrentCommand().getName());
 
     // This method will be called once per scheduler run
   }
