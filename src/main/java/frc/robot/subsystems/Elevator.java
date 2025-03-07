@@ -5,6 +5,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.ElevatorPositionSelector;
 import frc.robot.commands.EndEffector.MotorIntakeAlgae;
 import frc.slicelibs.TalonFXPositionalSubsystem;
@@ -14,6 +16,11 @@ public class Elevator extends TalonFXPositionalSubsystem {
 
     // private DigitalInput bottomLimitSwitch;
     // private DigitalInput topLimitSwitch;
+    private static Level m_coralLevel;
+    private static Level m_algaeLevel;
+    private static Level m_sourceLevel;
+    private static LevelType m_levelType;
+
 
     public Elevator() {
         super(
@@ -44,6 +51,38 @@ public class Elevator extends TalonFXPositionalSubsystem {
         }
 
     }
+
+    public static Level getCoralLevel(){
+        return m_coralLevel;
+      }
+    
+      public static Level getAlgaeLevel(){
+        return m_algaeLevel;
+      }
+    
+      public static Level getSourceLevel(){
+        return m_sourceLevel;
+      }
+    
+      public static LevelType getLevelType(){
+        return m_levelType;
+      }
+    
+      public static void setCoralLevel(Level angle){
+        m_coralLevel = angle;
+      }
+    
+      public static void setAlgaeLevel(Level angle){
+        m_algaeLevel = angle;
+      }
+    
+      public static void setSourceLevel(Level angle){
+        m_sourceLevel = angle;
+      }
+    
+      public static void setLevelType(LevelType levelType){
+        m_levelType = levelType;
+      }
 
     // public boolean isAtBottom() {
     // return bottomLimitSwitch.get();

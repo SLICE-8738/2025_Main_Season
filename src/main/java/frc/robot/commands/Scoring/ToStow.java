@@ -7,6 +7,7 @@ package frc.robot.commands.Scoring;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.subsystems.Elevator;
@@ -19,6 +20,6 @@ public class ToStow extends SequentialCommandGroup {
 
   /** Creates a new ElevatorToSource. */
   public ToStow(EndEffector endEffector, Elevator elevator) {
-    addCommands(new SetLevel(Level.STOW, endEffector), new ParallelCommandGroup(new PrepareEndEffector(endEffector), new MoveElevatorToLevel(elevator)).withTimeout(2.0));
+    addCommands(new SetLevel(Level.STOW, LevelType.SOURCE), new ParallelCommandGroup(new PrepareEndEffector(endEffector, LevelType.SOURCE), new MoveElevatorToLevel(elevator, LevelType.SOURCE)).withTimeout(2.0));
   }
 }

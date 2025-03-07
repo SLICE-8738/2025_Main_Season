@@ -7,6 +7,7 @@ package frc.robot.commands.EndEffector;
 import java.io.Console;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -14,18 +15,32 @@ public class PrepareEndEffector extends Command {
   /** Creates a new PrepareEndEffector. */
   EndEffector endEffector;
   double angle;
+  private LevelType m_levelType;
   // true = up false = down
   private boolean movementDirection;
 
-  public PrepareEndEffector(EndEffector endEffector) {
+  public PrepareEndEffector(EndEffector endEffector, LevelType levelType) {
     addRequirements(endEffector);
     this.endEffector = endEffector;
+    m_levelType = levelType;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.angle = endEffector.getSelectedAngle().angle;
+    switch(m_levelType){
+      case SOURCE:
+        angle = EndEffector.getSourceLevel().angle;
+        break;
+      case CORAL:
+        angle = EndEffector.getCoralLevel().angle;
+        break;
+      case ALGAE:
+        angle = EndEffector.getAlgaeLevel().angle;
+        break;
+    }
+    
+    
     endEffector.setPosition(angle);
     if (endEffector.getAngle().getDegrees() < angle) { 
       movementDirection = true;

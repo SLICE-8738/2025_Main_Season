@@ -6,6 +6,7 @@ package frc.robot.commands.Scoring;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Elevator.ElevatorToProcessor;
 import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.subsystems.Elevator;
@@ -19,7 +20,7 @@ public class ScoreAlgae extends SequentialCommandGroup {
   public ScoreAlgae(Elevator elevator, EndEffector endEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetLevel(Level.PROCESSER, endEffector), new ElevatorToProcessor(elevator),
-        new PrepareEndEffector(endEffector));
+    addCommands(new SetLevel(Level.PROCESSER, LevelType.ALGAE), new ElevatorToProcessor(elevator),
+        new PrepareEndEffector(endEffector, LevelType.ALGAE));
   }
 }

@@ -8,8 +8,10 @@ import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -20,7 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climber.ClimbCommand;
 import frc.robot.commands.Climber.ManualClimberCommand;
+import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.BumpAlgae;
@@ -98,7 +102,6 @@ public class RobotContainer {
   public final ManualElevator m_manualElevator;
 
   /* Scoring */
-  public final SetLevel m_setLevelSource;
   public final SetLevel m_setLevelOne;
   public final SetLevel m_setLevelTwo;
   public final SetLevel m_setLevelThree;
@@ -120,7 +123,6 @@ public class RobotContainer {
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
-  public final PrepareEndEffector m_testEndEffector;
 
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
@@ -207,10 +209,16 @@ public class RobotContainer {
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
-      () -> AutoBuilder.pathfindToPoseFlipped(
-          CoralPositionSelector.getSelectedReefPosition().fieldPosition,
-          Constants.kDrivetrain.PATH_CONSTRAINTS,
-          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedReefPosition(), m_endEffector.getSelectedAngle() == Level.LEVEL4)),
+      () -> {
+        CoralPosition position = CoralPositionSelector.getSelectedReefPosition();
+        int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
+        return AutoBuilder.pathfindToPoseFlipped(
+          position.fieldPosition,
+          Constants.kDrivetrain.PATH_CONSTRAINTS).until(
+            () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
+              || LimelightHelpers.getFiducialID("limelight-right") == targetTagID).andThen(
+                new CoralPositionAlignCommand(m_drivetrain, position, EndEffector.getCoralLevel() == Level.LEVEL4));
+        },
       Set.of(m_drivetrain));
     /*m_coralStationAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
@@ -225,7 +233,6 @@ public class RobotContainer {
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
-    m_testEndEffector = new PrepareEndEffector(m_endEffector);
 
     m_IntakeAlgae = new IntakeAlgae(m_endEffector);
     m_OutakeAlgae = new OutakeAlgae(m_endEffector);
@@ -240,15 +247,14 @@ public class RobotContainer {
     m_goToSourceIntakeAngle2 = new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.CLIMB_ANGLE);
 
     /* Scoring */
-    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, false);
-    m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, true);
-    m_setLevelSource = new SetLevel(Level.SOURCE, m_endEffector);
-    m_setLevelOne = new SetLevel(Level.LEVEL1, m_endEffector);
-    m_setLevelTwo = new SetLevel(Level.LEVEL2, m_endEffector);
-    m_setLevelThree = new SetLevel(Level.LEVEL3, m_endEffector);
-    m_setLevelFour = new SetLevel(Level.LEVEL4, m_endEffector);
-    m_setLowerAlgae = new SetLevel(Level.ALGAE1, m_endEffector);
-    m_setUpperAlgae = new SetLevel(Level.ALGAE2, m_endEffector);
+    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL,false);
+    m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true);
+    m_setLevelOne = new SetLevel(Level.LEVEL1, LevelType.CORAL);
+    m_setLevelTwo = new SetLevel(Level.LEVEL2, LevelType.CORAL);
+    m_setLevelThree = new SetLevel(Level.LEVEL3, LevelType.CORAL);
+    m_setLevelFour = new SetLevel(Level.LEVEL4, LevelType.CORAL);
+    m_setLowerAlgae = new SetLevel(Level.ALGAE1, LevelType.ALGAE);
+    m_setUpperAlgae = new SetLevel(Level.ALGAE2, LevelType.ALGAE);
     m_elevatorToStow = new ToStow(m_endEffector, m_elevator);
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
     m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector, false);
@@ -309,9 +315,9 @@ public class RobotContainer {
     /* Scoring */
     Button.controlPadDown1.onTrue(m_scoreAlgae);
     Button.rightBumper1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
-        () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPositions()[0] < 0)));
+        () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)));
 
-    Button.circle1.onTrue(new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher, () -> (ElevatorPositionSelector.getSelectedPosition().height - m_elevator.getPositions()[0] < 0)));
+    Button.circle1.onTrue(new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher, () -> (Elevator.getAlgaeLevel().height - m_elevator.getPositions()[0] < 0)));
     Button.triangle1.onTrue(m_clampAlgae);
 
     Button.cross1.onTrue(m_indexCoral);
@@ -319,6 +325,7 @@ public class RobotContainer {
 
     // ==================
     // Operator Controls
+
     // ==================
 
     /* End Effector */

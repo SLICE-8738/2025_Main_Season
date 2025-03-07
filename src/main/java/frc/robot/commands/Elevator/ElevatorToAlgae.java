@@ -6,6 +6,7 @@ package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.subsystems.Elevator;
@@ -19,6 +20,6 @@ public class ElevatorToAlgae extends SequentialCommandGroup {
   public ElevatorToAlgae(Elevator elevator, Level level, EndEffector endEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetLevel(level, endEffector), new MoveToLevel(endEffector, elevator, false));
+    addCommands(new SetLevel(level, LevelType.ALGAE), new MoveToLevel(endEffector, elevator, LevelType.ALGAE, false));
   }
 }

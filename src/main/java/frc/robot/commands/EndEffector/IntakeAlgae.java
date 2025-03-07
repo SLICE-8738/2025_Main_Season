@@ -5,6 +5,7 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.subsystems.EndEffector;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -15,6 +16,6 @@ public class IntakeAlgae extends SequentialCommandGroup {
   public IntakeAlgae(EndEffector endEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PrepareEndEffector(endEffector), new MotorIntakeAlgae(endEffector));
+    addCommands(new PrepareEndEffector(endEffector, LevelType.ALGAE), new MotorIntakeAlgae(endEffector));
   }
 }

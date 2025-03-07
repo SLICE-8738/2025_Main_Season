@@ -7,25 +7,39 @@ package frc.robot.commands.Scoring;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.ElevatorPositionSelector;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetLevel extends Command {
   private Level level;
-  private EndEffector endEffector;
+  private LevelType levelType;
 
   /** Creates a new SetElevatorLevel. */
-  public SetLevel(Level level, EndEffector endEffector) {
+  public SetLevel(Level level, LevelType levelType) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.level = level;
-    this.endEffector = endEffector;
+    this.levelType = levelType;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ElevatorPositionSelector.setSelectedPosition(level);
-    endEffector.setSelectedLevel(level);
+    switch(levelType){
+      case SOURCE:
+        EndEffector.setSourceLevel(level);
+        Elevator.setSourceLevel(level);
+        break;
+      case CORAL:
+        EndEffector.setCoralLevel(level);
+        Elevator.setCoralLevel(level);
+        break;
+      case ALGAE:
+        EndEffector.setAlgaeLevel(level);
+        Elevator.setAlgaeLevel(level);
+        break;
+    }
 
   }
 

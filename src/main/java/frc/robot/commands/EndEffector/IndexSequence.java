@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.Scoring.SetLevel;
@@ -25,8 +26,8 @@ public class IndexSequence extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     SequentialCommandGroup indexSequence = new SequentialCommandGroup(new IndexInCommand(endEffector, controller), new IndexAlignCommand(endEffector));
     ParallelDeadlineGroup indexAndManualElevator = new ParallelDeadlineGroup(indexSequence, new ManualElevator(elevator, controller));
-    addCommands(new SetLevel(Level.SOURCE, endEffector),
-        new ParallelCommandGroup(new MoveElevatorToLevel(elevator), new PrepareEndEffector(endEffector)),
+    addCommands(new SetLevel(Level.SOURCE, LevelType.SOURCE),
+        new ParallelCommandGroup(new MoveElevatorToLevel(elevator, LevelType.SOURCE), new PrepareEndEffector(endEffector, LevelType.SOURCE)),
         indexAndManualElevator);
   }
 }

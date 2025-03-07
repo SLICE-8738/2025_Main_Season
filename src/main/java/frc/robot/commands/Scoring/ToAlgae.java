@@ -10,6 +10,7 @@ import frc.robot.commands.EndEffector.MotorIntakeAlgae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,9 +22,9 @@ public class ToAlgae extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
 
     if (endEffectorFirst) {
-      addCommands(new MoveToLevel(endEffector, elevator, endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
+      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE ,endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
     } else {
-      addCommands(new MoveToLevel(endEffector, elevator, endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
+      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
     }
   }
 }

@@ -6,24 +6,39 @@ import frc.robot.ElevatorPositionSelector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.Constants.kElevator;
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 
 public class MoveElevatorToLevel extends Command {
     private final Elevator m_elevator;
     private final double m_elevatorThreshold;
     private double m_level;
+    private LevelType m_levelType;
 
     /// true is upwards movement. false is downwards movement.
     private boolean movementDirection = false;
 
-    public MoveElevatorToLevel(Elevator elevator) {
+    public MoveElevatorToLevel(Elevator elevator, LevelType levelType) {
         addRequirements(elevator);
 
         m_elevator = elevator;
         m_elevatorThreshold = kElevator.THRESHOLD;
+        m_levelType = levelType;
     }
 
     public void initialize() {
-        m_level = ElevatorPositionSelector.getSelectedPosition().height;
+        switch(m_levelType){
+            case SOURCE:
+                m_level = Elevator.getSourceLevel().height;
+                break;
+            case CORAL:
+                m_level = Elevator.getCoralLevel().height;
+                break;
+            case ALGAE:
+                m_level = Elevator.getAlgaeLevel().height;
+                break;
+        }
+        
+        
         if (m_level > m_elevator.getPositions()[0]) {
             movementDirection = true;
         }

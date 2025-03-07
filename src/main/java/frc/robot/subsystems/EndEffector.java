@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 
@@ -36,7 +37,10 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private static DigitalInput backSensor; 
   private static DigitalInput middleSensor;
   private TalonFX placementMotor;
-  private Level m_angle = Level.STOW;
+  private static Level m_coralLevel;
+  private static Level m_algaeLevel;
+  private static Level m_sourceLevel;
+  private static LevelType m_levelType;
   // private static DigitalInput middleSensor;
   public double normalKG = 2;
 
@@ -82,12 +86,37 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     return Rotation2d.fromDegrees(getPositions()[0]);
   }
 
-  public Level getSelectedAngle() {
-    return m_angle;
+
+  public static Level getCoralLevel(){
+    return m_coralLevel;
   }
 
-  public void setSelectedLevel(Level angle) {
-    m_angle = angle;
+  public static Level getAlgaeLevel(){
+    return m_algaeLevel;
+  }
+
+  public static Level getSourceLevel(){
+    return m_sourceLevel;
+  }
+
+  public static LevelType getLevelType(){
+    return m_levelType;
+  }
+
+  public static void setCoralLevel(Level angle){
+    m_coralLevel = angle;
+  }
+
+  public static void setAlgaeLevel(Level angle){
+    m_algaeLevel = angle;
+  }
+
+  public static void setSourceLevel(Level angle){
+    m_sourceLevel = angle;
+  }
+
+  public static void setLevelType(LevelType levelType){
+    m_levelType = levelType;
   }
 
   public void setPlacementMotor(double speed) {
@@ -135,7 +164,6 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     SmartDashboard.putBoolean("SensorFront", frontSensor.get());
     SmartDashboard.putBoolean("SensorBack", backSensor.get());
     SmartDashboard.putBoolean("SensorMiddle", middleSensor.get());
-    SmartDashboard.putNumber("End Effector Target", getSelectedAngle().angle);
     SmartDashboard.putString("Last Command", getCurrentCommand() == null ? "null" : getCurrentCommand().getName());
 
     // This method will be called once per scheduler run
