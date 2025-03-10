@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+
 import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
@@ -22,8 +22,10 @@ public class CoralPositionAlignCommand extends Command {
 
   private final PIDController distanceController, rotationController;
 
+  private Transform2d difference;
+
   /** Creates a new CoralPositionAlignCommand. */
-  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, boolean scoreL4) {
+  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double finalXDistance) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -31,14 +33,14 @@ public class CoralPositionAlignCommand extends Command {
     m_drivetrain = drivetrain;
 
     distanceController = new PIDController(3.5, 0, 0);
-    rotationController = new PIDController(2.5, 0, 0);
+    rotationController = new PIDController(3.5, 0, 0);
 
     distanceController.setSetpoint(0);
     rotationController.setSetpoint(position.fieldPosition.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
 
     targetPose = position.fieldPosition.plus(new Transform2d(
-      new Translation2d(scoreL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, position.yAlignPosition), 
+      new Translation2d(finalXDistance, position.yAlignPosition), 
       new Rotation2d()));
 
   }
@@ -55,7 +57,7 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void execute() {
 
-    Transform2d difference = targetPose.minus(m_drivetrain.getPose());
+    difference = targetPose.minus(m_drivetrain.getPose());
     double distanceFeedback = Math.abs(distanceController.calculate(difference.getTranslation().getDistance(new Translation2d())));
 
     double translationX = difference.getTranslation().getAngle().getCos() * distanceFeedback;
@@ -86,6 +88,10 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public double getTargetDistance() {
+    return difference == null ? 1 : difference.getTranslation().getDistance(new Translation2d());
   }
 
 }

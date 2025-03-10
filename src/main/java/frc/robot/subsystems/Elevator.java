@@ -16,8 +16,8 @@ public class Elevator extends TalonFXPositionalSubsystem {
 
     // private DigitalInput bottomLimitSwitch;
     // private DigitalInput topLimitSwitch;
-    private static Level m_coralLevel;
-    private static Level m_algaeLevel;
+    private static Level m_coralLevel = Level.LEVEL1;
+    private static Level m_algaeLevel = Level.ALGAE1;
     private static Level m_sourceLevel;
     private static LevelType m_levelType;
 

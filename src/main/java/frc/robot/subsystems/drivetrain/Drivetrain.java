@@ -425,7 +425,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-@AutoLogOutput(key = "Drivetrain/Heading")
+  @AutoLogOutput(key = "Drivetrain/Heading")
   /**
    * Obtains and returns the current heading of the robot as a Rotation2d from the
    * gyro object.
@@ -485,7 +485,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-@AutoLogOutput(key = "Drivetrain/Chassis Speeds")
+  @AutoLogOutput(key = "Drivetrain/Chassis Speeds")
   /**
    * Calculates and returns the current chassis speeds of the drivetrain using
    * the average forward and sideways velocities of the individual swerve modules

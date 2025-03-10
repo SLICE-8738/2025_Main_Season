@@ -130,7 +130,11 @@ public class AutoSelector {
 
         Pathfinding.ensureInitialized();
 
-        for (CoralPosition position : CoralPosition.values()) {
+        /* Reef Positions */
+        for (int i = 0; i < 12; i++) {
+
+            CoralPosition position = CoralPosition.values()[i];
+            int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
 
             for (String level : new String[] {"L4, Non-L4"}) {
             
@@ -139,7 +143,13 @@ public class AutoSelector {
                     AutoBuilder.pathfindToPoseFlipped(
                         position.fieldPosition,
                         Constants.kDrivetrain.PATH_CONSTRAINTS,
-                        0.5).andThen(new CoralPositionAlignCommand(drivetrain, position, level == "L4")));
+                        0.5).until(
+                            () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
+                              || LimelightHelpers.getFiducialID("limelight-right") == targetTagID).andThen(
+                            new CoralPositionAlignCommand(
+                                drivetrain, 
+                                position, 
+                                /*level == "L4" ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/ Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF)));
 
                 autoPoses.put("Go To " + position.name + " " + level, position.fieldPosition);
 
@@ -147,7 +157,24 @@ public class AutoSelector {
 
         }
 
-        
+        /* Coral Station Positions */
+        for (int i = 12; i < 16; i++) {
+
+            CoralPosition position = CoralPosition.values()[i];
+            
+                NamedCommands.registerCommand(
+                    "Go To " + position.name, 
+                    AutoBuilder.pathfindToPoseFlipped(
+                        position.fieldPosition,
+                        Constants.kDrivetrain.PATH_CONSTRAINTS,
+                        1).andThen(new CoralPositionAlignCommand(
+                            drivetrain, 
+                            position, 
+                            Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION)));
+
+                autoPoses.put("Go To " + position.name, position.fieldPosition);
+
+        }
 
     }
 
@@ -161,9 +188,9 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.name
                 + ", Mode: " + mode.name);
             autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name));
-            initialAutoPose = (mode == Mode.AUTO_BUILDER) ? 
-                m_drivetrain.getPose() 
-                : new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose();
+            initialAutoPose = (mode.useStartingPosition) ? 
+                new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose()
+                : null;
 
             /*if (m_simDrivetrain != null) {
 
@@ -253,7 +280,7 @@ public class AutoSelector {
 
     public Transform2d getInitialAutoPoseOffset() {
 
-        return initialAutoPose.minus(m_drivetrain.getPose());
+        return initialAutoPose == null ? new Transform2d() : initialAutoPose.minus(m_drivetrain.getPose());
 
     }
 

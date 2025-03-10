@@ -41,7 +41,7 @@ public class DriveCommand extends Command {
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
-        0.6,
+        0.25,
         Constants.OperatorConstants.DRIVE_EXPONENT,
         Constants.OperatorConstants.DRIVE_EXPONENT_PERCENT));
     rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(

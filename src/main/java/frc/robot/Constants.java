@@ -139,7 +139,7 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY = 12.5; // radians per second
 
     /* PathPlanner Values */
-    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.5, 5.5, 10, 12.5);
+    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(5, 6, 10, 12.5);
     public static final double TRANSLATION_KP = 4.5;
     public static final double ROTATION_KP = 1.0;
 
@@ -215,6 +215,7 @@ public final class Constants {
 
     public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
     public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
+    public static final double X_DISTANCE_TO_CORAL_STATION = 0.5; // TODO: Find actual coral station align x distance
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
@@ -223,25 +224,25 @@ public final class Constants {
       /* Reef Positions */
       BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(2.853, 4.021, new Rotation2d()),
           "Back Middle Left Branch", 18, 7),
-      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.692, 5.406, Rotation2d.fromDegrees(300)),
           "Back Left Right Branch", 19, 6),
-      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.464, 5.853, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.692, 5.406, Rotation2d.fromDegrees(300)),
           "Back Left Left Branch", 19, 6),
-      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.286, 5.406, Rotation2d.fromDegrees(240)),
           "Front Left Right Branch", 20, 11),
-      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.55, 5.829, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.286, 5.406, Rotation2d.fromDegrees(240)),
           "Front Left Left Branch", 20, 11),
-      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(6.083, 4.021, Rotation2d.fromDegrees(180)),
           "Front Middle Right Branch", 21, 10),
-      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(6.557, 4.055, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(6.083, 4.021, Rotation2d.fromDegrees(180)),
           "Front Middle Left Branch", 21, 10),
-      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.286, 2.646, Rotation2d.fromDegrees(120)),
           "Front Right Right Branch", 22, 9),
-      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.478, 2.233, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.286, 2.646, Rotation2d.fromDegrees(120)),
           "Front Right Left Branch", 22, 9),
-      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.692, 2.646, Rotation2d.fromDegrees(60)),
           "Back Right Right Branch", 17, 8),
-      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.455, 2.201, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.692, 2.646, Rotation2d.fromDegrees(60)),
           "Back Right Left Branch", 17, 8),
       BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(2.853, 4.021, new Rotation2d()),
           "Back Middle Right Branch", 18, 7),
@@ -320,7 +321,7 @@ public final class Constants {
       LEVEL1(0.294, 41),
       ALGAE1(0.34, 16),
       LEVEL2(0.44, 81),
-      ALGAE2(0.75, 16),
+      ALGAE2(0.73, 16),
       LEVEL3(0.838, 81),
       LEVEL4(1.625, 51);
 

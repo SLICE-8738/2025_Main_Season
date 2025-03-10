@@ -37,8 +37,8 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private static DigitalInput backSensor; 
   private static DigitalInput middleSensor;
   private TalonFX placementMotor;
-  private static Level m_coralLevel;
-  private static Level m_algaeLevel;
+  private static Level m_coralLevel = Level.LEVEL1;
+  private static Level m_algaeLevel = Level.ALGAE1;
   private static Level m_sourceLevel;
   private static LevelType m_levelType;
   // private static DigitalInput middleSensor;
