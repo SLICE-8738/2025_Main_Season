@@ -36,7 +36,7 @@ public class ManualRotateSourceIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    axis =MathUtil.applyDeadband(m_controller.getRawAxis(2),0.1);
+    axis =MathUtil.applyDeadband(-m_controller.getRawAxis(5),0.1);
     if (axis == 0) {
       if (!maintaining) {
         m_sourceIntake.maintainPosition();

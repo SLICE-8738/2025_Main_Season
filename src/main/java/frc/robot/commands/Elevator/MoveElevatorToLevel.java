@@ -1,5 +1,6 @@
 package frc.robot.commands.Elevator;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.ElevatorPositionSelector;
@@ -46,8 +47,9 @@ public class MoveElevatorToLevel extends Command {
 
     public void execute() {
         m_elevator.moveTo(m_level);
+        SmartDashboard.putBoolean("Level Height", m_level  == Level.STOW.height);
         if (m_level == Level.STOW.height
-                && Math.abs(m_elevator.getStatorCurrents()[0]) >= 55 && m_elevator.getPositions()[0] <= 0.1 && Math.abs(m_elevator.getVelocity()[0]) <= 0.01) {
+                && Math.abs(m_elevator.getStatorCurrents()[0]) >= 30 && m_elevator.getPositions()[0] <= 0.1 && Math.abs(m_elevator.getVelocity()[0]) <= 0.01) {
             m_elevator.setEncoderPosition(0);
         }
     }

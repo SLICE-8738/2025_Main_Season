@@ -9,43 +9,49 @@ import java.util.Set;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Climber.ClimbCommand;
-import frc.robot.commands.Climber.ManualClimberCommand;
 import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
-import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.Climber.ClimbCommand;
+import frc.robot.commands.Climber.ManualClimberCommand;
+import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
+import frc.robot.commands.Drivetrain.CoralStationAlignCommand;
+import frc.robot.commands.Drivetrain.DriveCommand;
+import frc.robot.commands.Drivetrain.ResetFieldOrientedHeading;
+import frc.robot.commands.Drivetrain.RunDutyCycleCommand;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.BumpAlgae;
 import frc.robot.commands.EndEffector.ClampAlgae;
 import frc.robot.commands.EndEffector.IndexSequence;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
-import frc.robot.commands.EndEffector.MotorIntakeAlgae;
 import frc.robot.commands.EndEffector.OutakeAlgae;
-import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.commands.EndEffector.ScoreCoral;
+import frc.robot.commands.Scoring.MoveToLevel;
+import frc.robot.commands.Scoring.ScoreAlgae;
+import frc.robot.commands.Scoring.SetLevel;
+import frc.robot.commands.Scoring.ToAlgae;
 import frc.robot.commands.Scoring.ToStow;
 import frc.robot.commands.SourceIntake.ManualRotateSourceIntake;
 import frc.robot.commands.SourceIntake.RotateSourceIntake;
-import frc.robot.commands.Scoring.MoveToLevel;
-import frc.robot.commands.Scoring.ToAlgae;
-import frc.robot.commands.Scoring.ScoreAlgae;
-import frc.robot.commands.Scoring.SetLevel;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.SourceIntake;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
 import frc.robot.subsystems.drivetrain.SimSwerveModuleIO;
@@ -227,7 +233,11 @@ public class RobotContainer {
           m_drivetrain, 
           position, 
           /*EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/Constants.kDrivetrain.X_DISTANCE_TO_REEF);
-        return new SequentialCommandGroup(
+          SequentialCommandGroup autoMoveToLevel = new WaitUntilCommand(() -> coralPositionAlign.getDistanceFromTarget() <= 0.9).andThen(new ConditionalCommand(
+                        new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true), 
+                        new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false),
+                        () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)));
+          return new SequentialCommandGroup(
           AutoBuilder.pathfindToPoseFlipped(
               position.fieldPosition,
               Constants.kDrivetrain.PATH_CONSTRAINTS,
@@ -235,11 +245,7 @@ public class RobotContainer {
                   () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
                     || LimelightHelpers.getFiducialID("limelight-right") == targetTagID),
           new ParallelCommandGroup(
-              coralPositionAlign,
-              new WaitUntilCommand(() -> coralPositionAlign.getDistanceFromTarget() <= 0.9).andThen(new ConditionalCommand(
-                  new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true), 
-                  new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false),
-                  () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)))));
+              coralPositionAlign, new InstantCommand(()-> autoMoveToLevel.schedule())));
         },
       Set.of(m_drivetrain));
     /*m_coralStationAlign = new DeferredCommand(
@@ -347,6 +353,9 @@ public class RobotContainer {
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
     Button.square2.onTrue(m_elevatorToStow);
+
+    Button.start.onTrue(new InstantCommand(
+      () -> m_elevator.setEncoderPosition(0), m_elevator));
 
     Button.cross2.onTrue(m_goToSourceIntakeAngle1);
     Button.circle2.onTrue(m_goToSourceIntakeAngle2);

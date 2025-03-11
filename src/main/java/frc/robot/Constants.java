@@ -283,7 +283,7 @@ public final class Constants {
                                                                                          // get pitch circumference)
                                                                                          // divided by gear ratio.
     public static final double VELOCITY_CONVERSION_FACTOR = POSITION_CONVERSION_FACTOR;
-    public static final double KP = 2.85;
+    public static final double KP = 3.5;
     public static final double KI = 0.14;
     public static final double KD = 0.25;
     public static final double KG = 0.24;
@@ -316,7 +316,7 @@ public final class Constants {
     /* Elevator Levels */
     public enum Level {
 
-      STOW(0.02, 84, "Stow"),
+      STOW(0.01, 84, "Stow"),
       PROCESSER(0.03, -4, "Processer"),
       SOURCE(0.2307, 66, "Source"),
       LEVEL1(0.294, 41, "Level 1"),

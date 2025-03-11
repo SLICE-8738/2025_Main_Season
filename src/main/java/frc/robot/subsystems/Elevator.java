@@ -19,7 +19,7 @@ public class Elevator extends TalonFXPositionalSubsystem {
     private static Level m_coralLevel = Level.LEVEL1;
     private static Level m_algaeLevel = Level.ALGAE1;
     private static Level m_sourceLevel;
-    private static LevelType m_levelType;
+    private static LevelType m_levelType = LevelType.SOURCE;
 
 
     public Elevator() {
@@ -98,5 +98,12 @@ public class Elevator extends TalonFXPositionalSubsystem {
         SmartDashboard.putNumber("Target Height", ElevatorPositionSelector.getSelectedPosition().height);
         SmartDashboard.putNumber("Elevator Current", getStatorCurrents()[0]);
         SmartDashboard.putBoolean("MotorIntakeAlgae Running", MotorIntakeAlgae.isRunning());
+
+        SmartDashboard.putBoolean("Stator Bool", Math.abs(getStatorCurrents()[0]) >= 30);
+        SmartDashboard.putBoolean("Velocity Bool", Math.abs(getVelocity()[0]) <= 0.01);
+        SmartDashboard.putBoolean("Height Bool", getPositions()[0] <= 0.1);
+        SmartDashboard.putBoolean("Level Type", m_levelType.equals(LevelType.SOURCE));
+
+
     }
 }
