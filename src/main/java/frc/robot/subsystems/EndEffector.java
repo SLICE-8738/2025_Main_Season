@@ -11,10 +11,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.Constants;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
-import frc.robot.Constants;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 
 public class EndEffector extends TalonFXPositionalSubsystem {
@@ -34,7 +33,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
    * Coral successfully indexed
    */
   private static DigitalInput frontSensor;
-  private static DigitalInput backSensor; 
+  private static DigitalInput backSensor;
   private static DigitalInput middleSensor;
   private TalonFX placementMotor;
   private static Level m_coralLevel = Level.LEVEL1;
@@ -51,7 +50,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     super(
         new int[] { Constants.kEndEffector.ROTATION_MOTOR_ID },
         new boolean[] { false },
-        1.75,//4.0,
+        1.75, // 4.0,
         1.0,
         0.175,
         Constants.kEndEffector.KG,
@@ -86,57 +85,55 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     return Rotation2d.fromDegrees(getPositions()[0]);
   }
 
-
-  public static Level getCoralLevel(){
+  public static Level getCoralLevel() {
     return m_coralLevel;
   }
 
-  public static Level getAlgaeLevel(){
+  public static Level getAlgaeLevel() {
     return m_algaeLevel;
   }
 
-  public static Level getSourceLevel(){
+  public static Level getSourceLevel() {
     return m_sourceLevel;
   }
 
-  public static LevelType getLevelType(){
+  public static LevelType getLevelType() {
     return m_levelType;
   }
 
-  public static void setCoralLevel(Level angle){
+  public static void setCoralLevel(Level angle) {
     m_coralLevel = angle;
   }
 
-  public static void setAlgaeLevel(Level angle){
+  public static void setAlgaeLevel(Level angle) {
     m_algaeLevel = angle;
   }
 
-  public static void setSourceLevel(Level angle){
+  public static void setSourceLevel(Level angle) {
     m_sourceLevel = angle;
   }
 
-  public static void setLevelType(LevelType levelType){
+  public static void setLevelType(LevelType levelType) {
     m_levelType = levelType;
   }
 
   public void setPlacementMotor(double speed) {
     placementMotor.set(speed);
   }
-  
+
   public void alignCoral() {
     boolean[] sensors = checkSensorsIndexing();
     boolean backSensor = sensors[2];
     boolean middleSensor = sensors[1];
     boolean frontSensor = sensors[0];
-    
-    if(!frontSensor){
+
+    if (!frontSensor) {
       setPlacementMotor(0);
-    }
-    else if (backSensor) {
+    } else if (backSensor) {
       setPlacementMotor(-0.05);
-    }else if (!middleSensor) {
+    } else if (!middleSensor) {
       setPlacementMotor(0.05);
-    }else {
+    } else {
       setPlacementMotor(0);
     }
   }
@@ -165,6 +162,10 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     SmartDashboard.putBoolean("SensorBack", backSensor.get());
     SmartDashboard.putBoolean("SensorMiddle", middleSensor.get());
     SmartDashboard.putString("Last Command", getCurrentCommand() == null ? "null" : getCurrentCommand().getName());
+
+    SmartDashboard.putNumber("Subsystem Target Angle", getLevelType().equals(LevelType.CORAL) ? getCoralLevel().angle
+        : getLevelType().equals(LevelType.ALGAE) ? getAlgaeLevel().angle : getSourceLevel().angle);
+    SmartDashboard.putNumber("Motor Target Angle", getTargetPosition());
 
     // This method will be called once per scheduler run
   }

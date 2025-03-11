@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -28,16 +29,41 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
 
     /**
      * Construct a new Positional Subsystem
-     * @param ids an array of CAN ids for every positionally controlled motor in the subsystem. All motors should rotate together, if additional motors should spin seperately, add them in the superclass
-     * @param inverted an array of booleans indicating whether the motor of the corresponding CAN id is inverted. This should be the same length as ids. true is CCW+ false is CW+.
-     * @param kP the p gain of the subsystem (in volts per unit).
-     * @param kI the i gain of the subsystem (in volts per unit seconds).
-     * @param kD the d gain of the subsystem (in volts per units per second).
-     * @param kG the g gain of the subsystem (in volts). 
-     * @param sensorToMechRatio the ratio from the output shaft of the motor to the output of the mechanism. >1 is a reduction. This should be used for gear ratios, not unit conversions.
-     * @param positionConversionFactor the number that, when multiplied by the mechanism's rotations, gives the position of the mechanism in desired units. This should be used for unit conversions, not gear ratios.
-     * @param velocityConversionFactor the number that, when multiplied by the mechanism's rotations per second, gives the velocity of the mechanism in desired units. This should be used for unit conversions, not gear ratios.
-     * @param motorConfigs the configs for the provided motor. The Slot0 PID controller, InvertedValue, and SensorToMechanismRatio will be overriden by other parameters.
+     * 
+     * @param ids                      an array of CAN ids for every positionally
+     *                                 controlled motor in the subsystem. All motors
+     *                                 should rotate together, if additional motors
+     *                                 should spin seperately, add them in the
+     *                                 superclass
+     * @param inverted                 an array of booleans indicating whether the
+     *                                 motor of the corresponding CAN id is
+     *                                 inverted. This should be the same length as
+     *                                 ids. true is CCW+ false is CW+.
+     * @param kP                       the p gain of the subsystem (in volts per
+     *                                 unit).
+     * @param kI                       the i gain of the subsystem (in volts per
+     *                                 unit seconds).
+     * @param kD                       the d gain of the subsystem (in volts per
+     *                                 units per second).
+     * @param kG                       the g gain of the subsystem (in volts).
+     * @param sensorToMechRatio        the ratio from the output shaft of the motor
+     *                                 to the output of the mechanism. >1 is a
+     *                                 reduction. This should be used for gear
+     *                                 ratios, not unit conversions.
+     * @param positionConversionFactor the number that, when multiplied by the
+     *                                 mechanism's rotations, gives the position of
+     *                                 the mechanism in desired units. This should
+     *                                 be used for unit conversions, not gear
+     *                                 ratios.
+     * @param velocityConversionFactor the number that, when multiplied by the
+     *                                 mechanism's rotations per second, gives the
+     *                                 velocity of the mechanism in desired units.
+     *                                 This should be used for unit conversions, not
+     *                                 gear ratios.
+     * @param motorConfigs             the configs for the provided motor. The Slot0
+     *                                 PID controller, InvertedValue, and
+     *                                 SensorToMechanismRatio will be overriden by
+     *                                 other parameters.
      */
     public TalonFXPositionalSubsystem(int[] ids, boolean[] inverted, double kP, double kI, double kD, double kG,
             double sensorToMechRatio,
@@ -167,6 +193,14 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
         return currents;
     }
 
+    public double getTargetPosition() {
+        return positionTargetReference;
+    }
+
+    public double getTargetVelocity() {
+        return velocityTargetReference;
+    }
+
     /**
      * Returns the average velocity reading across all positional motors.
      * 
@@ -222,4 +256,5 @@ public class TalonFXPositionalSubsystem extends SubsystemBase {
     public double getPositionTargetReference() {
         return positionTargetReference;
     }
+
 }
