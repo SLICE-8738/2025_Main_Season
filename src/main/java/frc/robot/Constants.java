@@ -213,8 +213,9 @@ public final class Constants {
     public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
 
-    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
-    public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
+    public static final double X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal reef scoring position
+    //public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
+    //public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
     public static final double X_DISTANCE_TO_CORAL_STATION = 0.5; // TODO: Find actual coral station align x distance
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
@@ -224,25 +225,25 @@ public final class Constants {
       /* Reef Positions */
       BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(2.853, 4.021, new Rotation2d()),
           "Back Middle Left Branch", 18, 7),
-      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.692, 5.406, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)),
           "Back Left Right Branch", 19, 6),
-      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.692, 5.406, Rotation2d.fromDegrees(300)),
+      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)),
           "Back Left Left Branch", 19, 6),
-      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.286, 5.406, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)),
           "Front Left Right Branch", 20, 11),
-      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.286, 5.406, Rotation2d.fromDegrees(240)),
+      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)),
           "Front Left Left Branch", 20, 11),
-      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(6.083, 4.021, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)),
           "Front Middle Right Branch", 21, 10),
-      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(6.083, 4.021, Rotation2d.fromDegrees(180)),
+      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)),
           "Front Middle Left Branch", 21, 10),
-      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.286, 2.646, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)),
           "Front Right Right Branch", 22, 9),
-      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.286, 2.646, Rotation2d.fromDegrees(120)),
+      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)),
           "Front Right Left Branch", 22, 9),
-      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.692, 2.646, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)),
           "Back Right Right Branch", 17, 8),
-      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.692, 2.646, Rotation2d.fromDegrees(60)),
+      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)),
           "Back Right Left Branch", 17, 8),
       BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_POSITION, new Pose2d(2.853, 4.021, new Rotation2d()),
           "Back Middle Right Branch", 18, 7),
@@ -315,22 +316,24 @@ public final class Constants {
     /* Elevator Levels */
     public enum Level {
 
-      STOW(0.02, 84),
-      PROCESSER(0.03, -4),
-      SOURCE(0.2307, 66),
-      LEVEL1(0.294, 41),
-      ALGAE1(0.34, 16),
-      LEVEL2(0.44, 81),
-      ALGAE2(0.73, 16),
-      LEVEL3(0.838, 81),
-      LEVEL4(1.625, 51);
+      STOW(0.02, 84, "Stow"),
+      PROCESSER(0.03, -4, "Processer"),
+      SOURCE(0.2307, 66, "Source"),
+      LEVEL1(0.294, 41, "Level 1"),
+      ALGAE1(0.34, 16, "Algae 1"),
+      LEVEL2(0.44, 81, "Level 2"),
+      ALGAE2(0.73, 16, "Algae 2"),
+      LEVEL3(0.838, 81, "Level 3"),
+      LEVEL4(1.625, 51, "Level 4");
 
       public double height;
       public double angle;
+      public String name;
 
-      private Level(double height, double angle) {
+      private Level(double height, double angle, String name) {
         this.height = height;
         this.angle = angle;
+        this.name = name;
       }
     }
 
@@ -426,6 +429,7 @@ public final class Constants {
   public final class kSourceIntake {
 
     public static final int MOTOR_PORT = 13; //TODO find actual motor port number
+    public static final int ABSOLUTE_ENCODER_ID = 4;
 
     public static final double INTAKE_ANGLE = 25;
     public static final double CLIMB_ANGLE = 94;

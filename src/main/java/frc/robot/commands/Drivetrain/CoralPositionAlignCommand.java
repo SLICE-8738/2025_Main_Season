@@ -22,7 +22,7 @@ public class CoralPositionAlignCommand extends Command {
 
   private final PIDController distanceController, rotationController;
 
-  private Transform2d difference;
+  private double distance = 1;
 
   /** Creates a new CoralPositionAlignCommand. */
   public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double finalXDistance) {
@@ -57,8 +57,9 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void execute() {
 
-    difference = targetPose.minus(m_drivetrain.getPose());
-    double distanceFeedback = Math.abs(distanceController.calculate(difference.getTranslation().getDistance(new Translation2d())));
+    Transform2d difference = targetPose.minus(m_drivetrain.getPose());
+    distance = Math.hypot(difference.getX(), difference.getY());
+    double distanceFeedback = Math.abs(distanceController.calculate(distance));
 
     double translationX = difference.getTranslation().getAngle().getCos() * distanceFeedback;
     double translationY = difference.getTranslation().getAngle().getSin() * distanceFeedback;
@@ -69,7 +70,8 @@ public class CoralPositionAlignCommand extends Command {
       false, 
       false);
 
-      SmartDashboard.putNumber("Auto Align Error", distanceController.getError());
+      SmartDashboard.putNumber("Auto Align Distance Error", distanceController.getError());
+      SmartDashboard.putNumber("Auto Align Rotation Error", rotationController.getError());
 
   }
 
@@ -90,8 +92,8 @@ public class CoralPositionAlignCommand extends Command {
     return false;
   }
 
-  public double getTargetDistance() {
-    return difference == null ? 1 : difference.getTranslation().getDistance(new Translation2d());
+  public double getDistanceFromTarget() {
+    return distance;
   }
 
 }

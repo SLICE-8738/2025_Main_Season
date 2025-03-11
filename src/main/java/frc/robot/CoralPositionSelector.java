@@ -56,6 +56,12 @@ public class CoralPositionSelector {
                 break;
 
             }
+            else if (!currentPosition.getBoolean(false) && currentPosition == selectedReefPosition) {
+
+                selectedReefPosition.setBoolean(true);
+                break;
+
+            }
 
         }
 

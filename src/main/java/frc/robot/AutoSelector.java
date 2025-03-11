@@ -12,10 +12,19 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 //import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 //import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.kDrivetrain.CoralPosition;
+import frc.robot.Constants.kElevator.Level;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
+import frc.robot.commands.Scoring.MoveToLevel;
+import frc.robot.commands.Scoring.SetLevel;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 //import java.io.File;
@@ -88,7 +97,7 @@ public class AutoSelector {
 
     private final Drivetrain m_drivetrain, m_simDrivetrain;
 
-    public AutoSelector(Drivetrain drivetrain, Drivetrain simDrivetrain) {
+    public AutoSelector(Drivetrain drivetrain, Drivetrain simDrivetrain, Elevator elevator, EndEffector endEffector) {
 
         m_drivetrain = drivetrain;
         m_simDrivetrain = simDrivetrain;
@@ -136,22 +145,31 @@ public class AutoSelector {
             CoralPosition position = CoralPosition.values()[i];
             int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
 
-            for (String level : new String[] {"L4, Non-L4"}) {
-            
-                NamedCommands.registerCommand(
-                    "Go To " + position.name + " " + level, 
-                    AutoBuilder.pathfindToPoseFlipped(
-                        position.fieldPosition,
-                        Constants.kDrivetrain.PATH_CONSTRAINTS,
-                        0.5).until(
-                            () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
-                              || LimelightHelpers.getFiducialID("limelight-right") == targetTagID).andThen(
-                            new CoralPositionAlignCommand(
-                                drivetrain, 
-                                position, 
-                                /*level == "L4" ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/ Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF)));
+            for (/*String*/ Level level : /*new String[] {"L4, Non-L4"}*/ Level.values()) {
 
-                autoPoses.put("Go To " + position.name + " " + level, position.fieldPosition);
+                CoralPositionAlignCommand coralPositionAlign = new CoralPositionAlignCommand(
+                    drivetrain, 
+                    position, 
+                    /*EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/Constants.kDrivetrain.X_DISTANCE_TO_REEF);
+
+                NamedCommands.registerCommand(
+                    "Score Coral " + position.name + " " + level.name,
+                    new SequentialCommandGroup(
+                        AutoBuilder.pathfindToPoseFlipped(
+                            position.fieldPosition,
+                            Constants.kDrivetrain.PATH_CONSTRAINTS,
+                            0.5).until(
+                                () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
+                                  || LimelightHelpers.getFiducialID("limelight-right") == targetTagID),
+                        new SetLevel(level, LevelType.CORAL),
+                        new ParallelCommandGroup(
+                            coralPositionAlign,
+                            new WaitUntilCommand(() -> coralPositionAlign.getDistanceFromTarget() <= 0.9).andThen(new ConditionalCommand(
+                                new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
+                                new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
+                                () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))))));
+
+                autoPoses.put("Score Coral " + position.name + " " + level.name, position.fieldPosition);
 
             }
 
@@ -163,7 +181,7 @@ public class AutoSelector {
             CoralPosition position = CoralPosition.values()[i];
             
                 NamedCommands.registerCommand(
-                    "Go To " + position.name, 
+                    "Get Coral " + position.name, 
                     AutoBuilder.pathfindToPoseFlipped(
                         position.fieldPosition,
                         Constants.kDrivetrain.PATH_CONSTRAINTS,
@@ -172,7 +190,7 @@ public class AutoSelector {
                             position, 
                             Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION)));
 
-                autoPoses.put("Go To " + position.name, position.fieldPosition);
+                autoPoses.put("Get Coral " + position.name, position.fieldPosition);
 
         }
 

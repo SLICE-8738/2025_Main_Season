@@ -156,16 +156,14 @@ public class RobotContainer {
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-        m_autoSelector = new AutoSelector(
+        /*m_autoSelector = new AutoSelector(
             m_drivetrain,
-            /*
-             * new Drivetrain(
-             * new SimSwerveModuleIO(),
-             * new SimSwerveModuleIO(),
-             * new SimSwerveModuleIO(),
-             * new SimSwerveModuleIO())
-             */
-            null);
+            new Drivetrain(
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO(),
+              new SimSwerveModuleIO())
+            null);*/
         break;
       case SIM:
         m_drivetrain = new Drivetrain(
@@ -173,7 +171,7 @@ public class RobotContainer {
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO());
-        m_autoSelector = new AutoSelector(m_drivetrain, null);
+        //m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
       default:
         m_drivetrain = new Drivetrain(
@@ -181,7 +179,7 @@ public class RobotContainer {
             new SwerveModuleIO() {},
             new SwerveModuleIO() {},
             new SwerveModuleIO() {});
-        m_autoSelector = new AutoSelector(m_drivetrain, null);
+        //m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
 
@@ -191,7 +189,8 @@ public class RobotContainer {
     m_sourceIntake = new SourceIntake();
 
     m_leds = new LEDs();
-
+    
+    m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector);
     m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_endEffector, m_autoSelector);
@@ -227,18 +226,20 @@ public class RobotContainer {
         CoralPositionAlignCommand coralPositionAlign = new CoralPositionAlignCommand(
           m_drivetrain, 
           position, 
-          /*EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF);
-        return AutoBuilder.pathfindToPoseFlipped(
-          position.fieldPosition,
-          Constants.kDrivetrain.PATH_CONSTRAINTS).until(
-            () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
-              || LimelightHelpers.getFiducialID("limelight-right") == targetTagID).andThen(
-                new ParallelCommandGroup(
-                  coralPositionAlign,
-                  new WaitUntilCommand(() -> coralPositionAlign.getTargetDistance() <= 0.9).andThen(new ConditionalCommand(
-                    new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true), 
-                    new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false),
-                    () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)))));
+          /*EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/Constants.kDrivetrain.X_DISTANCE_TO_REEF);
+        return new SequentialCommandGroup(
+          AutoBuilder.pathfindToPoseFlipped(
+              position.fieldPosition,
+              Constants.kDrivetrain.PATH_CONSTRAINTS,
+              0.5).until(
+                  () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
+                    || LimelightHelpers.getFiducialID("limelight-right") == targetTagID),
+          new ParallelCommandGroup(
+              coralPositionAlign,
+              new WaitUntilCommand(() -> coralPositionAlign.getDistanceFromTarget() <= 0.9).andThen(new ConditionalCommand(
+                  new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true), 
+                  new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false),
+                  () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)))));
         },
       Set.of(m_drivetrain));
     /*m_coralStationAlign = new DeferredCommand(
