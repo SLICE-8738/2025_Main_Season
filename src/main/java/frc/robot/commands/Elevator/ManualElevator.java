@@ -27,7 +27,7 @@ public class ManualElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    maintaining = true;
+    maintaining = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -6,28 +6,21 @@ package frc.robot;
 
 import java.util.Set;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.kDrivetrain.CoralPosition;
+
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Climber.ClimbCommand;
 import frc.robot.commands.Climber.ManualClimberCommand;
-import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
 import frc.robot.commands.Drivetrain.CoralStationAlignCommand;
 import frc.robot.commands.Drivetrain.DriveCommand;
 import frc.robot.commands.Drivetrain.ResetFieldOrientedHeading;
@@ -40,7 +33,9 @@ import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.ScoreCoral;
+import frc.robot.commands.Scoring.AlignAndScoreCoral;
 import frc.robot.commands.Scoring.MoveToLevel;
+import frc.robot.commands.Scoring.ResetRelativeEncoders;
 import frc.robot.commands.Scoring.ScoreAlgae;
 import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.commands.Scoring.ToAlgae;
@@ -226,27 +221,7 @@ public class RobotContainer {
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
-      () -> {
-        CoralPosition position = CoralPositionSelector.getSelectedReefPosition();
-        int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
-        CoralPositionAlignCommand coralPositionAlign = new CoralPositionAlignCommand(
-          m_drivetrain, 
-          position, 
-          /*EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/Constants.kDrivetrain.X_DISTANCE_TO_REEF);
-          SequentialCommandGroup autoMoveToLevel = new WaitUntilCommand(() -> coralPositionAlign.getDistanceFromTarget() <= 0.9).andThen(new ConditionalCommand(
-                        new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true), 
-                        new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false),
-                        () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)));
-          return new SequentialCommandGroup(
-          AutoBuilder.pathfindToPoseFlipped(
-              position.fieldPosition,
-              Constants.kDrivetrain.PATH_CONSTRAINTS,
-              0.5).until(
-                  () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
-                    || LimelightHelpers.getFiducialID("limelight-right") == targetTagID),
-          new ParallelCommandGroup(
-              coralPositionAlign, new InstantCommand(()-> autoMoveToLevel.schedule())));
-        },
+      () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
       Set.of(m_drivetrain));
     /*m_coralStationAlign = new DeferredCommand(
       () -> AutoBuilder.pathfindToPoseFlipped(
@@ -378,7 +353,6 @@ public class RobotContainer {
   }
 
   public Command getTeleopInitCommand() {
-    return m_goToSourceIntakeAngle1;
+    return new ResetRelativeEncoders(m_endEffector, m_sourceIntake);
   }
-
 }

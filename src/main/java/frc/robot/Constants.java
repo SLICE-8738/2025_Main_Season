@@ -213,9 +213,8 @@ public final class Constants {
     public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
     public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
 
-    public static final double X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal reef scoring position
-    //public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
-    //public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
+    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
+    public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef wall)
     public static final double X_DISTANCE_TO_CORAL_STATION = 0.5; // TODO: Find actual coral station align x distance
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
@@ -320,7 +319,7 @@ public final class Constants {
       PROCESSER(0.03, -4, "Processer"),
       SOURCE(0.2307, 66, "Source"),
       LEVEL1(0.294, 41, "Level 1"),
-      ALGAE1(0.34, 16, "Algae 1"),
+      ALGAE1(0.35, 13, "Algae 1"),
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.73, 16, "Algae 2"),
       LEVEL3(0.838, 81, "Level 3"),
@@ -430,6 +429,8 @@ public final class Constants {
 
     public static final int MOTOR_PORT = 13; //TODO find actual motor port number
     public static final int ABSOLUTE_ENCODER_ID = 4;
+    public static final double ABSOLUTE_ENCODER_OFFSET = 364;
+    public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
     public static final double INTAKE_ANGLE = 25;
     public static final double CLIMB_ANGLE = 94;

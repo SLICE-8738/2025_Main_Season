@@ -7,6 +7,7 @@ package frc.robot.commands.EndEffector;
 import java.io.Console;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.subsystems.EndEffector;
 
@@ -53,6 +54,9 @@ public class PrepareEndEffector extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(angle == Level.SOURCE.angle){
+      endEffector.setPlacementMotor(-.1);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.slicelibs.PositionalSubsystem;
@@ -16,6 +17,7 @@ import frc.slicelibs.TalonFXPositionalSubsystem;
 public class SourceIntake extends TalonFXPositionalSubsystem {
 
 private final double DEFAULT_POSITION = 0;
+private final DutyCycleEncoder m_absoluteEncoder;
 
   /** Creates a new SourceIntake. */
   public SourceIntake() {
@@ -32,7 +34,7 @@ private final double DEFAULT_POSITION = 0;
       Constants.kSourceIntake.VELOCITY_CONVERSION_FACTOR, 
       Constants.CTRE_CONFIGS.sourceIntakeFXConfig);
 
-    setEncoderPosition(DEFAULT_POSITION);
+    m_absoluteEncoder = new DutyCycleEncoder(Constants.kSourceIntake.ABSOLUTE_ENCODER_ID, Constants.kSourceIntake.ABSOLUTE_ENCODER_RANGE, 0);
 
   }
 
@@ -50,9 +52,18 @@ private final double DEFAULT_POSITION = 0;
     }
   }
 
+  public void resetRelativeEncoder(){
+    if(m_absoluteEncoder.get() - (Constants.kSourceIntake.ABSOLUTE_ENCODER_ID - 5) < 0){
+      setEncoderPosition(m_absoluteEncoder.get() - Constants.kSourceIntake.ABSOLUTE_ENCODER_OFFSET + Constants.kSourceIntake.ABSOLUTE_ENCODER_RANGE);
+    } else{
+      setEncoderPosition(m_absoluteEncoder.get() - Constants.kSourceIntake.ABSOLUTE_ENCODER_OFFSET);
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Source Intake Relative Angle", getPositions()[0]);
+    SmartDashboard.putNumber("Source Absolute Angle", m_absoluteEncoder.get());
   }
 }

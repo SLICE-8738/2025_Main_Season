@@ -4,12 +4,16 @@
 
 package frc.robot.commands.Drivetrain;
 
+import com.pathplanner.lib.util.FlippingUtil;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.kDrivetrain.CoralPosition;
@@ -22,10 +26,8 @@ public class CoralPositionAlignCommand extends Command {
 
   private final PIDController distanceController, rotationController;
 
-  private double distance = 1;
-
   /** Creates a new CoralPositionAlignCommand. */
-  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double finalXDistance) {
+  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double xDistance) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -39,10 +41,14 @@ public class CoralPositionAlignCommand extends Command {
     rotationController.setSetpoint(position.fieldPosition.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
 
-    targetPose = position.fieldPosition.plus(new Transform2d(
-      new Translation2d(finalXDistance, position.yAlignPosition), 
-      new Rotation2d()));
-
+    targetPose = DriverStation.getAlliance().get() == Alliance.Blue ? 
+      position.fieldPosition.plus(new Transform2d(
+        new Translation2d(xDistance, position.yAlignPosition), 
+        new Rotation2d()))
+      : FlippingUtil.flipFieldPose(position.fieldPosition).plus(new Transform2d(
+        new Translation2d(xDistance, position.yAlignPosition), 
+        new Rotation2d()));
+        
   }
 
   // Called when the command is initially scheduled.
@@ -58,8 +64,7 @@ public class CoralPositionAlignCommand extends Command {
   public void execute() {
 
     Transform2d difference = targetPose.minus(m_drivetrain.getPose());
-    distance = Math.hypot(difference.getX(), difference.getY());
-    double distanceFeedback = Math.abs(distanceController.calculate(distance));
+    double distanceFeedback = Math.abs(distanceController.calculate(Math.hypot(difference.getX(), difference.getY())));
 
     double translationX = difference.getTranslation().getAngle().getCos() * distanceFeedback;
     double translationY = difference.getTranslation().getAngle().getSin() * distanceFeedback;
@@ -92,8 +97,8 @@ public class CoralPositionAlignCommand extends Command {
     return false;
   }
 
-  public double getDistanceFromTarget() {
-    return distance;
+  public Pose2d getTargetPose() {
+    return targetPose;
   }
 
 }

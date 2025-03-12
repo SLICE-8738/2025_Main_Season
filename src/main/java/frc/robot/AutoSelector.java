@@ -21,6 +21,7 @@ import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
+import frc.robot.commands.Scoring.AlignAndScoreCoralAutonomous;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.subsystems.Elevator;
@@ -143,31 +144,17 @@ public class AutoSelector {
         for (int i = 0; i < 12; i++) {
 
             CoralPosition position = CoralPosition.values()[i];
-            int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
 
-            for (/*String*/ Level level : /*new String[] {"L4, Non-L4"}*/ Level.values()) {
-
-                CoralPositionAlignCommand coralPositionAlign = new CoralPositionAlignCommand(
-                    drivetrain, 
-                    position, 
-                    /*EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF*/Constants.kDrivetrain.X_DISTANCE_TO_REEF);
+            for (Level level : Level.values()) {
 
                 NamedCommands.registerCommand(
                     "Score Coral " + position.name + " " + level.name,
-                    new SequentialCommandGroup(
-                        AutoBuilder.pathfindToPoseFlipped(
-                            position.fieldPosition,
-                            Constants.kDrivetrain.PATH_CONSTRAINTS,
-                            0.5).until(
-                                () -> LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
-                                  || LimelightHelpers.getFiducialID("limelight-right") == targetTagID),
-                        new SetLevel(level, LevelType.CORAL),
-                        new ParallelCommandGroup(
-                            coralPositionAlign,
-                            new WaitUntilCommand(() -> coralPositionAlign.getDistanceFromTarget() <= 0.9).andThen(new ConditionalCommand(
-                                new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
-                                new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
-                                () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))))));
+                    new AlignAndScoreCoralAutonomous(
+                        drivetrain,
+                        elevator,
+                        endEffector,
+                        position,
+                        level));
 
                 autoPoses.put("Score Coral " + position.name + " " + level.name, position.fieldPosition);
 
