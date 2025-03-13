@@ -347,9 +347,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
-    // return m_autoSelector.getAutoRoutine();
-    return null;
+    return m_autoSelector.getAutoRoutine();
   }
 
   public Command getTeleopInitCommand() {

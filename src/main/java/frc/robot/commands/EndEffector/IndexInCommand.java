@@ -44,7 +44,7 @@ public class IndexInCommand extends Command {
     m_endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
 
     // Manual control
-    double axis = MathUtil.applyDeadband(m_controller.getRawAxis(0) * .5, .1);
+    double axis = m_controller == null ? 0 : MathUtil.applyDeadband(m_controller.getRawAxis(0) * .5, .1);
     if ((axis < 0 && m_endEffector.getAngle().getDegrees() <= 0)
         || (axis > 0 && m_endEffector.getAngle().getDegrees() >= 84)) {
       m_endEffector.set(0);
