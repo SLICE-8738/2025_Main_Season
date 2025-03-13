@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,6 +35,7 @@ import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.commands.Scoring.AlignAndScoreCoral;
+import frc.robot.commands.Scoring.IntakeAdjustment;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.ResetRelativeEncoders;
 import frc.robot.commands.Scoring.ScoreAlgae;
@@ -117,6 +119,7 @@ public class RobotContainer {
   public final ToAlgae m_toAlgaeLower;
   public final ScoreAlgae m_scoreAlgae;
   public final ToStow m_elevatorToStow;
+  public final IntakeAdjustment m_intakeAdjustment;
 
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
@@ -157,14 +160,16 @@ public class RobotContainer {
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-        /*m_autoSelector = new AutoSelector(
-            m_drivetrain,
-            new Drivetrain(
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO(),
-              new SimSwerveModuleIO())
-            null);*/
+        /*
+         * m_autoSelector = new AutoSelector(
+         * m_drivetrain,
+         * new Drivetrain(
+         * new SimSwerveModuleIO(),
+         * new SimSwerveModuleIO(),
+         * new SimSwerveModuleIO(),
+         * new SimSwerveModuleIO())
+         * null);
+         */
         break;
       case SIM:
         m_drivetrain = new Drivetrain(
@@ -172,15 +177,19 @@ public class RobotContainer {
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO());
-        //m_autoSelector = new AutoSelector(m_drivetrain, null);
+        // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
       default:
         m_drivetrain = new Drivetrain(
-            new SwerveModuleIO() {},
-            new SwerveModuleIO() {},
-            new SwerveModuleIO() {},
-            new SwerveModuleIO() {});
-        //m_autoSelector = new AutoSelector(m_drivetrain, null);
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            });
+        // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
 
@@ -190,7 +199,7 @@ public class RobotContainer {
     m_sourceIntake = new SourceIntake();
 
     m_leds = new LEDs();
-    
+
     m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector);
     m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
@@ -201,7 +210,7 @@ public class RobotContainer {
     // ==========================
 
     /* Scoring */
-    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL,false);
+    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false);
     m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true);
     m_setLevelOne = new SetLevel(Level.LEVEL1, LevelType.CORAL);
     m_setLevelTwo = new SetLevel(Level.LEVEL2, LevelType.CORAL);
@@ -213,6 +222,7 @@ public class RobotContainer {
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
     m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector, false);
     m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector, true);
+    m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
@@ -221,14 +231,17 @@ public class RobotContainer {
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
     m_reefAlign = new DeferredCommand(
-      () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
-      Set.of(m_drivetrain));
-    /*m_coralStationAlign = new DeferredCommand(
-      () -> AutoBuilder.pathfindToPoseFlipped(
-          CoralPositionSelector.getSelectedCoralStationPosition().fieldPosition,
-          Constants.kDrivetrain.PATH_CONSTRAINTS,
-          0.5).andThen(new CoralPositionAlignCommand(m_drivetrain, CoralPositionSelector.getSelectedCoralStationPosition())),
-      Set.of(m_drivetrain));*/
+        () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
+        Set.of(m_drivetrain));
+    /*
+     * m_coralStationAlign = new DeferredCommand(
+     * () -> AutoBuilder.pathfindToPoseFlipped(
+     * CoralPositionSelector.getSelectedCoralStationPosition().fieldPosition,
+     * Constants.kDrivetrain.PATH_CONSTRAINTS,
+     * 0.5).andThen(new CoralPositionAlignCommand(m_drivetrain,
+     * CoralPositionSelector.getSelectedCoralStationPosition())),
+     * Set.of(m_drivetrain));
+     */
     m_coralStationAlign = new CoralStationAlignCommand(m_drivetrain, driverController);
 
     /* End Effector */
@@ -306,7 +319,8 @@ public class RobotContainer {
     Button.rightBumper1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)));
 
-    Button.circle1.onTrue(new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher, () -> (Elevator.getAlgaeLevel().height - m_elevator.getPositions()[0] < 0)));
+    Button.circle1.onTrue(new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher,
+        () -> (Elevator.getAlgaeLevel().height - m_elevator.getPositions()[0] < 0)));
     Button.triangle1.onTrue(m_clampAlgae);
 
     Button.cross1.onTrue(m_indexCoral);
@@ -319,8 +333,8 @@ public class RobotContainer {
     /* End Effector */
     Button.triangle2.onTrue(m_bumpAlgae);
 
-    Button.rightTrigger2.whileTrue(m_IntakeAlgae);
-    Button.leftTrigger2.whileTrue(m_OutakeAlgae);
+    Button.rightTrigger2.onTrue(m_intakeAdjustment);
+    Button.rightTrigger2.onFalse(m_indexCoral);
 
     /* Elevator */
     Button.controlPadDown2.onTrue(m_setLevelOne);
@@ -330,7 +344,7 @@ public class RobotContainer {
     Button.square2.onTrue(m_elevatorToStow);
 
     Button.start.onTrue(new InstantCommand(
-      () -> m_elevator.setEncoderPosition(0), m_elevator));
+        () -> m_elevator.setEncoderPosition(0), m_elevator));
 
     Button.cross2.onTrue(m_goToSourceIntakeAngle1);
     Button.circle2.onTrue(m_goToSourceIntakeAngle2);
