@@ -38,14 +38,13 @@ public class CoralLEDs extends Command {
     m_leds.setAllHSV(orange[0], orange[1], orange[2]); // Set the LEDs to orange initially.
 
     // Begin timer
-    timer.reset();
-    timer.start();
+    timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_endEffector.checkSensorsIndexing()[0] == true){ // We need the front sensor of the end effector to check the coral status.
+    if (m_endEffector.checkSensorsIndexing()[0]){ // We need the front sensor of the end effector to check the coral status.
       // Flash the lights green if the coral is within the robot
       if ((timer.get() % 1) > 0.5){
         m_leds.setAllHSV(green[0], green[1], green[2]); // Make it green
