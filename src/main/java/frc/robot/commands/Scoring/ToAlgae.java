@@ -22,9 +22,11 @@ public class ToAlgae extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
 
     if (endEffectorFirst) {
-      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE ,endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
+      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, endEffectorFirst).withTimeout(1.5),
+          new MotorIntakeAlgae(endEffector));
     } else {
-      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, endEffectorFirst).withTimeout(2.0), new MotorIntakeAlgae(endEffector));
+      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, endEffectorFirst).withTimeout(1.5),
+          new MotorIntakeAlgae(endEffector));
     }
   }
 }

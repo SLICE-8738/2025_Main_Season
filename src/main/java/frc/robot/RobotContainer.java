@@ -367,6 +367,7 @@ public class RobotContainer {
   }
 
   public Command getTeleopInitCommand() {
-    return new ResetRelativeEncoders(m_endEffector, m_sourceIntake);
+    return new SequentialCommandGroup(new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
+        m_goToSourceIntakeAngle1);
   }
 }
