@@ -5,19 +5,23 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ScoreCoral extends Command {
-  EndEffector endEffector;
-  boolean frontSensor;
+
+  private final EndEffector endEffector;
+
+  private boolean frontSensor;
   // Boolean middleSensor;
-  boolean backSensor;
+  private boolean backSensor;
 
   /** Creates a new ScoreCoral. */
   public ScoreCoral(EndEffector endEffector) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.endEffector = endEffector;
+
     addRequirements(endEffector);
 
   }
@@ -36,8 +40,10 @@ public class ScoreCoral extends Command {
     frontSensor = sensorGroup[0];
     // middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
-    endEffector.setPlacementMotor(-0.5);
 
+    Level level = EndEffector.getCoralLevel();
+
+    endEffector.setPlacementMotor(level == Level.LEVEL1 || level == Level.LEVEL4 ? -0.25 : -0.5);
   }
 
   // Called once the command ends or is interrupted.

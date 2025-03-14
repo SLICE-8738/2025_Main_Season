@@ -326,7 +326,7 @@ public final class Constants {
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.73, 16, "Algae 2"),
       LEVEL3(0.838, 81, "Level 3"),
-      LEVEL4(1.625, 51, "Level 4");
+      LEVEL4(1.645, 51, "Level 4");
 
       public double height;
       public double angle;

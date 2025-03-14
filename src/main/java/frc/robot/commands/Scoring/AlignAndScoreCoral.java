@@ -52,7 +52,7 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
           () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
             && drivetrain.getPose().getTranslation().getDistance(coralPositionAlign.getTargetPose().getTranslation()) <= 0.9),
-      new InstantCommand(()-> autoMoveToLevel.schedule()),
+      new InstantCommand(autoMoveToLevel::schedule),
       coralPositionAlign);
 
   }

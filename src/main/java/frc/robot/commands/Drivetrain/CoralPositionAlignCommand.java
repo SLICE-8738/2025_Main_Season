@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.kDrivetrain.CoralPosition;
@@ -25,6 +26,8 @@ public class CoralPositionAlignCommand extends Command {
   private final Pose2d targetPose;
 
   private final PIDController distanceController, rotationController;
+
+  private final Timer timer;
 
   public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double xDistance) {
 
@@ -49,6 +52,8 @@ public class CoralPositionAlignCommand extends Command {
       : FlippingUtil.flipFieldPose(position.fieldPosition).plus(new Transform2d(
         new Translation2d(xDistance, position.yAlignPosition), 
         new Rotation2d()));
+
+    timer = new Timer();
         
   }
 
@@ -57,6 +62,7 @@ public class CoralPositionAlignCommand extends Command {
   public void initialize() {
 
     m_drivetrain.addField2dPose(targetPose, "Auto Align Target Pose");
+    timer.restart();
 
   }
 
@@ -95,7 +101,7 @@ public class CoralPositionAlignCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return distanceController.atSetpoint();
+    return distanceController.atSetpoint() && timer.hasElapsed(0.5);
   }
 
   public Pose2d getTargetPose() {

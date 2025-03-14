@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -98,11 +97,8 @@ public class RobotContainer {
   public final RunDutyCycleCommand m_setDrivePercentOutput;
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
-  public final Command m_reefAlign;
+  public final Command m_alignAndScoreCoral;
   public final Command m_coralStationAlign;
-
-  /* Elevator */
-  public final ManualElevator m_manualElevator;
 
   /* Scoring */
   public final SetLevel m_setLevelOne;
@@ -122,6 +118,10 @@ public class RobotContainer {
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
   public final SequentialCommandGroup m_climb;
+
+  /* Elevator */
+  public final ManualElevator m_manualElevator;
+
   /* End Effector */
   public final IndexSequence m_indexCoral;
   public final BumpAlgae m_bumpAlgae;
@@ -194,11 +194,10 @@ public class RobotContainer {
         break;
     }
 
-    m_climber = new Climber();
-    m_elevator = new Elevator();
     m_endEffector = new EndEffector();
+    m_elevator = new Elevator();
     m_sourceIntake = new SourceIntake();
-
+    m_climber = new Climber();
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector);
@@ -231,7 +230,7 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    m_reefAlign = new DeferredCommand(
+    m_alignAndScoreCoral = new DeferredCommand(
         () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
         Set.of(m_drivetrain));
     /*
@@ -313,7 +312,7 @@ public class RobotContainer {
     /* Drivetrain */
     Button.options.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
-    Button.leftTrigger1.whileTrue(m_reefAlign);
+    Button.leftTrigger1.whileTrue(m_alignAndScoreCoral);
     Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));
 
     /* Elevator */
