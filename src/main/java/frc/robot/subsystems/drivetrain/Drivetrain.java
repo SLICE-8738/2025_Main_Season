@@ -227,23 +227,19 @@ public class Drivetrain extends SubsystemBase {
 
     m_odometry.update(getHeading(), getModulePositions());
 
-    if (!DriverStation.isAutonomousEnabled()) {
+    for (String side : new String[] {"left", "right"}) {
 
-      for (String side : new String[] {"left", "right"}) {
+      LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
 
-        LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
+      if (estimate.tagCount > 0) {
 
-        if (estimate.tagCount >= 1) {
+        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
 
-          Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
-
-          if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
+        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
           
-            m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
+          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
           
-          }
-
         }
 
       }
