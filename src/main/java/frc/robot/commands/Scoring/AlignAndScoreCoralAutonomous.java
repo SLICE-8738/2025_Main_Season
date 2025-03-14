@@ -18,6 +18,7 @@ import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
+import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -52,7 +53,9 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
         new ConditionalCommand(
             new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
             new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
-            () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))));
+            () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))),
+      new ScoreCoral(endEffector),
+      new ToStow(endEffector, elevator));
 
   }
   

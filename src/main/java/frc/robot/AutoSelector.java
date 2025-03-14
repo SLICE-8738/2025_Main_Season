@@ -12,18 +12,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 //import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.Constants.kElevator.Level;
-import frc.robot.Constants.kElevator.LevelType;
-import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
+import frc.robot.commands.Scoring.AlignAndGetCoralAutonomous;
 import frc.robot.commands.Scoring.AlignAndScoreCoralAutonomous;
-import frc.robot.commands.Scoring.MoveToLevel;
-import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -70,7 +62,10 @@ public class AutoSelector {
     public enum Mode {
 
         TEST_PATH("Test Path", false),
-        AUTO_BUILDER("Auto Builder", false);
+        AUTO_BUILDER("Auto Builder", false),
+        SCORE_1_CORAL_L4("Score 1 Coral L4", false),
+        SCORE_4_CORAL_L4_FRONT_LEFT("Score 4 Coral L4 Front Left", false),
+        SCORE_4_CORAL_L4_FRONT_RIGHT("Score 4 Coral L4 Front Right", false);
 
         public final String name;
         public final boolean useStartingPosition;
@@ -112,7 +107,13 @@ public class AutoSelector {
         modeChooser = new SendableChooser<Mode>();
 
         modeChooser.setDefaultOption(Mode.TEST_PATH.name, Mode.TEST_PATH);
-        modeChooser.addOption(Mode.AUTO_BUILDER.name, Mode.AUTO_BUILDER);
+
+        for (int i = 1; i < Mode.values().length; i++) {
+
+            Mode mode = Mode.values()[i];
+            modeChooser.addOption(mode.name, mode);
+
+        }
 
         modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
@@ -145,16 +146,13 @@ public class AutoSelector {
 
             CoralPosition position = CoralPosition.values()[i];
 
-            for (Level level : Level.values()) {
+            for (int j : new int[] {3, 5, 7, 8}) {
+
+                Level level = Level.values()[j];
 
                 NamedCommands.registerCommand(
                     "Score Coral " + position.name + " " + level.name,
-                    new AlignAndScoreCoralAutonomous(
-                        drivetrain,
-                        elevator,
-                        endEffector,
-                        position,
-                        level));
+                    new AlignAndScoreCoralAutonomous(drivetrain, elevator, endEffector, position, level));
 
                 autoPoses.put("Score Coral " + position.name + " " + level.name, position.fieldPosition);
 
@@ -169,13 +167,7 @@ public class AutoSelector {
             
                 NamedCommands.registerCommand(
                     "Get Coral " + position.name, 
-                    AutoBuilder.pathfindToPoseFlipped(
-                        position.fieldPosition,
-                        Constants.kDrivetrain.PATH_CONSTRAINTS,
-                        1).andThen(new CoralPositionAlignCommand(
-                            drivetrain, 
-                            position, 
-                            Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION)));
+                    new AlignAndGetCoralAutonomous(drivetrain, elevator, endEffector, position));
 
                 autoPoses.put("Get Coral " + position.name, position.fieldPosition);
 

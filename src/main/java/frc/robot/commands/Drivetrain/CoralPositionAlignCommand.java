@@ -26,7 +26,6 @@ public class CoralPositionAlignCommand extends Command {
 
   private final PIDController distanceController, rotationController;
 
-  /** Creates a new CoralPositionAlignCommand. */
   public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double xDistance) {
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,6 +37,8 @@ public class CoralPositionAlignCommand extends Command {
     rotationController = new PIDController(3.5, 0, 0);
 
     distanceController.setSetpoint(0);
+    distanceController.setTolerance(0.02);
+
     rotationController.setSetpoint(position.fieldPosition.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
 
@@ -94,7 +95,7 @@ public class CoralPositionAlignCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return distanceController.atSetpoint();
   }
 
   public Pose2d getTargetPose() {

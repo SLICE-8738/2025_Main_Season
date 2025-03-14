@@ -34,6 +34,7 @@ import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.ScoreCoral;
+import frc.robot.commands.LEDs.CoralLEDs;
 import frc.robot.commands.Scoring.AlignAndScoreCoral;
 import frc.robot.commands.Scoring.IntakeAdjustment;
 import frc.robot.commands.Scoring.MoveToLevel;
@@ -72,9 +73,6 @@ public class RobotContainer {
   // ==========================
   // Subsystems
   // ==========================
-
-  // public final Drivetrain m_drivetrain;
-  // public final LEDs m_leds;
 
   // public final AutoSelector m_autoSelector;
   // public final ShuffleboardData m_shuffleboardData;
@@ -138,6 +136,9 @@ public class RobotContainer {
   public final ManualRotateSourceIntake m_manualSourceIntake;
   public final RotateSourceIntake m_goToSourceIntakeAngle1;
   public final RotateSourceIntake m_goToSourceIntakeAngle2;
+
+  /* LEDs */
+  public final CoralLEDs m_coralLEDs;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -270,6 +271,9 @@ public class RobotContainer {
     // a cage.
     m_climb = new SequentialCommandGroup(new WaitCommand(0.5), new ClimbCommand(m_climber));
 
+    /* LEDs */
+    m_coralLEDs = new CoralLEDs(m_leds, m_endEffector);
+
     /* Tests */
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
     m_antiGravityTest = new InstantCommand(() -> m_endEffector.setVoltage(-m_endEffector.normalKG), m_endEffector);
@@ -282,6 +286,7 @@ public class RobotContainer {
     m_endEffector.setDefaultCommand(m_manualEndEffector);
     m_elevator.setDefaultCommand(m_manualElevator);
     m_sourceIntake.setDefaultCommand(m_manualSourceIntake);
+    m_leds.setDefaultCommand(m_coralLEDs);
 
   }
 
@@ -361,9 +366,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
-    // return m_autoSelector.getAutoRoutine();
-    return null;
+    return m_autoSelector.getAutoRoutine();
   }
 
   public Command getTeleopInitCommand() {

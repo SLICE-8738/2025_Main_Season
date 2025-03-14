@@ -53,7 +53,7 @@ private final DutyCycleEncoder m_absoluteEncoder;
   }
 
   public void resetRelativeEncoder(){
-    if(m_absoluteEncoder.get() - (Constants.kSourceIntake.ABSOLUTE_ENCODER_ID - 5) < 0){
+    if(m_absoluteEncoder.get() - (Constants.kSourceIntake.ABSOLUTE_ENCODER_OFFSET- 5) < 0){
       setEncoderPosition(m_absoluteEncoder.get() - Constants.kSourceIntake.ABSOLUTE_ENCODER_OFFSET + Constants.kSourceIntake.ABSOLUTE_ENCODER_RANGE);
     } else{
       setEncoderPosition(m_absoluteEncoder.get() - Constants.kSourceIntake.ABSOLUTE_ENCODER_OFFSET);

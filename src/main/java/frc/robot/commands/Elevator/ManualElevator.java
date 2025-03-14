@@ -33,7 +33,7 @@ public class ManualElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double axis = MathUtil.applyDeadband(-m_controller.getRawAxis(1), 0.1);
+    double axis = m_controller == null ? 0 : MathUtil.applyDeadband(-m_controller.getRawAxis(1), 0.1);
 
     if (axis == 0) {
       if(!maintaining){
