@@ -5,7 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-
+import frc.robot.Constants.Mode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -81,7 +81,7 @@ public class Drivetrain extends SubsystemBase {
 
     Timer.delay(1.0);
     resetModulesToAbsolute();
-    resetHeading();
+    zeroHeading();
 
     m_field2d = new Field2d();
 
@@ -89,6 +89,11 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putData(m_field2d);
 
     DriverStation.waitForDsConnection(60);
+
+    if (RobotBase.isReal()) {
+      Constants.ADVANTAGE_KIT_MODE = Mode.REAL;
+    }
+
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
@@ -97,7 +102,9 @@ public class Drivetrain extends SubsystemBase {
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.1, 0.1, 0.1));
 
-    fieldOrientedOffset = new Rotation2d();
+    resetHeading(getPose().getRotation().minus(Rotation2d.fromDegrees(180)));
+
+    fieldOrientedOffset = Rotation2d.fromDegrees(180);
 
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
@@ -229,7 +236,7 @@ public class Drivetrain extends SubsystemBase {
 
     for (String side : new String[] {"left", "right"}) {
 
-      LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().minus(fieldOrientedOffset).getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().getDegrees(), 0, 0, 0, 0, 0);
       LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
 
       if (estimate.tagCount > 0) {
@@ -238,7 +245,7 @@ public class Drivetrain extends SubsystemBase {
 
         if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
           
-          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading().minus(fieldOrientedOffset)), estimate.timestampSeconds);
+          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading()), estimate.timestampSeconds);
           
         }
 
@@ -473,9 +480,18 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Resets the gyro yaw axis to a heading of 0.
+   * Resets the gyro yaw axis to the given angle.
    */
-  public void resetHeading() {
+  public void resetHeading(Rotation2d angle) {
+
+    m_gyro.setYaw(angle.getMeasure());
+
+  }
+
+  /**
+   * Resets the gyro yaw axis to 0.
+   */
+  public void zeroHeading() {
 
     m_gyro.reset();
 

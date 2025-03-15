@@ -18,7 +18,7 @@ public class IntakeAdjustment extends ParallelCommandGroup {
   public IntakeAdjustment(EndEffector endEffector, SourceIntake sourceIntake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InstantCommand(() -> endEffector.setPlacementMotor(.1)),
+    addCommands(new InstantCommand(() -> endEffector.setPlacementMotor(.1), endEffector),
         new RotateSourceIntake(sourceIntake, 1, 1));
   }
 }

@@ -7,6 +7,8 @@ package frc.robot.commands.LEDs;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import frc.robot.Constants;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.LEDs;
 
@@ -35,7 +37,9 @@ public class CoralLEDs extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_leds.setAllHSV(orange[0], orange[1], orange[2]); // Set the LEDs to orange initially.
+    for (int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
+      m_leds.setLEDhsv(i, orange[0], orange[1], orange[2]);
+    }
 
     // Begin timer
     timer.restart();
@@ -47,28 +51,42 @@ public class CoralLEDs extends Command {
     if (m_endEffector.checkSensorsIndexing()[0]){ // We need the front sensor of the end effector to check the coral status.
       // Flash the lights green if the coral is within the robot
       if ((timer.get() % 1) > 0.5){
-        m_leds.setAllHSV(green[0], green[1], green[2]); // Make it green
+        //m_leds.setAllHSV(green[0], green[1], green[2]); // Make it green
+        for (int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
+          m_leds.setLEDhsv(i, green[0], green[1], green[2]);
+        }
       }
       else {
-        m_leds.setAll(Color.kBlack); // Make it black
+        for (int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
+          m_leds.setAll(Color.kBlack);
+        }
       }
     }
     else {
       // If the coral is outside of the robot,
-      m_leds.setAllHSV(orange[0], orange[1], orange[2]); // Keep the robot orange.
+      for (int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
+          m_leds.setLEDhsv(i, orange[0], orange[1], orange[2]);
+      }
     }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_leds.setAllHSV(orange[0], orange[1], orange[2]); // Set it to orange when the command finishes.
+  public void end(boolean interrupted) {      
+    // Set it all to orange when the command finishes
+    for (int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
+      m_leds.setLEDhsv(i, orange[0], orange[1], orange[2]);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override
+  public boolean runsWhenDisabled() {
+    return true;
   }
 }

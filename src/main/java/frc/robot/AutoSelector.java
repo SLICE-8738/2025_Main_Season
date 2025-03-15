@@ -18,6 +18,7 @@ import frc.robot.commands.Scoring.AlignAndGetCoralAutonomous;
 import frc.robot.commands.Scoring.AlignAndScoreCoralAutonomous;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.SourceIntake;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 //import java.io.File;
@@ -61,9 +62,9 @@ public class AutoSelector {
 
     public enum Mode {
 
+        SCORE_1_CORAL_L4("Score 1 Coral L4", false),
         TEST_PATH("Test Path", false),
         AUTO_BUILDER("Auto Builder", false),
-        SCORE_1_CORAL_L4("Score 1 Coral L4", false),
         SCORE_4_CORAL_L4_FRONT_LEFT("Score 4 Coral L4 Front Left", false),
         SCORE_4_CORAL_L4_FRONT_RIGHT("Score 4 Coral L4 Front Right", false);
 
@@ -93,7 +94,7 @@ public class AutoSelector {
 
     private final Drivetrain m_drivetrain, m_simDrivetrain;
 
-    public AutoSelector(Drivetrain drivetrain, Drivetrain simDrivetrain, Elevator elevator, EndEffector endEffector) {
+    public AutoSelector(Drivetrain drivetrain, Drivetrain simDrivetrain, Elevator elevator, EndEffector endEffector, SourceIntake sourceIntake) {
 
         m_drivetrain = drivetrain;
         m_simDrivetrain = simDrivetrain;
@@ -106,7 +107,7 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.setDefaultOption(Mode.TEST_PATH.name, Mode.TEST_PATH);
+        modeChooser.setDefaultOption(Mode.SCORE_1_CORAL_L4.name, Mode.SCORE_1_CORAL_L4);
 
         for (int i = 1; i < Mode.values().length; i++) {
 

@@ -96,9 +96,7 @@ public class LEDs extends SubsystemBase {
   }
 
   public LEDMode getSelectedMode() {
-
     return ledModeChooser.getSelected();
-
   }
 
   @Override

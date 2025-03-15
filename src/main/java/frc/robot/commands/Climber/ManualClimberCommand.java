@@ -36,7 +36,7 @@ public class ManualClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = MathUtil.applyDeadband(controller.getRawAxis(2), 0.02);
+    double speed = MathUtil.applyDeadband(controller.getRawAxis(2), 0.1);
     climber.moveClimbMotor(speed);
   }
 

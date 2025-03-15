@@ -200,7 +200,7 @@ public class RobotContainer {
     m_climber = new Climber();
     m_leds = new LEDs();
 
-    m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector);
+    m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector, m_sourceIntake);
     m_coralPositionSelector = new CoralPositionSelector();
     m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_endEffector, m_autoSelector);
@@ -327,6 +327,7 @@ public class RobotContainer {
         () -> (Elevator.getAlgaeLevel().height - m_elevator.getPositions()[0] < 0)));
     Button.triangle1.onTrue(m_clampAlgae);
 
+    Button.cross1.onTrue(m_goToSourceIntakeAngle1);
     Button.cross1.onTrue(m_indexCoral);
     Button.rightTrigger1.onTrue(m_scoreCoral);
 
@@ -338,6 +339,7 @@ public class RobotContainer {
     Button.triangle2.onTrue(m_bumpAlgae);
 
     Button.rightTrigger2.onTrue(m_intakeAdjustment);
+    Button.rightTrigger2.onFalse(m_goToSourceIntakeAngle1);
     Button.rightTrigger2.onFalse(m_indexCoral);
 
     /* Elevator */
@@ -365,11 +367,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autoSelector.getAutoRoutine();
+    return new SequentialCommandGroup(
+      new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
+      new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE)).andThen(m_autoSelector.getAutoRoutine());
   }
 
   public Command getTeleopInitCommand() {
-    return new SequentialCommandGroup(new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
-        m_goToSourceIntakeAngle1);
+    return null;
+    //return new SequentialCommandGroup(
+    //    new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE));
   }
 }

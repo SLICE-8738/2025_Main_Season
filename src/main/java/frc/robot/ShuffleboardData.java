@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Map;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -88,7 +89,7 @@ public class ShuffleboardData {
         withSize(2, 1);
         
         //Displays the current heading of the robot in degrees on Shuffleboard
-        debugTab.addDouble("Drivetrain Heading", () -> drivetrain.getHeading().getDegrees()).
+        debugTab.addDouble("Drivetrain Heading", () -> MathUtil.inputModulus(drivetrain.getPose().getRotation().getDegrees(), 0, 360)).
         withWidget(BuiltInWidgets.kDial).
         withProperties(Map.of("Min", 0, "Max", 360)).
         withPosition(0, 0).

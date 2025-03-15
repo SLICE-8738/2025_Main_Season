@@ -34,7 +34,7 @@ import frc.slicelibs.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static final Mode ADVANTAGE_KIT_MODE = Mode.REAL;
+  public static Mode ADVANTAGE_KIT_MODE = Mode.REAL;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
@@ -376,8 +376,8 @@ public final class Constants {
   }
 
   public final class kLEDs {
-    public static final int LED_PWM_PORT = 0;
-    public static final int LED_LENGTH = 300;
+    public static final int LED_PWM_PORT = 9;
+    public static final int LED_LENGTH = 150;
   }
 
   public final class kEndEffector {
@@ -435,7 +435,7 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET = 364;
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
-    public static final double INTAKE_ANGLE = 25;
+    public static final double INTAKE_ANGLE = 27;
     public static final double CLIMB_ANGLE = 94;
 
     /* Motor Configs */

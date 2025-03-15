@@ -40,9 +40,11 @@ public class CoralPositionAlignCommand extends Command {
     rotationController = new PIDController(3.5, 0, 0);
 
     distanceController.setSetpoint(0);
-    distanceController.setTolerance(0.02);
+    distanceController.setTolerance(0.03);
 
-    rotationController.setSetpoint(position.fieldPosition.getRotation().getDegrees());
+    rotationController.setSetpoint(DriverStation.getAlliance().get() == Alliance.Blue ? 
+      position.fieldPosition.getRotation().getDegrees()
+      : FlippingUtil.flipFieldPose(position.fieldPosition).getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
 
     targetPose = DriverStation.getAlliance().get() == Alliance.Blue ? 
@@ -101,7 +103,7 @@ public class CoralPositionAlignCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return distanceController.atSetpoint() && timer.hasElapsed(0.5);
+    return DriverStation.isAutonomousEnabled() ? distanceController.atSetpoint() && timer.hasElapsed(0.5) : false;
   }
 
   public Pose2d getTargetPose() {
