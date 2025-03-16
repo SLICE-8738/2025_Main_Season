@@ -5,7 +5,8 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.Mode;
+import frc.robot.Constants.kDrivetrain.CoralPosition;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -64,6 +65,8 @@ public class Drivetrain extends SubsystemBase {
 
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
+
+  private CoralPosition lastCoralPosition;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -237,9 +240,17 @@ public class Drivetrain extends SubsystemBase {
 
       if (estimate.tagCount > 0) {
 
+        for (int tagID : Constants.kDrivetrain.NON_REEF_APRILTAG_IDS) {
+
+          if (LimelightHelpers.getFiducialID("limelight-" + side) == tagID) {
+            return m_odometry.getEstimatedPosition();
+          }
+
+        }
+
         Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
 
-        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3) {
+        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3.5) {
           
           m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading()), estimate.timestampSeconds);
           
@@ -493,7 +504,6 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  @AutoLogOutput(key = "Drivetrain/Chassis Speeds")
   /**
    * Calculates and returns the current chassis speeds of the drivetrain using
    * the average forward and sideways velocities of the individual swerve modules
@@ -504,6 +514,18 @@ public class Drivetrain extends SubsystemBase {
   public ChassisSpeeds getChassisSpeeds() {
 
     return Constants.kDrivetrain.kSwerveKinematics.toChassisSpeeds(getModuleStates());
+
+  }
+
+  @AutoLogOutput(key = "Drivetrain/Speed")
+  /**
+   * Calculates and returns the speed of the drivetrain.
+   * 
+   * @return The current speed of the drivetrain.
+   */
+  public double getSpeed() {
+
+    return Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond);
 
   }
 
@@ -594,6 +616,18 @@ public class Drivetrain extends SubsystemBase {
       return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 235 : 125);
 
     }
+
+  }
+
+  public void setLastCoralPosition(CoralPosition position) {
+
+    lastCoralPosition = position;
+
+  }
+
+  public CoralPosition getLastCoralPosition() {
+
+    return lastCoralPosition;
 
   }
 

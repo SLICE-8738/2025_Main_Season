@@ -4,8 +4,21 @@
 
 package frc.robot.commands.Scoring;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+import java.util.List;
+import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
+import com.pathplanner.lib.path.RotationTarget;
+import com.pathplanner.lib.util.FlippingUtil;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -31,14 +44,34 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
       position, 
       Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION);
 
+    Timer timer = new Timer();
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(timer::restart),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,
-        0.5).until(
-          () -> drivetrain.getPose().getTranslation().getDistance(coralPositionAlign.getTargetPose().getTranslation()) <= 0.9),
+        0.5).until(() -> drivetrain.getSpeed() <= 1.5 && timer.hasElapsed(2))
+      /*new DeferredCommand(() -> {
+        Pose2d midPoint = DriverStation.getAlliance().get() == Alliance.Blue ? 
+          drivetrain.getLastCoralPosition().fieldPosition
+          : FlippingUtil.flipFieldPose(drivetrain.getLastCoralPosition().fieldPosition);
+        Pose2d endPoint = DriverStation.getAlliance().get() == Alliance.Blue ? 
+          position.fieldPosition
+          : FlippingUtil.flipFieldPose(position.fieldPosition);
+  
+        return AutoBuilder.followPath(PathPlannerPath.fromPathPoints(
+          List.of(
+            new PathPoint(drivetrain.getPose().getTranslation(), new RotationTarget(0, drivetrain.getPose().getRotation())),
+            new PathPoint(midPoint.getTranslation(), new RotationTarget(0, midPoint.getRotation())),
+            new PathPoint(endPoint.getTranslation())
+          ),
+          Constants.kDrivetrain.PATH_CONSTRAINTS,
+          new GoalEndState(0.5, endPoint.getRotation())));},
+        Set.of(drivetrain)).until(
+          () -> drivetrain.getPose().getTranslation().getDistance(coralPositionAlign.getTargetPose().getTranslation()) <= 0.9)*/,
       new InstantCommand(new IndexSequence(endEffector, elevator, null)::schedule),
       coralPositionAlign,
       new WaitCommand(1.5));

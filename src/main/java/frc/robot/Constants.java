@@ -34,7 +34,7 @@ import frc.slicelibs.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static Mode ADVANTAGE_KIT_MODE = Mode.SIM;
+  public static Mode ADVANTAGE_KIT_MODE = Mode.REAL;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
@@ -210,15 +210,15 @@ public final class Constants {
     public static final double LEFT_BRANCH_Y_POSITION = 0.1651;
     public static final double RIGHT_BRANCH_Y_POSITION = -0.1651;
 
-    public static final double CORAL_STATION_LEFT_Y_POSITION = -0.25;
-    public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.25;
+    public static final double CORAL_STATION_LEFT_Y_POSITION = 0.25;
+    public static final double CORAL_STATION_RIGHT_Y_POSITION = -0.25;
 
     public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
     //public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef face)
     //public static final double X_DISTANCE_TO_CORAL_STATION = 0.55; // Robot-relative x distance from pathfinding target field position to coral station (coral station face)
     //public static final double NON_L4_X_DISTANCE_TO_REEF = 0.191; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
     public static final double L4_X_DISTANCE_TO_REEF = 0.28; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef face)
-    public static final double X_DISTANCE_TO_CORAL_STATION = 0.518; // Robot-relative x distance from pathfinding target field position to coral station (coral station face)
+    public static final double X_DISTANCE_TO_CORAL_STATION = -0.518; // Robot-relative x distance from pathfinding target field position to coral station (coral station face)
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
@@ -274,6 +274,8 @@ public final class Constants {
       }
 
     }
+
+    public static final int[] NON_REEF_APRILTAG_IDS = {13, 12, 16, 15, 14, 5, 4, 3, 2, 1};
 
   }
 
