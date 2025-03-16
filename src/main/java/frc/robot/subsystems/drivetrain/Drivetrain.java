@@ -90,10 +90,6 @@ public class Drivetrain extends SubsystemBase {
 
     DriverStation.waitForDsConnection(60);
 
-    if (RobotBase.isReal()) {
-      Constants.ADVANTAGE_KIT_MODE = Mode.REAL;
-    }
-
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 

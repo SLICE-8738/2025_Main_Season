@@ -34,7 +34,7 @@ import frc.slicelibs.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static Mode ADVANTAGE_KIT_MODE = Mode.REAL;
+  public static Mode ADVANTAGE_KIT_MODE = Mode.SIM;
   public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
   public static final REVConfigs REV_CONFIGS = new REVConfigs();
 
