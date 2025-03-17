@@ -43,7 +43,7 @@ public class ScoreCoral extends Command {
 
     Level level = EndEffector.getCoralLevel();
 
-    endEffector.setPlacementMotor(level == Level.LEVEL1 || level == Level.LEVEL4 ? -0.25 : -0.5);
+    endEffector.setPlacementMotor(-0.25);
   }
 
   // Called once the command ends or is interrupted.
