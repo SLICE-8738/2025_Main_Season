@@ -5,7 +5,6 @@
 package frc.robot.commands.Scoring;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ElevatorPositionSelector;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.subsystems.Elevator;
@@ -26,7 +25,7 @@ public class SetLevel extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    switch(levelType){
+    switch (levelType) {
       case SOURCE:
         EndEffector.setSourceLevel(level);
         Elevator.setSourceLevel(level);

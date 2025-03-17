@@ -41,8 +41,6 @@ public class ScoreCoral extends Command {
     // middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];
 
-    Level level = EndEffector.getCoralLevel();
-
     endEffector.setPlacementMotor(-0.25);
   }
 

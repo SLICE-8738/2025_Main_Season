@@ -3,7 +3,6 @@ package frc.robot.commands.Elevator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.ElevatorPositionSelector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.Constants.kElevator;
 import frc.robot.Constants.kElevator.Level;
@@ -27,7 +26,7 @@ public class MoveElevatorToLevel extends Command {
     }
 
     public void initialize() {
-        switch(m_levelType){
+        switch (m_levelType) {
             case SOURCE:
                 m_level = Elevator.getSourceLevel().height;
                 break;
@@ -38,8 +37,7 @@ public class MoveElevatorToLevel extends Command {
                 m_level = Elevator.getAlgaeLevel().height;
                 break;
         }
-        
-        
+
         if (m_level > m_elevator.getPositions()[0]) {
             movementDirection = true;
         }
@@ -47,9 +45,10 @@ public class MoveElevatorToLevel extends Command {
 
     public void execute() {
         m_elevator.moveTo(m_level);
-        SmartDashboard.putBoolean("Level Height", m_level  == Level.STOW.height);
+        SmartDashboard.putBoolean("Level Height", m_level == Level.STOW.height);
         if (m_level == Level.STOW.height
-                && Math.abs(m_elevator.getStatorCurrents()[0]) >= 30 && m_elevator.getPositions()[0] <= 0.1 && Math.abs(m_elevator.getVelocity()[0]) <= 0.01) {
+                && Math.abs(m_elevator.getStatorCurrents()[0]) >= 30 && m_elevator.getPositions()[0] <= 0.1
+                && Math.abs(m_elevator.getVelocity()[0]) <= 0.01) {
             m_elevator.setEncoderPosition(0);
         }
     }

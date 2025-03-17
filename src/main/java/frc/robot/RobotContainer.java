@@ -85,7 +85,6 @@ public class RobotContainer {
 
   public final AutoSelector m_autoSelector;
   public final CoralPositionSelector m_coralPositionSelector;
-  public final ElevatorPositionSelector m_elevatorPositionSelector;
   public final ShuffleboardData m_shuffleboardData;
 
   // ==========================
@@ -207,7 +206,6 @@ public class RobotContainer {
 
     m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector, m_sourceIntake);
     m_coralPositionSelector = new CoralPositionSelector();
-    m_elevatorPositionSelector = new ElevatorPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_endEffector, m_autoSelector);
 
     // ==========================
@@ -373,13 +371,15 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-      new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
-      new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE)).andThen(m_autoSelector.getAutoRoutine());
+        new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
+        new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE))
+        .andThen(m_autoSelector.getAutoRoutine());
   }
 
   public Command getTeleopInitCommand() {
     return null;
-    //return new SequentialCommandGroup(
-    //    new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE));
+    // return new SequentialCommandGroup(
+    // new RotateSourceIntake(m_sourceIntake, 2,
+    // Constants.kSourceIntake.INTAKE_ANGLE));
   }
 }
