@@ -35,19 +35,13 @@ public class PoseAlignCommand extends Command {
    *                          flipped to the red alliance side (given pose
    *                          must be for blue alliance)
    */
-  public PoseAlignCommand(Drivetrain drivetrain, Pose2d targetPose, boolean automaticallyFlip) {
+  public PoseAlignCommand(Drivetrain drivetrain, Pose2d targetPose) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
-
-    if (automaticallyFlip && DriverStation.getAlliance().get() == Alliance.Red) {
-      m_targetPose = FlippingUtil.flipFieldPose(targetPose);
-    }
-    else {
-      m_targetPose = targetPose;
-    }
+    m_targetPose = DriverStation.getAlliance().get() == Alliance.Blue ? targetPose : FlippingUtil.flipFieldPose(targetPose);
 
     distanceController = new PIDController(3.5, 0, 0);
     rotationController = new PIDController(3.5, 0, 0);

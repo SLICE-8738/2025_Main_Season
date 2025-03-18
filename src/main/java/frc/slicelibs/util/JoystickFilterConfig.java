@@ -1,4 +1,4 @@
-package frc.slicelibs.config;
+package frc.slicelibs.util;
 
 import frc.slicelibs.PolarJoystickFilter;
 

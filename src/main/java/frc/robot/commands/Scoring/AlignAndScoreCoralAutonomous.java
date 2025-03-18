@@ -44,12 +44,12 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
             Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
             : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
           position.yAlignPosition), 
-        new Rotation2d())),
-        false);
+        new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(() -> drivetrain.setAligningWithReef(true)),
       new InstantCommand(() -> drivetrain.setLastCoralPosition(position)),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,

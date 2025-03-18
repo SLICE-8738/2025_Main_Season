@@ -32,7 +32,7 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
   /** Creates a new AlignAndRemoveAlgae. */
   public AlignAndRemoveAlgae(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
 
-    AlignPosition position = AlignPositionSelector.getSelectedReefPosition();
+    AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
     int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
@@ -40,12 +40,10 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
         new Translation2d(
           Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF, 
           0), 
-        new Rotation2d())),
-      true);
+        new Rotation2d())));
     PoseAlignCommand moveAwayFromReef = new PoseAlignCommand(
       drivetrain, 
-      position.fieldPosition, 
-      true);
+      position.fieldPosition);
     ConditionalCommand moveToLevel = new ConditionalCommand(
       new ToAlgae(elevator, endEffector, true), 
       new ToAlgae(elevator, endEffector, false),
@@ -54,6 +52,7 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(() -> drivetrain.setAligningWithReef(true)),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,

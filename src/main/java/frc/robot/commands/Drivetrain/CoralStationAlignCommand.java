@@ -14,7 +14,7 @@ import frc.robot.Button;
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
-import frc.slicelibs.config.JoystickFilterConfig;
+import frc.slicelibs.util.JoystickFilterConfig;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralStationAlignCommand extends Command {

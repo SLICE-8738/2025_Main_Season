@@ -34,7 +34,7 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
   /** Creates a new AlignAndScoreCoral. */
   public AlignAndScoreCoral(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
 
-    AlignPosition position = AlignPositionSelector.getSelectedReefPosition();
+    AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
     int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
@@ -44,8 +44,7 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
             Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
             : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
           position.yAlignPosition), 
-        new Rotation2d())),
-        true);
+        new Rotation2d())));
     ConditionalCommand moveToLevel = new ConditionalCommand(
       new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
       new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
@@ -54,6 +53,7 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(() -> drivetrain.setAligningWithReef(true)),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,

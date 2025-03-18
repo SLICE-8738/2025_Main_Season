@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
@@ -156,6 +158,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
     SmartDashboard.putNumber("Absolute End Effector Angle", encoder.get());
     SmartDashboard.putNumber("Relative End Effector Angle", getPositions()[0]);
     SmartDashboard.putBoolean("SensorFront", frontSensor.get());
@@ -167,6 +170,6 @@ public class EndEffector extends TalonFXPositionalSubsystem {
         : getLevelType().equals(LevelType.ALGAE) ? getAlgaeLevel().angle : getSourceLevel().angle);
     SmartDashboard.putNumber("Motor Target Angle", getTargetPosition());
 
-    // This method will be called once per scheduler run
+    Logger.recordOutput("End Effector/Current Command", getCurrentCommand().getName());
   }
 }

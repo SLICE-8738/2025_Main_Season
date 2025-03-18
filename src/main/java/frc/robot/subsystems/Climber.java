@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -46,5 +48,6 @@ public class Climber extends SubsystemBase{
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Climb Angle", getPosition());
+    Logger.recordOutput("Climber/Current Command", getCurrentCommand().getName());
   }
 }

@@ -51,12 +51,12 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
         new Translation2d(
           Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
           position.yAlignPosition), 
-        new Rotation2d())),
-        false);
+        new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new InstantCommand(() -> drivetrain.setAligningWithReef(false)),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,

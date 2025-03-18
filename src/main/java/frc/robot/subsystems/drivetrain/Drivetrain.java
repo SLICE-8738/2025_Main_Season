@@ -67,7 +67,7 @@ public class Drivetrain extends SubsystemBase {
 
   private AlignPosition lastCoralPosition;
 
-  private boolean aligningWithReef;
+  private boolean aligningWithReef = true;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -104,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
 
     resetHeading(getPose().getRotation().minus(Rotation2d.fromDegrees(180)));
 
-    fieldOrientedOffset = Rotation2d.fromDegrees(180);
+    fieldOrientedOffset = new Rotation2d();
 
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
@@ -159,6 +159,8 @@ public class Drivetrain extends SubsystemBase {
       gyroYawSignal,
       gyroYawVelocitySignal
     );
+
+    Logger.recordOutput("Drivetrain/Current Command", getCurrentCommand().getName());
 
   }
 
@@ -234,7 +236,7 @@ public class Drivetrain extends SubsystemBase {
 
     m_odometry.update(getHeading(), getModulePositions());
 
-    for (String side : new String[] {"left", "right", "back"}) {
+    for (String side : new String[] {"left", "right"}) {
 
       LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().getDegrees(), 0, 0, 0, 0, 0);
       LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);

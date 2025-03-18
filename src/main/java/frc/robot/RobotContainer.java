@@ -35,6 +35,7 @@ import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.commands.LEDs.CoralLEDs;
+import frc.robot.commands.Scoring.AlignAndRemoveAlgae;
 import frc.robot.commands.Scoring.AlignAndScoreCoral;
 import frc.robot.commands.Scoring.IntakeAdjustment;
 import frc.robot.commands.Scoring.MoveToLevel;
@@ -98,6 +99,7 @@ public class RobotContainer {
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
   public final Command m_alignAndScoreCoral;
+  public final Command m_alignAndRemoveAlgae;
   public final Command m_coralStationAlign;
 
   /* Scoring */
@@ -186,14 +188,10 @@ public class RobotContainer {
         break;
       default:
         m_drivetrain = new Drivetrain(
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            });
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {});
         // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
@@ -226,6 +224,10 @@ public class RobotContainer {
     m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector, false);
     m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector, true);
     m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
+    m_alignAndScoreCoral = new DeferredCommand(
+      () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
+      Set.of(m_drivetrain));
+    m_alignAndRemoveAlgae = new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector);
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
@@ -233,9 +235,6 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    m_alignAndScoreCoral = new DeferredCommand(
-        () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
-        Set.of(m_drivetrain));
     /*
      * m_coralStationAlign = new DeferredCommand(
      * () -> AutoBuilder.pathfindToPoseFlipped(
@@ -316,6 +315,7 @@ public class RobotContainer {
     Button.options.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_alignAndScoreCoral);
+    Button.square1.whileTrue(m_alignAndRemoveAlgae);
     Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));
 
     /* Elevator */

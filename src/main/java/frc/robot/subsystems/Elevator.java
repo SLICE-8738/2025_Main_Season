@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 //import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,7 +19,7 @@ public class Elevator extends TalonFXPositionalSubsystem {
   // private DigitalInput topLimitSwitch;
   private static Level m_coralLevel = Level.LEVEL1;
   private static Level m_algaeLevel = Level.ALGAE1;
-  private static Level m_sourceLevel;
+  private static Level m_sourceLevel = Level.SOURCE;
   private static LevelType m_levelType = LevelType.SOURCE;
 
   public Elevator() {
@@ -132,5 +134,6 @@ public class Elevator extends TalonFXPositionalSubsystem {
     SmartDashboard.putBoolean("Height Bool", getPositions()[0] <= 0.1);
     SmartDashboard.putBoolean("Level Type", m_levelType.equals(LevelType.SOURCE));
 
+    Logger.recordOutput("Elevator/Current Command", getCurrentCommand().getName());
   }
 }

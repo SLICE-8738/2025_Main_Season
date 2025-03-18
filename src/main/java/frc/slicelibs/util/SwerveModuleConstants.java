@@ -1,4 +1,4 @@
-package frc.slicelibs.config;
+package frc.slicelibs.util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 

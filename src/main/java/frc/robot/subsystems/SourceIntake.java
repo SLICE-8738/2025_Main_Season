@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -66,5 +68,7 @@ private final DutyCycleEncoder m_absoluteEncoder;
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Source Intake Relative Angle", getPositions()[0]);
     SmartDashboard.putNumber("Source Absolute Angle", m_absoluteEncoder.get());
+
+    Logger.recordOutput("Source Intake/Current Command", getCurrentCommand().getName());
   }
 }
