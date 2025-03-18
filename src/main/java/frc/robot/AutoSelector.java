@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 //import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.kDrivetrain.CoralPosition;
+import frc.robot.Constants.kDrivetrain.AlignPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Scoring.AlignAndGetCoralAutonomous;
 import frc.robot.commands.Scoring.AlignAndScoreCoralAutonomous;
@@ -145,7 +145,7 @@ public class AutoSelector {
         /* Reef Positions */
         for (int i = 0; i < 12; i++) {
 
-            CoralPosition position = CoralPosition.values()[i];
+            AlignPosition position = AlignPosition.values()[i];
 
             for (int j : new int[] {3, 5, 7, 8}) {
 
@@ -164,7 +164,7 @@ public class AutoSelector {
         /* Coral Station Positions */
         for (int i = 12; i < 16; i++) {
 
-            CoralPosition position = CoralPosition.values()[i];
+            AlignPosition position = AlignPosition.values()[i];
             
                 NamedCommands.registerCommand(
                     "Get Coral " + position.name, 

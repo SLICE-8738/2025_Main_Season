@@ -5,7 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.kDrivetrain.CoralPosition;
+import frc.robot.Constants.kDrivetrain.AlignPosition;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -60,13 +60,14 @@ public class Drivetrain extends SubsystemBase {
   public final Field2d m_field2d;
 
   private Rotation2d fieldOrientedOffset;
-
   private Rotation2d simHeading = new Rotation2d();
 
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
 
-  private CoralPosition lastCoralPosition;
+  private AlignPosition lastCoralPosition;
+
+  private boolean aligningWithReef;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -229,21 +230,23 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The new updated pose of the robot.
    */
-  public Pose2d updateOdometry() {
+  public void updateOdometry() {
 
     m_odometry.update(getHeading(), getModulePositions());
 
-    for (String side : new String[] {"left", "right"}) {
+    for (String side : new String[] {"left", "right", "back"}) {
 
       LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().getDegrees(), 0, 0, 0, 0, 0);
       LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
 
       if (estimate.tagCount > 0) {
+        
+        double tagID = LimelightHelpers.getFiducialID("limelight-" + side);
 
-        for (int tagID : Constants.kDrivetrain.NON_REEF_APRILTAG_IDS) {
+        for (int ignoredTagID : aligningWithReef ? Constants.kDrivetrain.NON_REEF_APRILTAG_IDS : Constants.kDrivetrain.REEF_APRILTAG_IDS) {
 
-          if (LimelightHelpers.getFiducialID("limelight-" + side) == tagID) {
-            return m_odometry.getEstimatedPosition();
+          if (tagID == ignoredTagID) {
+            return;
           }
 
         }
@@ -259,8 +262,6 @@ public class Drivetrain extends SubsystemBase {
       }
 
     }
-
-    return m_odometry.getEstimatedPosition();
 
   }
 
@@ -619,15 +620,30 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void setLastCoralPosition(CoralPosition position) {
+  public void setLastCoralPosition(AlignPosition position) {
 
     lastCoralPosition = position;
 
   }
 
-  public CoralPosition getLastCoralPosition() {
+  public AlignPosition getLastCoralPosition() {
 
     return lastCoralPosition;
+
+  }
+
+  /**
+   * Tells this subsystem whether the robot is aligning
+   * with the reef or the coral station in order to only
+   * use the respective AprilTags for each for vision
+   * odometry.
+   * 
+   * @param aligningWithReef True if aligning with reef,
+   *                         false if aligning with coral station
+   */
+  public void setAligningWithReef(boolean aligningWithReef) {
+
+    this.aligningWithReef = aligningWithReef;
 
   }
 

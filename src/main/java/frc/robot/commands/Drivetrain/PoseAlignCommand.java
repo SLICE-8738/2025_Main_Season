@@ -10,52 +10,54 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.Constants.kDrivetrain.CoralPosition;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
-public class CoralPositionAlignCommand extends Command {
+public class PoseAlignCommand extends Command {
 
   private final Drivetrain m_drivetrain;
-  private final Pose2d targetPose;
+  private final Pose2d m_targetPose;
 
   private final PIDController distanceController, rotationController;
 
-  private final Timer timer;
-
-  public CoralPositionAlignCommand(Drivetrain drivetrain, CoralPosition position, double xDistance) {
+  /**
+   * Automatically aligns to the given pose using PID.
+   * 
+   * @param drivetrain The drivetrain subsystem instance passed in
+   *                   from RobotContainer.
+   * @param targetPose The pose to align to
+   * @param automaticallyFlip Whether the given pose should automatically be
+   *                          flipped to the red alliance side (given pose
+   *                          must be for blue alliance)
+   */
+  public PoseAlignCommand(Drivetrain drivetrain, Pose2d targetPose, boolean automaticallyFlip) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
 
+    if (automaticallyFlip && DriverStation.getAlliance().get() == Alliance.Red) {
+      m_targetPose = FlippingUtil.flipFieldPose(targetPose);
+    }
+    else {
+      m_targetPose = targetPose;
+    }
+
     distanceController = new PIDController(3.5, 0, 0);
     rotationController = new PIDController(3.5, 0, 0);
 
     distanceController.setSetpoint(0);
-    distanceController.setTolerance(0.03);
+    distanceController.setTolerance(0.025);
 
-    rotationController.setSetpoint(DriverStation.getAlliance().get() == Alliance.Blue ? 
-      position.fieldPosition.getRotation().getDegrees()
-      : FlippingUtil.flipFieldPose(position.fieldPosition).getRotation().getDegrees());
+    rotationController.setSetpoint(m_targetPose.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
-
-    targetPose = DriverStation.getAlliance().get() == Alliance.Blue ? 
-      position.fieldPosition.plus(new Transform2d(
-        new Translation2d(xDistance, position.yAlignPosition), 
-        new Rotation2d()))
-      : FlippingUtil.flipFieldPose(position.fieldPosition).plus(new Transform2d(
-        new Translation2d(xDistance, position.yAlignPosition), 
-        new Rotation2d()));
-
-    timer = new Timer();
+    rotationController.setTolerance(2);
         
   }
 
@@ -63,8 +65,7 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void initialize() {
 
-    m_drivetrain.addField2dPose(targetPose, "Auto Align Target Pose");
-    timer.restart();
+    m_drivetrain.addField2dPose(m_targetPose, "Auto Align Target Pose");
 
   }
 
@@ -72,11 +73,11 @@ public class CoralPositionAlignCommand extends Command {
   @Override
   public void execute() {
 
-    Transform2d difference = targetPose.minus(m_drivetrain.getPose());
+    Translation2d difference = m_targetPose.minus(m_drivetrain.getPose()).getTranslation();
     double distanceFeedback = Math.abs(distanceController.calculate(Math.hypot(difference.getX(), difference.getY())));
 
-    double translationX = difference.getTranslation().getAngle().getCos() * distanceFeedback;
-    double translationY = difference.getTranslation().getAngle().getSin() * distanceFeedback;
+    double translationX = difference.getAngle().getCos() * distanceFeedback;
+    double translationY = difference.getAngle().getSin() * distanceFeedback;
     double rotation = rotationController.calculate(m_drivetrain.getPose().getRotation().getDegrees());
 
     m_drivetrain.drive(
@@ -103,11 +104,11 @@ public class CoralPositionAlignCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return DriverStation.isAutonomousEnabled() ? distanceController.atSetpoint() && timer.hasElapsed(0.5) : false;
+    return distanceController.atSetpoint() && rotationController.atSetpoint();
   }
 
-  public Pose2d getTargetPose() {
-    return targetPose;
+  public double getDistanceFromTarget() {
+    return m_drivetrain.getPose().getTranslation().getDistance(m_targetPose.getTranslation());
   }
 
 }

@@ -4,32 +4,37 @@
 
 package frc.robot.commands.Scoring;
 
-import java.util.List;
-import java.util.Set;
+//import java.util.List;
+//import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.GoalEndState;
+/*import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.RotationTarget;
-import com.pathplanner.lib.util.FlippingUtil;
+import com.pathplanner.lib.util.FlippingUtil;*/
 
-import edu.wpi.first.math.geometry.Pose2d;
+//import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
+//import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import frc.robot.Constants;
-import frc.robot.Constants.kDrivetrain.CoralPosition;
-import frc.robot.commands.Drivetrain.CoralPositionAlignCommand;
+import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.LimelightHelpers;
+import frc.robot.commands.Drivetrain.PoseAlignCommand;
 import frc.robot.commands.EndEffector.IndexSequence;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -37,23 +42,27 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
 
   /** Creates a new AlignAndGetCoralAutonomous. */
-  public AlignAndGetCoralAutonomous(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector, CoralPosition position) {
+  public AlignAndGetCoralAutonomous(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector, AlignPosition position) {
 
-    CoralPositionAlignCommand coralPositionAlign = new CoralPositionAlignCommand(
-      drivetrain, 
-      position, 
-      Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION);
-
-    Timer timer = new Timer();
+    int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
+    PoseAlignCommand alignWithCoralStation = new PoseAlignCommand(
+      drivetrain,
+      position.fieldPosition.plus(new Transform2d(
+        new Translation2d(
+          Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
+          position.yAlignPosition), 
+        new Rotation2d())),
+        false);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(timer::restart),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,
-        0.5).until(() -> drivetrain.getSpeed() <= 1.5 && timer.hasElapsed(2))
+        0.5).until(() ->
+          LimelightHelpers.getFiducialID("limelight-back") == targetTagID
+            && alignWithCoralStation.getDistanceFromTarget() <= 0.9),
       /*new DeferredCommand(() -> {
         Pose2d midPoint = DriverStation.getAlliance().get() == Alliance.Blue ? 
           drivetrain.getLastCoralPosition().fieldPosition
@@ -71,9 +80,9 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
           Constants.kDrivetrain.PATH_CONSTRAINTS,
           new GoalEndState(0.5, endPoint.getRotation())));},
         Set.of(drivetrain)).until(
-          () -> drivetrain.getPose().getTranslation().getDistance(coralPositionAlign.getTargetPose().getTranslation()) <= 0.9)*/,
+          () -> drivetrain.getPose().getTranslation().getDistance(coralPositionAlign.getTargetPose().getTranslation()) <= 0.9)*/
       new InstantCommand(new IndexSequence(endEffector, elevator, null)::schedule),
-      coralPositionAlign,
+      alignWithCoralStation,
       new WaitCommand(1.5));
 
   }

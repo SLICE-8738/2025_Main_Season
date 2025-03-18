@@ -222,7 +222,7 @@ public final class Constants {
 
     //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
-    public static enum CoralPosition {
+    public static enum AlignPosition {
 
       /* Reef Positions */
       BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_POSITION, new Pose2d(2.853, 4.021, new Rotation2d()),
@@ -265,7 +265,7 @@ public final class Constants {
       public final String name;
       public final int blueAprilTagID, redAprilTagID;
 
-      private CoralPosition(double yAlignPosition, Pose2d fieldPosition, String name, int blueAprilTagID, int redAprilTagID) {
+      private AlignPosition(double yAlignPosition, Pose2d fieldPosition, String name, int blueAprilTagID, int redAprilTagID) {
         this.yAlignPosition = yAlignPosition;
         this.fieldPosition = fieldPosition;
         this.name = name;
@@ -276,6 +276,7 @@ public final class Constants {
     }
 
     public static final int[] NON_REEF_APRILTAG_IDS = {13, 12, 16, 15, 14, 5, 4, 3, 2, 1};
+    public static final int[] REEF_APRILTAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
 
   }
 
