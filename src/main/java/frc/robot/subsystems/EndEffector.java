@@ -170,6 +170,6 @@ public class EndEffector extends TalonFXPositionalSubsystem {
         : getLevelType().equals(LevelType.ALGAE) ? getAlgaeLevel().angle : getSourceLevel().angle);
     SmartDashboard.putNumber("Motor Target Angle", getTargetPosition());
 
-    Logger.recordOutput("End Effector/Current Command", getCurrentCommand().getName());
+    Logger.recordOutput("End Effector/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
   }
 }

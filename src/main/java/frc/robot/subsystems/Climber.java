@@ -48,6 +48,6 @@ public class Climber extends SubsystemBase{
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Climb Angle", getPosition());
-    Logger.recordOutput("Climber/Current Command", getCurrentCommand().getName());
+    Logger.recordOutput("Climber/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
   }
 }

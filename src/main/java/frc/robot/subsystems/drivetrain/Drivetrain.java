@@ -36,7 +36,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -100,11 +99,11 @@ public class Drivetrain extends SubsystemBase {
       getModulePositions(), 
       new Pose2d(0, 0, Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 180 : 0)),
       VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(0.1, 0.1, 0.1));
+      VecBuilder.fill(0.3, 0.3, 0.3));
 
     resetHeading(getPose().getRotation().minus(Rotation2d.fromDegrees(180)));
 
-    fieldOrientedOffset = new Rotation2d();
+    fieldOrientedOffset = DriverStation.getAlliance().get() == Alliance.Blue ? new Rotation2d() : Rotation2d.fromDegrees(180);
 
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
@@ -126,19 +125,21 @@ public class Drivetrain extends SubsystemBase {
             mod.runCharacterization(voltage.in(Units.Volts));
           }
         },
-        null,
+        (log) ->{ 
+          for (SwerveModule mod : swerveMods) {
+            log.motor("Drive Motor " + mod.moduleNumber)
+              .voltage(Units.Volts.of(mod.getDriveVoltage())).linearVelocity(Units.MetersPerSecond.of(mod.getState().speedMetersPerSecond))
+                .linearAcceleration(Units.MetersPerSecondPerSecond.of(mod.getDriveAcceleration()));
+          }
+        },
         this));
 
     sysIDChooser = new SendableChooser<Command>();
 
-    sysIDChooser.setDefaultOption("Quasistatic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward)
-      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
-    sysIDChooser.addOption("Quasistatic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse)
-      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
-    sysIDChooser.addOption("Dynamic Forward", sysIDDriveRoutine.dynamic(Direction.kForward)
-      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
-    sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.dynamic(Direction.kReverse)
-      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
+    sysIDChooser.setDefaultOption("Quasistatic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward));
+    sysIDChooser.addOption("Quasistatic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse));
+    sysIDChooser.addOption("Dynamic Forward", sysIDDriveRoutine.dynamic(Direction.kForward));
+    sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.dynamic(Direction.kReverse));
 
   }
 
@@ -160,7 +161,7 @@ public class Drivetrain extends SubsystemBase {
       gyroYawVelocitySignal
     );
 
-    Logger.recordOutput("Drivetrain/Current Command", getCurrentCommand().getName());
+    Logger.recordOutput("Drivetrain/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
 
   }
 
@@ -236,7 +237,7 @@ public class Drivetrain extends SubsystemBase {
 
     m_odometry.update(getHeading(), getModulePositions());
 
-    for (String side : new String[] {"left", "right"}) {
+    for (String side : new String[] {"left", "right", "back"}) {
 
       LimelightHelpers.SetRobotOrientation("limelight-" + side, getHeading().getDegrees(), 0, 0, 0, 0, 0);
       LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-" + side);
@@ -622,13 +623,13 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void setLastCoralPosition(AlignPosition position) {
+  public void setLastReefPosition(AlignPosition position) {
 
     lastCoralPosition = position;
 
   }
 
-  public AlignPosition getLastCoralPosition() {
+  public AlignPosition getLastReefPosition() {
 
     return lastCoralPosition;
 

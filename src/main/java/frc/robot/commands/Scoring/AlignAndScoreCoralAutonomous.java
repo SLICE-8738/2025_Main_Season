@@ -50,7 +50,7 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> drivetrain.setAligningWithReef(true)),
-      new InstantCommand(() -> drivetrain.setLastCoralPosition(position)),
+      new InstantCommand(() -> drivetrain.setLastReefPosition(position)),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,

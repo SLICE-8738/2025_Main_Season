@@ -227,7 +227,9 @@ public class RobotContainer {
     m_alignAndScoreCoral = new DeferredCommand(
       () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
       Set.of(m_drivetrain));
-    m_alignAndRemoveAlgae = new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector);
+    m_alignAndRemoveAlgae = new DeferredCommand(
+      () -> new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector),
+      Set.of(m_drivetrain));
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);

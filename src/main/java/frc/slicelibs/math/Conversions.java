@@ -116,6 +116,12 @@ public class Conversions {
         return motorRotations;
     }
 
+    public static double talonToMPSSquared(double motorRPSSquard, double circumference, double gearRatio) {
+        double wheelRPSSquared = motorRPSSquard / gearRatio;
+        double wheelMPSSquared = wheelRPSSquared * circumference;
+        return wheelMPSSquared;
+    }
+
     /**
      * @param mechRPM Mechanism Rotational Velocity: (in Rotations per Minute)
      * @param circumference Wheel Circumference: (in Meters)

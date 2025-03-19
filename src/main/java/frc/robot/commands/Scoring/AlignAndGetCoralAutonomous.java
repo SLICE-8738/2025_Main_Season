@@ -65,7 +65,7 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
             && alignWithCoralStation.getDistanceFromTarget() <= 0.9),
       /*new DeferredCommand(() -> {
         Pose2d midPoint = DriverStation.getAlliance().get() == Alliance.Blue ? 
-          drivetrain.getLastCoralPosition().fieldPosition
+          drivetrain.getLastReefPosition().fieldPosition
           : FlippingUtil.flipFieldPose(drivetrain.getLastCoralPosition().fieldPosition);
         Pose2d endPoint = DriverStation.getAlliance().get() == Alliance.Blue ? 
           position.fieldPosition
@@ -81,7 +81,7 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
           new GoalEndState(0.5, endPoint.getRotation())));},
         Set.of(drivetrain)).until(
           () -> drivetrain.getPose().getTranslation().getDistance(coralPositionAlign.getTargetPose().getTranslation()) <= 0.9)*/
-      new InstantCommand(new IndexSequence(endEffector, elevator, null)::schedule),
+      new InstantCommand(new IndexSequence(endEffector, elevator, null)::schedule, endEffector, elevator),
       alignWithCoralStation,
       new WaitCommand(1.5));
 

@@ -134,6 +134,6 @@ public class Elevator extends TalonFXPositionalSubsystem {
     SmartDashboard.putBoolean("Height Bool", getPositions()[0] <= 0.1);
     SmartDashboard.putBoolean("Level Type", m_levelType.equals(LevelType.SOURCE));
 
-    Logger.recordOutput("Elevator/Current Command", getCurrentCommand().getName());
+    Logger.recordOutput("Elevator/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
   }
 }

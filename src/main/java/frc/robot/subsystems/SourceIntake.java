@@ -69,6 +69,6 @@ private final DutyCycleEncoder m_absoluteEncoder;
     SmartDashboard.putNumber("Source Intake Relative Angle", getPositions()[0]);
     SmartDashboard.putNumber("Source Absolute Angle", m_absoluteEncoder.get());
 
-    Logger.recordOutput("Source Intake/Current Command", getCurrentCommand().getName());
+    Logger.recordOutput("Source Intake/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
   }
 }

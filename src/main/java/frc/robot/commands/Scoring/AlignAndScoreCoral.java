@@ -61,7 +61,7 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
           () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
               && alignWithReef.getDistanceFromTarget() <= 0.9),
-      new InstantCommand(moveToLevel::schedule),
+      new InstantCommand(moveToLevel::schedule, endEffector, elevator),
       alignWithReef);
 
   }

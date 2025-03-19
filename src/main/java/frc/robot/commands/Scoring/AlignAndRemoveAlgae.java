@@ -34,6 +34,10 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
 
     AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
     int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
+    ConditionalCommand moveToLevel = new ConditionalCommand(
+      new ToAlgae(elevator, endEffector, true), 
+      new ToAlgae(elevator, endEffector, false),
+      () -> (Elevator.getAlgaeLevel().height - elevator.getPositions()[0] < 0));
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
       position.fieldPosition.plus(new Transform2d(
@@ -41,13 +45,6 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
           Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF, 
           0), 
         new Rotation2d())));
-    PoseAlignCommand moveAwayFromReef = new PoseAlignCommand(
-      drivetrain, 
-      position.fieldPosition);
-    ConditionalCommand moveToLevel = new ConditionalCommand(
-      new ToAlgae(elevator, endEffector, true), 
-      new ToAlgae(elevator, endEffector, false),
-      () -> (Elevator.getAlgaeLevel().height - elevator.getPositions()[0] < 0));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -61,9 +58,7 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
               && alignWithReef.getDistanceFromTarget() <= 0.9),
       new InstantCommand(moveToLevel::schedule),
-      alignWithReef,
-      moveAwayFromReef,
-      new ToStow(endEffector, elevator));
+      alignWithReef);
 
   }
 

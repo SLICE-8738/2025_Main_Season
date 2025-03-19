@@ -104,6 +104,6 @@ public class LEDs extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Logger.recordOutput("LEDs/Current Command", getCurrentCommand().getName());
+    Logger.recordOutput("LEDs/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
   }
 }

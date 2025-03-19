@@ -43,15 +43,15 @@ public class PoseAlignCommand extends Command {
     m_drivetrain = drivetrain;
     m_targetPose = DriverStation.getAlliance().get() == Alliance.Blue ? targetPose : FlippingUtil.flipFieldPose(targetPose);
 
-    distanceController = new PIDController(3.5, 0, 0);
+    distanceController = new PIDController(4, 0, 0);
     rotationController = new PIDController(3.5, 0, 0);
 
     distanceController.setSetpoint(0);
-    distanceController.setTolerance(0.025);
+    distanceController.setTolerance(0.02);
 
     rotationController.setSetpoint(m_targetPose.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
-    rotationController.setTolerance(2);
+    rotationController.setTolerance(1);
         
   }
 

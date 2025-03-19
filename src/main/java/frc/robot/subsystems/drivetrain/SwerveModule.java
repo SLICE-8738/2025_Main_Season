@@ -99,9 +99,14 @@ public class SwerveModule {
         );
     }
 
-    /**
-     * @return The output current of the drive motor in amps
-     */
+    public double getDriveAcceleration() {
+        return inputs.driveAccelerationMetersPerSecSquared;
+    }
+
+    public double getDriveVoltage() {
+        return inputs.driveAppliedVolts;
+    }
+
     public double getDriveOutputCurrent() {
        return inputs.driveCurrentAmps;
     }

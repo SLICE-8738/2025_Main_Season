@@ -48,6 +48,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
     /* Drive Motor Status Signals */
     private final StatusSignal<Angle> drivePositionSignal;
     private final StatusSignal<AngularVelocity> driveVelocitySignal;
+    private final StatusSignal<AngularAcceleration> driveAccelerationSignal;
     private final StatusSignal<Voltage> driveAppliedVoltsSignal;
     private final StatusSignal<Current> driveCurrentSignal;
 
@@ -76,6 +77,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         /* Drive Motor Status Signals */
         drivePositionSignal = driveMotor.getPosition();
         driveVelocitySignal = driveMotor.getVelocity();
+        driveAccelerationSignal = driveMotor.getAcceleration();
         driveAppliedVoltsSignal = driveMotor.getMotorVoltage();
         driveCurrentSignal = driveMotor.getSupplyCurrent();
 
@@ -84,6 +86,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         BaseStatusSignal.setUpdateFrequencyForAll(
             Constants.kDrivetrain.DRIVE_DEFAULT_FREQUENCY_HZ,
             driveVelocitySignal,
+            driveAccelerationSignal,
             driveAppliedVoltsSignal,
             driveCurrentSignal);
         //driveMotor.optimizeBusUtilization();
@@ -94,6 +97,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         BaseStatusSignal.refreshAll(
             drivePositionSignal,
             driveVelocitySignal,
+            driveAccelerationSignal,
             driveAppliedVoltsSignal,
             driveCurrentSignal);
 
@@ -101,6 +105,8 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
             Conversions.talonToMeters(drivePositionSignal.getValueAsDouble(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
         inputs.driveVelocityMetersPerSec =
             Conversions.talonToMPS(driveVelocitySignal.getValueAsDouble(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
+        inputs.driveAccelerationMetersPerSecSquared =
+            Conversions.talonToMPSSquared(driveAccelerationSignal.getValueAsDouble(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
         inputs.driveAppliedVolts = driveAppliedVoltsSignal.getValueAsDouble();
         inputs.driveCurrentAmps = driveCurrentSignal.getValueAsDouble();
 
