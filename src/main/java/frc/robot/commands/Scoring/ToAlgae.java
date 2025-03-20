@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Scoring;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.MotorIntakeAlgae;
@@ -17,16 +18,11 @@ import frc.robot.Constants.kElevator.LevelType;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ToAlgae extends SequentialCommandGroup {
   /** Creates a new PickupAlgae. */
-  public ToAlgae(Elevator elevator, EndEffector endEffector, boolean endEffectorFirst) {
+  public ToAlgae(Elevator elevator, EndEffector endEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    if (endEffectorFirst) {
-      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, endEffectorFirst).withTimeout(1.5),
+      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, true).withTimeout(1.5),
           new MotorIntakeAlgae(endEffector));
-    } else {
-      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, endEffectorFirst).withTimeout(1.5),
-          new MotorIntakeAlgae(endEffector));
-    }
   }
 }

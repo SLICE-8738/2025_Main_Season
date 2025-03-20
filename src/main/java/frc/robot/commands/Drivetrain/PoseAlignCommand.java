@@ -44,7 +44,7 @@ public class PoseAlignCommand extends Command {
     m_targetPose = DriverStation.getAlliance().get() == Alliance.Blue ? targetPose : FlippingUtil.flipFieldPose(targetPose);
 
     distanceController = new PIDController(4, 0, 0);
-    rotationController = new PIDController(3.5, 0, 0);
+    rotationController = new PIDController(4, 0, 0);
 
     distanceController.setSetpoint(0);
     distanceController.setTolerance(0.02);

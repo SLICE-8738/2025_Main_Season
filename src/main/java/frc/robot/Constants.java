@@ -322,7 +322,7 @@ public final class Constants {
 
       STOW(0.01, 84, "Stow"),
       PROCESSER(0.03, -4, "Processer"),
-      SOURCE(0.2307, 66, "Source"),
+      SOURCE(0.045, 66, "Source"),
       LEVEL1(0.294, 41, "Level 1"),
       ALGAE1(0.35, 13, "Algae 1"),
       LEVEL2(0.44, 81, "Level 2"),
@@ -438,7 +438,9 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
     public static final double INTAKE_ANGLE = 27;
-    public static final double CLIMB_ANGLE = 94;
+    public static final double CLIMB_ANGLE = 80;
+
+    public static final double MAX_ANGLE = 80;
 
     /* Motor Configs */
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;

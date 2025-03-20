@@ -66,7 +66,7 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
             new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
             () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))),
       new ScoreCoral(endEffector).withTimeout(1),
-      new ToStow(endEffector, elevator));
+      new InstantCommand(() -> new ToStow(endEffector, elevator).schedule(), endEffector, elevator));
 
   }
   
