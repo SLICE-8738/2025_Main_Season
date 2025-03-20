@@ -14,8 +14,6 @@ import frc.robot.Constants;
 import frc.slicelibs.PositionalSubsystem;
 import frc.slicelibs.TalonFXPositionalSubsystem;
 
-
-
 public class SourceIntake extends TalonFXPositionalSubsystem {
 
 private final double DEFAULT_POSITION = 0;

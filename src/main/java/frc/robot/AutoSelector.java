@@ -92,12 +92,12 @@ public class AutoSelector {
 
     private final Map<String, Pose2d> autoPoses = new HashMap<String, Pose2d>();
 
-    private final Drivetrain m_drivetrain, m_simDrivetrain;
+    private final Drivetrain m_drivetrain/*, m_simDrivetrain*/;
 
-    public AutoSelector(Drivetrain drivetrain, Drivetrain simDrivetrain, Elevator elevator, EndEffector endEffector, SourceIntake sourceIntake) {
+    public AutoSelector(Drivetrain drivetrain/*, Drivetrain simDrivetrain*/, Elevator elevator, EndEffector endEffector, SourceIntake sourceIntake) {
 
         m_drivetrain = drivetrain;
-        m_simDrivetrain = simDrivetrain;
+        //m_simDrivetrain = simDrivetrain;
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 

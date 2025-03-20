@@ -67,6 +67,7 @@ public class Drivetrain extends SubsystemBase {
   private AlignPosition lastCoralPosition;
 
   private boolean aligningWithReef = true;
+  private boolean pauseOdometry = false;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -84,6 +85,7 @@ public class Drivetrain extends SubsystemBase {
 
     Timer.delay(1.0);
     resetModulesToAbsolute();
+    while (!m_gyro.isConnected()) {}
     zeroHeading();
 
     m_field2d = new Field2d();
@@ -93,6 +95,8 @@ public class Drivetrain extends SubsystemBase {
 
     DriverStation.waitForDsConnection(60);
 
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : 180));
+
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
@@ -100,8 +104,6 @@ public class Drivetrain extends SubsystemBase {
       new Pose2d(0, 0, Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 180 : 0)),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.3, 0.3, 0.3));
-
-    resetHeading(getPose().getRotation().minus(Rotation2d.fromDegrees(180)));
 
     fieldOrientedOffset = DriverStation.getAlliance().get() == Alliance.Blue ? new Rotation2d() : Rotation2d.fromDegrees(180);
 
@@ -153,7 +155,9 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    updateOdometry();
+    //if (Timer.getFPGATimestamp() > 0.025 && !pauseOdometry) {
+      updateOdometry();
+    //}
     m_field2d.setRobotPose(getPose());
 
     BaseStatusSignal.refreshAll(
@@ -427,15 +431,19 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetFieldOrientedHeading() {
 
+    pauseOdometry = true;
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
-    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
+    pauseOdometry = false;
 
   }
 
   public void reverseFieldOrientedHeading() {
 
+    pauseOdometry = true;
     fieldOrientedOffset = getHeading();
-    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
+    pauseOdometry = false;
 
   }
 
