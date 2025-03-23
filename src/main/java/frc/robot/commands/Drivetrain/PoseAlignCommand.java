@@ -35,7 +35,7 @@ public class PoseAlignCommand extends Command {
    *                          flipped to the red alliance side (given pose
    *                          must be for blue alliance)
    */
-  public PoseAlignCommand(Drivetrain drivetrain, Pose2d targetPose) {
+  public PoseAlignCommand(Drivetrain drivetrain, Pose2d targetPose, double distanceTolerance) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -47,7 +47,7 @@ public class PoseAlignCommand extends Command {
     rotationController = new PIDController(4, 0, 0);
 
     distanceController.setSetpoint(0);
-    distanceController.setTolerance(0.02);
+    distanceController.setTolerance(distanceTolerance);
 
     rotationController.setSetpoint(m_targetPose.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);

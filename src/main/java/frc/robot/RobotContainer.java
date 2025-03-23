@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -29,6 +30,7 @@ import frc.robot.commands.Drivetrain.RunDutyCycleCommand;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.BumpAlgae;
 import frc.robot.commands.EndEffector.ClampAlgae;
+import frc.robot.commands.EndEffector.IndexAlignCommand;
 import frc.robot.commands.EndEffector.IndexSequence;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
@@ -374,8 +376,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
       new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
-      new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE))
-        .alongWith(m_autoSelector.getAutoRoutine());
+      new ParallelCommandGroup(
+        new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE)),
+        m_autoSelector.getAutoRoutine());
   }
 
   public Command getTeleopInitCommand() {

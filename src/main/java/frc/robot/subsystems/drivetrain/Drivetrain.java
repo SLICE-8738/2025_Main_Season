@@ -5,7 +5,6 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,8 +62,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
-
-  private AlignPosition lastCoralPosition;
 
   private boolean aligningWithReef = true;
   private boolean pauseOdometry = false;
@@ -433,7 +430,7 @@ public class Drivetrain extends SubsystemBase {
 
     pauseOdometry = true;
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
-    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
     pauseOdometry = false;
 
   }
@@ -442,7 +439,7 @@ public class Drivetrain extends SubsystemBase {
 
     pauseOdometry = true;
     fieldOrientedOffset = getHeading();
-    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
     pauseOdometry = false;
 
   }
@@ -628,18 +625,6 @@ public class Drivetrain extends SubsystemBase {
       return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 235 : 125);
 
     }
-
-  }
-
-  public void setLastReefPosition(AlignPosition position) {
-
-    lastCoralPosition = position;
-
-  }
-
-  public AlignPosition getLastReefPosition() {
-
-    return lastCoralPosition;
 
   }
 

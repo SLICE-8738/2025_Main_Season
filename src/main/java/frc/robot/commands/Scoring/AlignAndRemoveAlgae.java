@@ -35,10 +35,6 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
 
     AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
     int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
-    /*ConditionalCommand toAlgae = new ConditionalCommand(
-      new ToAlgae(elevator, endEffector), 
-      new ToAlgae(elevator, endEffector),
-      () -> (Elevator.getAlgaeLevel().height - elevator.getPositions()[0] < 0));*/
     ToAlgae toAlgae = new ToAlgae(elevator, endEffector);
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
@@ -46,7 +42,8 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
         new Translation2d(
           Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF, 
           0), 
-        new Rotation2d())));
+        new Rotation2d())),
+        0.02);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

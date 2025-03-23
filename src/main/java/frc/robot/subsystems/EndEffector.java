@@ -140,7 +140,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     }
   }
 
-  public boolean[] checkSensorsIndexing() {
+  public static boolean[] checkSensorsIndexing() {
     boolean[] sensorStatuses = new boolean[3];
     sensorStatuses[0] = !frontSensor.get();
     sensorStatuses[1] = !middleSensor.get();
