@@ -36,7 +36,7 @@ public class IndexAlignCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    boolean[] sensorGroup = endEffector.checkSensorsIndexing();
+    boolean[] sensorGroup = EndEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
     middleSensor = sensorGroup[1];
     backSensor = sensorGroup[2];

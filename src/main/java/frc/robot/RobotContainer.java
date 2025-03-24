@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.Constants.Mode;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
@@ -30,7 +31,6 @@ import frc.robot.commands.Drivetrain.RunDutyCycleCommand;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.BumpAlgae;
 import frc.robot.commands.EndEffector.ClampAlgae;
-import frc.robot.commands.EndEffector.IndexAlignCommand;
 import frc.robot.commands.EndEffector.IndexSequence;
 import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
@@ -77,8 +77,6 @@ public class RobotContainer {
   // Subsystems
   // ==========================
 
-  // public final AutoSelector m_autoSelector;
-  // public final ShuffleboardData m_shuffleboardData;
   public final Drivetrain m_drivetrain;
   public final Climber m_climber;
   public final Elevator m_elevator;

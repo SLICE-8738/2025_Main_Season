@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -42,8 +41,7 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
         new Translation2d(
           Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF, 
           0), 
-        new Rotation2d())),
-        0.02);
+        new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

@@ -64,7 +64,6 @@ public class Drivetrain extends SubsystemBase {
   public final SendableChooser<Command> sysIDChooser;
 
   private boolean aligningWithReef = true;
-  private boolean pauseOdometry = false;
 
   /** Creates a new Drivetrain. */
   public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
@@ -119,12 +118,12 @@ public class Drivetrain extends SubsystemBase {
     sysIDDriveRoutine = new SysIdRoutine(
       new Config(), 
       new Mechanism(
-        (voltage) -> {
+        voltage -> {
           for (SwerveModule mod : swerveMods) {
             mod.runCharacterization(voltage.in(Units.Volts));
           }
         },
-        (log) ->{ 
+        log -> { 
           for (SwerveModule mod : swerveMods) {
             log.motor("Drive Motor " + mod.moduleNumber)
               .voltage(Units.Volts.of(mod.getDriveVoltage())).linearVelocity(Units.MetersPerSecond.of(mod.getState().speedMetersPerSecond))
@@ -152,9 +151,7 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    //if (Timer.getFPGATimestamp() > 0.025 && !pauseOdometry) {
-      updateOdometry();
-    //}
+    updateOdometry();
     m_field2d.setRobotPose(getPose());
 
     BaseStatusSignal.refreshAll(
@@ -428,19 +425,15 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetFieldOrientedHeading() {
 
-    pauseOdometry = true;
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
     resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
-    pauseOdometry = false;
 
   }
 
   public void reverseFieldOrientedHeading() {
 
-    pauseOdometry = true;
     fieldOrientedOffset = getHeading();
     resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
-    pauseOdometry = false;
 
   }
 

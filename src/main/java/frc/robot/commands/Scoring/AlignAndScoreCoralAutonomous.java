@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import frc.robot.Constants;
 import frc.robot.Constants.kDrivetrain.AlignPosition;
 import frc.robot.Constants.kElevator.Level;
@@ -46,8 +47,7 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
             Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
             : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
           position.yAlignPosition), 
-        new Rotation2d())),
-        0.02);
+        new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

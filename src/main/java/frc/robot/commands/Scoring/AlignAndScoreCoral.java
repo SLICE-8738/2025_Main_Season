@@ -44,8 +44,7 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
             Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
             : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
           position.yAlignPosition), 
-        new Rotation2d())),
-        0.02);
+        new Rotation2d())));
     ConditionalCommand moveToLevel = new ConditionalCommand(
       new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
       new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),

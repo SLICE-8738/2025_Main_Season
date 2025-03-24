@@ -4,7 +4,6 @@
 
 package frc.robot.commands.Scoring;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,8 +36,7 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
         new Translation2d(
           Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
           position.yAlignPosition), 
-        new Rotation2d())),
-        0.02);
+        new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
