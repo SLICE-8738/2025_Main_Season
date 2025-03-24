@@ -138,7 +138,7 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY = 12.5; // radians per second
 
     /* PathPlanner Values */
-    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(5, 6, 10, 12.5);
+    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(5, 6.1, 10, 12.5);
     public static final double TRANSLATION_KP = 4.5;
     public static final double ROTATION_KP = 1.0;
 

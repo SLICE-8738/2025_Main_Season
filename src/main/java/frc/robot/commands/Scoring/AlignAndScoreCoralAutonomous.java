@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.kDrivetrain.AlignPosition;
@@ -21,8 +22,8 @@ import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.Drivetrain.PoseAlignCommand;
 import frc.robot.commands.Drivetrain.SetAligningWithReefCommand;
+import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.IndexAlignCommand;
-import frc.robot.commands.EndEffector.IndexInCommand;
 import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
@@ -53,7 +54,7 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
     addCommands(
       new SetAligningWithReefCommand(drivetrain, true),
       new ParallelCommandGroup(
-        new SequentialCommandGroup(new IndexInCommand(endEffector, null), new IndexAlignCommand(endEffector)),
+        new ParallelDeadlineGroup(new IndexAlignCommand(endEffector), new ManualElevator(elevator, null)),
         AutoBuilder.pathfindToPoseFlipped(
           position.fieldPosition,
           Constants.kDrivetrain.PATH_CONSTRAINTS,
