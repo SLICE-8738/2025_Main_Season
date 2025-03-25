@@ -1,0 +1,10 @@
+{
+  "download": {
+    "deleteAfter": false,
+    "localDir": "C:\\Users\\Slice 8738\\Downloads",
+    "serverTeam": "8738"
+  },
+  "output": {
+    "outputFolder": "C:\\Users\\Slice 8738\\Downloads"
+  }
+}

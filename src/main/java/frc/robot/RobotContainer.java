@@ -167,16 +167,6 @@ public class RobotContainer {
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-        /*
-         * m_autoSelector = new AutoSelector(
-         * m_drivetrain,
-         * new Drivetrain(
-         * new SimSwerveModuleIO(),
-         * new SimSwerveModuleIO(),
-         * new SimSwerveModuleIO(),
-         * new SimSwerveModuleIO())
-         * null);
-         */
         break;
       case SIM:
         m_drivetrain = new Drivetrain(
@@ -184,7 +174,6 @@ public class RobotContainer {
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO());
-        // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
       default:
         m_drivetrain = new Drivetrain(
@@ -192,7 +181,6 @@ public class RobotContainer {
             new SwerveModuleIO() {},
             new SwerveModuleIO() {},
             new SwerveModuleIO() {});
-        // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
 
@@ -315,7 +303,7 @@ public class RobotContainer {
 
     /* Drivetrain */
     Button.options.onTrue(m_resetFieldOrientedHeading);
-    Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    Button.controlPadLeft1.whileTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_alignAndScoreCoral);
     Button.square1.whileTrue(m_alignAndRemoveAlgae);
     Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));

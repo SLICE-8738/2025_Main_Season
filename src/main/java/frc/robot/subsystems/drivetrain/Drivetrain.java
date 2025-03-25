@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -79,10 +78,9 @@ public class Drivetrain extends SubsystemBase {
     gyroYawSignal = m_gyro.getYaw();
     gyroYawVelocitySignal = m_gyro.getAngularVelocityZWorld();
 
-    Timer.delay(1.0);
     resetModulesToAbsolute();
     while (!m_gyro.isConnected()) {}
-    zeroHeading();
+    m_gyro.reset();
 
     m_field2d = new Field2d();
 
@@ -101,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.3, 0.3, 0.3));
 
-    fieldOrientedOffset = DriverStation.getAlliance().get() == Alliance.Blue ? new Rotation2d() : Rotation2d.fromDegrees(180);
+    fieldOrientedOffset = Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : 180);
 
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
@@ -126,8 +124,9 @@ public class Drivetrain extends SubsystemBase {
         log -> { 
           for (SwerveModule mod : swerveMods) {
             log.motor("Drive Motor " + mod.moduleNumber)
-              .voltage(Units.Volts.of(mod.getDriveVoltage())).linearVelocity(Units.MetersPerSecond.of(mod.getState().speedMetersPerSecond))
-                .linearAcceleration(Units.MetersPerSecondPerSecond.of(mod.getDriveAcceleration()));
+              .voltage(Units.Volts.of(mod.getDriveVoltage())).linearPosition(Units.Meters.of(mod.getPosition().distanceMeters))
+                .linearVelocity(Units.MetersPerSecond.of(mod.getState().speedMetersPerSecond))
+                  .linearAcceleration(Units.MetersPerSecondPerSecond.of(mod.getDriveAcceleration()));
           }
         },
         this));
@@ -494,15 +493,6 @@ public class Drivetrain extends SubsystemBase {
   public void resetHeading(Rotation2d angle) {
 
     m_gyro.setYaw(angle.getMeasure());
-
-  }
-
-  /**
-   * Resets the gyro yaw axis to 0.
-   */
-  public void zeroHeading() {
-
-    m_gyro.reset();
 
   }
 

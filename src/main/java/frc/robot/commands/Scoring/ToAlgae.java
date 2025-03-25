@@ -4,13 +4,11 @@
 
 package frc.robot.commands.Scoring;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.EndEffector.IntakeAlgae;
+
 import frc.robot.commands.EndEffector.MotorIntakeAlgae;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
-import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more

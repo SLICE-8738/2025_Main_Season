@@ -83,7 +83,7 @@ public final class Constants {
         new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
 
     /* Motor Gearing */
-    public static final double DRIVE_GEAR_RATIO = (5.14 / 1.0); // 5.14:1
+    public static final double DRIVE_GEAR_RATIO = (6.75 / 1.0); // 6.75:1
     public static final double ANGLE_GEAR_RATIO = (25.0 / 1.0); // 25:1
 
     /* Swerve Voltage Compensation */
@@ -96,7 +96,7 @@ public final class Constants {
     public static final double DRIVE_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
     public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double DRIVE_STATOR_CURRENT_LIMIT = 65;
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 50;
 
     public static final int ANGLE_CURRENT_LIMIT = 20;
 
@@ -108,10 +108,10 @@ public final class Constants {
     public static final int DRIVE_DEFAULT_FREQUENCY_HZ = 22;
     public static final int DRIVE_POSITION_FREQUENCY_HZ = 100;
     public static final int ANGLE_VELOCITY_PERIOD_MS = 1500;
-    public static final int ANGLE_POSITION_PERIOD_MS = 300;
+    public static final int ANGLE_POSITION_PERIOD_MS = 150;
 
     /* Drive Motor PID Values */
-    public static final double DRIVE_KP = 0.05; // TODO: Tune drive motor PID gains
+    public static final double DRIVE_KP = 0.05;
     public static final double DRIVE_KI = 0.0;
     public static final double DRIVE_KD = 0.0;
 
@@ -123,7 +123,7 @@ public final class Constants {
 
     /* Drive Motor Feedforward Values */
     // TODO: Find drive motor feedforward gains from characterization
-    public static final double DRIVE_KS = 0.0;
+    public static final double DRIVE_KS = 0.15;
     public static final double DRIVE_KV = 2.1818;
     public static final double DRIVE_KA = 0.01;
 
@@ -143,7 +143,7 @@ public final class Constants {
     public static final double ROTATION_KP = 1.0;
 
     /* Motor Idle Modes */
-    public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kBrake;
     public static final NeutralModeValue DRIVE_IDLE_MODE = NeutralModeValue.Brake;
 
     /* Motor Inverts */
@@ -159,7 +159,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int ABSOLUTE_ENCODER_ID = 2;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(273.3);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(274.5);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
           DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -172,7 +172,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
       public static final int ABSOLUTE_ENCODER_ID = 1;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(295.2);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(295.7);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
           DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -185,7 +185,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 6;
       public static final int ABSOLUTE_ENCODER_ID = 3;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.6);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(187.4);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
           DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -198,7 +198,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int ABSOLUTE_ENCODER_ID = 0;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(82.1);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(82.8);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
           DRIVE_MOTOR_ID,
           ANGLE_MOTOR_ID,
@@ -209,8 +209,8 @@ public final class Constants {
     public static final double LEFT_BRANCH_Y_POSITION = 0.1651;
     public static final double RIGHT_BRANCH_Y_POSITION = -0.1651;
 
-    public static final double CORAL_STATION_LEFT_Y_POSITION = 0.25;
-    public static final double CORAL_STATION_RIGHT_Y_POSITION = -0.25;
+    public static final double CORAL_STATION_LEFT_Y_POSITION = -0.175;
+    public static final double CORAL_STATION_RIGHT_Y_POSITION = 0.175;
 
     public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
     //public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef face)
@@ -218,8 +218,6 @@ public final class Constants {
     //public static final double NON_L4_X_DISTANCE_TO_REEF = 0.191; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
     public static final double L4_X_DISTANCE_TO_REEF = 0.28; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef face)
     public static final double X_DISTANCE_TO_CORAL_STATION = -0.518; // Robot-relative x distance from pathfinding target field position to coral station (coral station face)
-
-    //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
     public static enum AlignPosition {
 
