@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.Constants.Mode;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
@@ -78,8 +80,6 @@ public class RobotContainer {
   // Subsystems
   // ==========================
 
-  // public final AutoSelector m_autoSelector;
-  // public final ShuffleboardData m_shuffleboardData;
   public final Drivetrain m_drivetrain;
   public final Climber m_climber;
   public final Elevator m_elevator;
@@ -172,16 +172,6 @@ public class RobotContainer {
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod1.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod2.CONSTANTS),
             new RealSwerveModuleIO(Constants.kDrivetrain.Mod3.CONSTANTS));
-        /*
-         * m_autoSelector = new AutoSelector(
-         * m_drivetrain,
-         * new Drivetrain(
-         * new SimSwerveModuleIO(),
-         * new SimSwerveModuleIO(),
-         * new SimSwerveModuleIO(),
-         * new SimSwerveModuleIO())
-         * null);
-         */
         break;
       case SIM:
         m_drivetrain = new Drivetrain(
@@ -189,7 +179,6 @@ public class RobotContainer {
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO(),
             new SimSwerveModuleIO());
-        // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
       default:
         m_drivetrain = new Drivetrain(
@@ -201,7 +190,6 @@ public class RobotContainer {
             },
             new SwerveModuleIO() {
             });
-        // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
 
@@ -211,7 +199,7 @@ public class RobotContainer {
     m_climber = new Climber();
     m_leds = new LEDs();
 
-    m_autoSelector = new AutoSelector(m_drivetrain, m_drivetrain, m_elevator, m_endEffector, m_sourceIntake);
+    m_autoSelector = new AutoSelector(m_drivetrain, m_elevator, m_endEffector, m_sourceIntake);
     m_alignPositionSelector = new AlignPositionSelector();
     m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_endEffector, m_autoSelector);
 
@@ -230,8 +218,8 @@ public class RobotContainer {
     m_setUpperAlgae = new SetLevel(Level.ALGAE2, LevelType.ALGAE);
     m_elevatorToStow = new ToStow(m_endEffector, m_elevator);
     m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
-    m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector, false);
-    m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector, true);
+    m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector);
+    m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector);
     m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
     m_alignAndScoreCoral = new DeferredCommand(
         () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
@@ -326,7 +314,7 @@ public class RobotContainer {
 
     /* Drivetrain */
     Button.options.onTrue(m_resetFieldOrientedHeading);
-    Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    Button.controlPadLeft1.whileTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_alignAndScoreCoral);
     Button.square1.whileTrue(m_alignAndRemoveAlgae);
     Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));
@@ -385,8 +373,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
         new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
-        new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE))
-        .andThen(m_autoSelector.getAutoRoutine());
+        new ParallelCommandGroup(
+            new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE)),
+        m_autoSelector.getAutoRoutine());
   }
 
   public Command getTeleopInitCommand() {

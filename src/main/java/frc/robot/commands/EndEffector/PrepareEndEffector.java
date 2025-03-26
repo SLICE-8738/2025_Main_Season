@@ -4,9 +4,8 @@
 
 package frc.robot.commands.EndEffector;
 
-import java.io.Console;
-
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.subsystems.EndEffector;

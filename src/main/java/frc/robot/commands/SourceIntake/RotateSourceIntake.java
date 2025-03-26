@@ -6,6 +6,7 @@ package frc.robot.commands.SourceIntake;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.SourceIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -21,7 +22,13 @@ public class RotateSourceIntake extends Command {
 
     m_sourceIntake = sourceIntake;
     m_threshold = threshold;
-    m_degrees = degrees;
+    if(degrees > Constants.kSourceIntake.MAX_ANGLE){
+      m_degrees = Constants.kSourceIntake.MAX_ANGLE;
+    } else if(degrees < 1){
+      m_degrees = 1;
+    } else{
+      m_degrees = degrees;
+    }
   }
 
   // Called when the command is initially scheduled.

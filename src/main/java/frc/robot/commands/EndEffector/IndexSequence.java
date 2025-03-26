@@ -8,16 +8,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
+
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.Scoring.SetLevel;
-import frc.robot.commands.SourceIntake.RotateSourceIntake;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
-import frc.robot.subsystems.SourceIntake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

@@ -9,9 +9,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -34,10 +34,7 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
 
     AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
     int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
-    ConditionalCommand moveToLevel = new ConditionalCommand(
-      new ToAlgae(elevator, endEffector, true), 
-      new ToAlgae(elevator, endEffector, false),
-      () -> (Elevator.getAlgaeLevel().height - elevator.getPositions()[0] < 0));
+    ToAlgae toAlgae = new ToAlgae(elevator, endEffector);
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
       position.fieldPosition.plus(new Transform2d(
@@ -53,11 +50,12 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
         Constants.kDrivetrain.PATH_CONSTRAINTS,
-        0.5).until(
+        0).until(
           () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
               && alignWithReef.getDistanceFromTarget() <= 0.9),
-      new InstantCommand(moveToLevel::schedule),
+      new InstantCommand(() -> drivetrain.runChassisSpeeds(new ChassisSpeeds())),
+      toAlgae,
       alignWithReef);
 
   }

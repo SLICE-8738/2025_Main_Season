@@ -12,8 +12,10 @@ public class REVConfigs {
     public final SparkMaxConfig angleSparkMaxConfig = new SparkMaxConfig();
 
     public REVConfigs() {
+        /* ==================================== */
         /* Default Velocity Motor Configuration */
-
+        /* ==================================== */
+        
             /* Motor Invert and Idle Mode */
             defaultVelocitySparkMaxConfig.inverted(false);
             defaultVelocitySparkMaxConfig.idleMode(IdleMode.kBrake);
@@ -22,8 +24,8 @@ public class REVConfigs {
             defaultVelocitySparkMaxConfig.smartCurrentLimit(30);
 
             /* Open and Closed Loop Ramping */
-            defaultVelocitySparkMaxConfig.openLoopRampRate(0);
-            defaultVelocitySparkMaxConfig.closedLoopRampRate(0);
+            defaultVelocitySparkMaxConfig.openLoopRampRate(Constants.kDrivetrain.OPEN_LOOP_RAMP);
+            defaultVelocitySparkMaxConfig.closedLoopRampRate(Constants.kDrivetrain.CLOSED_LOOP_RAMP);
 
             /* Status Frame Periods */
             defaultVelocitySparkMaxConfig.signals.primaryEncoderVelocityPeriodMs(200);
@@ -32,7 +34,9 @@ public class REVConfigs {
             /* Voltage Compensation */
             defaultVelocitySparkMaxConfig.voltageCompensation(12);
 
+        /* ==================================== */
         /* Default Position Motor Configuration */
+        /* ==================================== */
 
             /* Motor Invert and Idle Mode */
             defaultPositionSparkMaxConfig.inverted(false);
@@ -52,7 +56,9 @@ public class REVConfigs {
             /* Voltage Compensation */
             defaultPositionSparkMaxConfig.voltageCompensation(12);
 
+        /* ======================================= */
         /* Swerve Module Angle Motor Configuration */
+        /* ======================================= */
 
             /* Motor Invert and Idle Mode */
             angleSparkMaxConfig.inverted(Constants.kDrivetrain.ANGLE_INVERT);

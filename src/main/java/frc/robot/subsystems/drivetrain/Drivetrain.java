@@ -5,7 +5,6 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -64,8 +62,6 @@ public class Drivetrain extends SubsystemBase {
   private final SysIdRoutine sysIDDriveRoutine;
   public final SendableChooser<Command> sysIDChooser;
 
-  private AlignPosition lastCoralPosition;
-
   private boolean aligningWithReef = true;
 
   /** Creates a new Drivetrain. */
@@ -82,9 +78,9 @@ public class Drivetrain extends SubsystemBase {
     gyroYawSignal = m_gyro.getYaw();
     gyroYawVelocitySignal = m_gyro.getAngularVelocityZWorld();
 
-    Timer.delay(1.0);
     resetModulesToAbsolute();
-    zeroHeading();
+    while (!m_gyro.isConnected()) {}
+    m_gyro.reset();
 
     m_field2d = new Field2d();
 
@@ -92,6 +88,8 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putData(m_field2d);
 
     DriverStation.waitForDsConnection(60);
+
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : 180));
 
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
@@ -101,9 +99,7 @@ public class Drivetrain extends SubsystemBase {
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.3, 0.3, 0.3));
 
-    resetHeading(getPose().getRotation().minus(Rotation2d.fromDegrees(180)));
-
-    fieldOrientedOffset = DriverStation.getAlliance().get() == Alliance.Blue ? new Rotation2d() : Rotation2d.fromDegrees(180);
+    fieldOrientedOffset = Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : 180);
 
     PathPlannerLogging.setLogActivePathCallback(
       (path) -> {
@@ -120,16 +116,17 @@ public class Drivetrain extends SubsystemBase {
     sysIDDriveRoutine = new SysIdRoutine(
       new Config(), 
       new Mechanism(
-        (voltage) -> {
+        voltage -> {
           for (SwerveModule mod : swerveMods) {
             mod.runCharacterization(voltage.in(Units.Volts));
           }
         },
-        (log) ->{ 
+        log -> { 
           for (SwerveModule mod : swerveMods) {
             log.motor("Drive Motor " + mod.moduleNumber)
-              .voltage(Units.Volts.of(mod.getDriveVoltage())).linearVelocity(Units.MetersPerSecond.of(mod.getState().speedMetersPerSecond))
-                .linearAcceleration(Units.MetersPerSecondPerSecond.of(mod.getDriveAcceleration()));
+              .voltage(Units.Volts.of(mod.getDriveVoltage())).linearPosition(Units.Meters.of(mod.getPosition().distanceMeters))
+                .linearVelocity(Units.MetersPerSecond.of(mod.getState().speedMetersPerSecond))
+                  .linearAcceleration(Units.MetersPerSecondPerSecond.of(mod.getDriveAcceleration()));
           }
         },
         this));
@@ -428,14 +425,14 @@ public class Drivetrain extends SubsystemBase {
   public void resetFieldOrientedHeading() {
 
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
-    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
 
   }
 
   public void reverseFieldOrientedHeading() {
 
     fieldOrientedOffset = getHeading();
-    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
+    resetHeading(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
 
   }
 
@@ -496,15 +493,6 @@ public class Drivetrain extends SubsystemBase {
   public void resetHeading(Rotation2d angle) {
 
     m_gyro.setYaw(angle.getMeasure());
-
-  }
-
-  /**
-   * Resets the gyro yaw axis to 0.
-   */
-  public void zeroHeading() {
-
-    m_gyro.reset();
 
   }
 
@@ -620,18 +608,6 @@ public class Drivetrain extends SubsystemBase {
       return Rotation2d.fromDegrees(getPose().getY() >= 4.025 ? 235 : 125);
 
     }
-
-  }
-
-  public void setLastReefPosition(AlignPosition position) {
-
-    lastCoralPosition = position;
-
-  }
-
-  public AlignPosition getLastReefPosition() {
-
-    return lastCoralPosition;
 
   }
 

@@ -25,7 +25,7 @@ public class ShuffleboardTuner {
      */
     public static void create(DoubleConsumer updateCallback, String layoutName) {
 
-        ShuffleboardLayout tunerLayout = Shuffleboard.getTab("Debug Tab").getLayout(layoutName, BuiltInLayouts.kGrid);
+        ShuffleboardLayout tunerLayout = Shuffleboard.getTab("Debug").getLayout(layoutName, BuiltInLayouts.kGrid);
 
         GenericEntry valueEntry = tunerLayout.add("Value", 0).getEntry();
         tunerLayout.add("Update", new InstantCommand(() -> updateCallback.accept(valueEntry.getDouble(0))));
@@ -42,7 +42,7 @@ public class ShuffleboardTuner {
      */
     public static void create(Consumer<Double[]> updateCallback, String[] entryNames, String layoutName) {
 
-        ShuffleboardLayout tunerLayout = Shuffleboard.getTab("Debug Tab").getLayout(layoutName, BuiltInLayouts.kGrid);
+        ShuffleboardLayout tunerLayout = Shuffleboard.getTab("Debug").getLayout(layoutName, BuiltInLayouts.kGrid);
         GenericEntry[] valueEntries = new GenericEntry[entryNames.length];
 
         for(int i = 0; i < entryNames.length; i++) {
