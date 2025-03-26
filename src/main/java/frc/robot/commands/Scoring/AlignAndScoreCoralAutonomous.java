@@ -46,7 +46,7 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
           EndEffector.getCoralLevel() == Level.LEVEL4 ? 
             Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
             : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
-          position.yAlignPosition), 
+          position.yAlignDistance), 
         new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.

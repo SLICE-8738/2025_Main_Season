@@ -35,7 +35,7 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
       position.fieldPosition.plus(new Transform2d(
         new Translation2d(
           Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
-          position.yAlignPosition), 
+          position.yAlignDistance), 
         new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.

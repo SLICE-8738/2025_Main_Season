@@ -10,7 +10,6 @@ import frc.robot.subsystems.EndEffector;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClampAlgae extends Command {
   EndEffector m_endEffector;
-  double m_angle = 50;
 
   /** Creates a new ClampAlgae. */
   public ClampAlgae(EndEffector endEffector) {
@@ -24,7 +23,7 @@ public class ClampAlgae extends Command {
   @Override
   public void initialize() {
     m_endEffector.setPlacementMotor(0.065);
-    m_endEffector.setPosition(m_angle);
+    m_endEffector.setPosition(50);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,7 +40,7 @@ public class ClampAlgae extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_endEffector.getAngle().getDegrees() > m_angle) {
+    if (m_endEffector.getAngle().getDegrees() > 53) {
       return true;
     }
     return false;
