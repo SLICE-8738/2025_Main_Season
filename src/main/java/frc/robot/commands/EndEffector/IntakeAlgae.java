@@ -16,6 +16,6 @@ public class IntakeAlgae extends SequentialCommandGroup {
   public IntakeAlgae(EndEffector endEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PrepareEndEffector(endEffector, LevelType.ALGAE), new MotorIntakeAlgae(endEffector));
+    addCommands(new PrepareEndEffector(endEffector, LevelType.ALGAE, false), new MotorIntakeAlgae(endEffector));
   }
 }

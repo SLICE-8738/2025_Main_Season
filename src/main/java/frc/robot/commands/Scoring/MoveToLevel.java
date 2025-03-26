@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Scoring;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Elevator.MoveElevatorToLevel;
@@ -16,13 +17,19 @@ import frc.robot.subsystems.EndEffector;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MoveToLevel extends SequentialCommandGroup {
   /** Creates a new MoveToLevel. */
-  public MoveToLevel(EndEffector endEffector, Elevator elevator, LevelType levelType, boolean endEffectorFirst) {
+  public MoveToLevel(EndEffector endEffector, Elevator elevator, LevelType levelType, boolean endEffectorFirst,
+      boolean retainAlgae) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    if (endEffectorFirst) {
-      addCommands(new PrepareEndEffector(endEffector, levelType).withTimeout(2.0), new MoveElevatorToLevel(elevator, levelType).withTimeout(2.0));
+    if (retainAlgae) {
+      addCommands(new ParallelDeadlineGroup(new MoveElevatorToLevel(elevator, levelType),
+          new PrepareEndEffector(endEffector, levelType, retainAlgae)));
+    } else if (endEffectorFirst) {
+      addCommands(new PrepareEndEffector(endEffector, levelType, retainAlgae).withTimeout(2.0),
+          new MoveElevatorToLevel(elevator, levelType).withTimeout(2.0));
     } else {
-      addCommands(new MoveElevatorToLevel(elevator, levelType).withTimeout(2.0), new PrepareEndEffector(endEffector, levelType).withTimeout(2.0));
+      addCommands(new MoveElevatorToLevel(elevator, levelType).withTimeout(2.0),
+          new PrepareEndEffector(endEffector, levelType, retainAlgae).withTimeout(2.0));
     }
   }
 }

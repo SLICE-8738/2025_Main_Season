@@ -24,7 +24,7 @@ public class ToAlgae extends SequentialCommandGroup {
 
     addCommands(
         new ParallelCommandGroup(new MoveElevatorToLevel(elevator, LevelType.ALGAE),
-            new PrepareEndEffector(endEffector, LevelType.ALGAE)).withTimeout(1.5),
+            new PrepareEndEffector(endEffector, LevelType.ALGAE, false)).withTimeout(1.5),
         new MotorIntakeAlgae(endEffector));
   }
 }
