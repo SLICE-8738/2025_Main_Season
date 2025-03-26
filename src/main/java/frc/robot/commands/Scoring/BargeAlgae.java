@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Scoring;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.Constants.kElevator.LevelType;
@@ -20,6 +21,11 @@ public class BargeAlgae extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SetLevel(Level.BARGE, LevelType.SOURCE),
-        new MoveToLevel(endEffector, elevator, LevelType.SOURCE, false), new ThrowAlgae(endEffector));
+        new MoveToLevel(endEffector, elevator, LevelType.SOURCE, true),
+        new SetLevel(Level.BARGE2, LevelType.SOURCE),
+        new ParallelDeadlineGroup(
+            new ThrowAlgae(endEffector), 
+            new MoveToLevel(endEffector, elevator, LevelType.SOURCE, true)
+        ));
   }
 }

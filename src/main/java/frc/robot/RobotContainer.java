@@ -45,7 +45,6 @@ import frc.robot.commands.Scoring.IntakeAdjustment;
 import frc.robot.commands.Scoring.MoveToLevel;
 import frc.robot.commands.Scoring.ProcessAlgae;
 import frc.robot.commands.Scoring.ResetRelativeEncoders;
-import frc.robot.commands.Scoring.ScoreAlgae;
 import frc.robot.commands.Scoring.SetLevel;
 import frc.robot.commands.Scoring.ToAlgae;
 import frc.robot.commands.Scoring.ToStow;
@@ -116,7 +115,6 @@ public class RobotContainer {
   public final MoveToLevel m_moveDownToLevel;
   public final ToAlgae m_toAlgaeHigher;
   public final ToAlgae m_toAlgaeLower;
-  public final ScoreAlgae m_scoreAlgae;
   public final ToStow m_elevatorToStow;
   public final IntakeAdjustment m_intakeAdjustment;
   public final BargeAlgae m_bargeAlgae;
@@ -217,7 +215,6 @@ public class RobotContainer {
     m_setLowerAlgae = new SetLevel(Level.ALGAE1, LevelType.ALGAE);
     m_setUpperAlgae = new SetLevel(Level.ALGAE2, LevelType.ALGAE);
     m_elevatorToStow = new ToStow(m_endEffector, m_elevator);
-    m_scoreAlgae = new ScoreAlgae(m_elevator, m_endEffector);
     m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector);
     m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector);
     m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
@@ -323,7 +320,6 @@ public class RobotContainer {
     Button.psButton1.onTrue(m_elevatorToStow);
 
     /* Scoring */
-    Button.controlPadDown1.onTrue(m_scoreAlgae);
     Button.rightBumper1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
         () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)));
 
@@ -361,7 +357,9 @@ public class RobotContainer {
     Button.leftBumper2.onTrue(m_setLowerAlgae);
     Button.rightBumper2.onTrue(m_setUpperAlgae);
     Button.rightTrigger2.onTrue(m_bargeAlgae);
+    Button.rightTrigger2.onFalse(new ThrowAlgae(m_endEffector));
     Button.leftTrigger2.onTrue(m_processAlgae);
+    Button.leftTrigger2.onFalse(new ThrowAlgae(m_endEffector));
 
   }
 

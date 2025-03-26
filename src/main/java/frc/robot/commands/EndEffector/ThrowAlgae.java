@@ -17,7 +17,6 @@ public class ThrowAlgae extends Command {
   public ThrowAlgae(EndEffector endEffector) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_endEffector = endEffector;
-    addRequirements(m_endEffector);
   }
 
   // Called when the command is initially scheduled.
@@ -30,7 +29,7 @@ public class ThrowAlgae extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_endEffector.setPlacementMotor(1);
+    m_endEffector.setPlacementMotor(-.2);
   }
 
   // Called once the command ends or is interrupted.

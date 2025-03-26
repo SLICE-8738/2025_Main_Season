@@ -22,8 +22,8 @@ public class ClampAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_endEffector.setPlacementMotor(0.065);
-    m_endEffector.setPosition(50);
+    m_endEffector.setPlacementMotor(0.1); // .065
+    m_endEffector.setPosition(47);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
