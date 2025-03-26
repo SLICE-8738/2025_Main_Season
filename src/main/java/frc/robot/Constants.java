@@ -330,7 +330,7 @@ public final class Constants {
       ALGAE2(0.77, 16, "Algae 2"),
       LEVEL3(0.838, 81, "Level 3"),
       LEVEL4(1.645, 51, "Level 4"),
-      BARGE(1.65, 47, "Barge"),
+      BARGE(1.65, 52, "Barge"),
       BARGE2(1.65, 65, "Barge 2");
 
       public double height;
