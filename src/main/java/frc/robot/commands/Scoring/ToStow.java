@@ -20,6 +20,8 @@ public class ToStow extends SequentialCommandGroup {
 
   /** Creates a new ElevatorToSource. */
   public ToStow(EndEffector endEffector, Elevator elevator) {
-    addCommands(new SetLevel(Level.STOW, LevelType.SOURCE), new ParallelCommandGroup(new PrepareEndEffector(endEffector, LevelType.SOURCE), new MoveElevatorToLevel(elevator, LevelType.SOURCE)).withTimeout(2.0));
+    addCommands(new SetLevel(Level.STOW, LevelType.SOURCE),
+        new ParallelCommandGroup(new PrepareEndEffector(endEffector, LevelType.SOURCE, false),
+            new MoveElevatorToLevel(elevator, LevelType.SOURCE)).withTimeout(2.0));
   }
 }

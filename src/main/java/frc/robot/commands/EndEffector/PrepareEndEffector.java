@@ -18,8 +18,9 @@ public class PrepareEndEffector extends Command {
   private LevelType m_levelType;
   // true = up false = down
   private boolean movementDirection;
+  private boolean m_retainAlgae;
 
-  public PrepareEndEffector(EndEffector endEffector, LevelType levelType) {
+  public PrepareEndEffector(EndEffector endEffector, LevelType levelType, boolean retainAlgae) {
     addRequirements(endEffector);
     this.endEffector = endEffector;
     m_levelType = levelType;
@@ -28,7 +29,7 @@ public class PrepareEndEffector extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    switch(m_levelType){
+    switch (m_levelType) {
       case SOURCE:
         angle = EndEffector.getSourceLevel().angle;
         break;
@@ -39,10 +40,9 @@ public class PrepareEndEffector extends Command {
         angle = EndEffector.getAlgaeLevel().angle;
         break;
     }
-    
-    
+
     endEffector.setPosition(angle);
-    if (endEffector.getAngle().getDegrees() < angle) { 
+    if (endEffector.getAngle().getDegrees() < angle) {
       movementDirection = true;
     }
     if (endEffector.getAngle().getDegrees() > angle) {
@@ -53,8 +53,11 @@ public class PrepareEndEffector extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(angle == Level.SOURCE.angle){
+    if (angle == Level.SOURCE.angle) {
       endEffector.setPlacementMotor(-.1);
+    }
+    if (m_retainAlgae) {
+      endEffector.setPlacementMotor(0.1);
     }
   }
 
