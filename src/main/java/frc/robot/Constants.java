@@ -212,14 +212,24 @@ public final class Constants {
     public static final double CORAL_STATION_LEFT_Y_POSITION = 0.25;
     public static final double CORAL_STATION_RIGHT_Y_POSITION = -0.25;
 
-    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
-    //public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef face)
-    //public static final double X_DISTANCE_TO_CORAL_STATION = 0.55; // Robot-relative x distance from pathfinding target field position to coral station (coral station face)
-    //public static final double NON_L4_X_DISTANCE_TO_REEF = 0.191; // Robot-relative x distance from pathfinding target field position to ideal position for L1 - L3
-    public static final double L4_X_DISTANCE_TO_REEF = 0.28; // Robot-relative x distance from pathfinding target field position to ideal position for L4 (reef face)
-    public static final double X_DISTANCE_TO_CORAL_STATION = -0.518; // Robot-relative x distance from pathfinding target field position to coral station (coral station face)
+    public static final double NON_L4_X_DISTANCE_TO_REEF = 0.223; // Robot-relative x distance from pathfinding target
+                                                                  // field position to ideal position for L1 - L3
+    // public static final double L4_X_DISTANCE_TO_REEF = 0.312; // Robot-relative x
+    // distance from pathfinding target field position to ideal position for L4
+    // (reef face)
+    // public static final double X_DISTANCE_TO_CORAL_STATION = 0.55; //
+    // Robot-relative x distance from pathfinding target field position to coral
+    // station (coral station face)
+    // public static final double NON_L4_X_DISTANCE_TO_REEF = 0.191; //
+    // Robot-relative x distance from pathfinding target field position to ideal
+    // position for L1 - L3
+    public static final double L4_X_DISTANCE_TO_REEF = 0.28; // Robot-relative x distance from pathfinding target field
+                                                             // position to ideal position for L4 (reef face)
+    public static final double X_DISTANCE_TO_CORAL_STATION = -0.518; // Robot-relative x distance from pathfinding
+                                                                     // target field position to coral station (coral
+                                                                     // station face)
 
-    //public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
+    // public static final double ROBOT_FLUSH_SURFACE_Z_POSITION = -0.47;
 
     public static enum AlignPosition {
 
@@ -264,7 +274,8 @@ public final class Constants {
       public final String name;
       public final int blueAprilTagID, redAprilTagID;
 
-      private AlignPosition(double yAlignPosition, Pose2d fieldPosition, String name, int blueAprilTagID, int redAprilTagID) {
+      private AlignPosition(double yAlignPosition, Pose2d fieldPosition, String name, int blueAprilTagID,
+          int redAprilTagID) {
         this.yAlignPosition = yAlignPosition;
         this.fieldPosition = fieldPosition;
         this.name = name;
@@ -274,8 +285,8 @@ public final class Constants {
 
     }
 
-    public static final int[] NON_REEF_APRILTAG_IDS = {13, 12, 16, 15, 14, 5, 4, 3, 2, 1};
-    public static final int[] REEF_APRILTAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+    public static final int[] NON_REEF_APRILTAG_IDS = { 13, 12, 16, 15, 14, 5, 4, 3, 2, 1 };
+    public static final int[] REEF_APRILTAG_IDS = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };
 
   }
 
@@ -321,14 +332,15 @@ public final class Constants {
     public enum Level {
 
       STOW(0.01, 84, "Stow"),
-      PROCESSER(0.03, -4, "Processer"),
+      PROCESSER(0.03, 0, "Processer"),
       SOURCE(0.2307, 66, "Source"),
       LEVEL1(0.294, 41, "Level 1"),
       ALGAE1(0.35, 13, "Algae 1"),
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.73, 16, "Algae 2"),
       LEVEL3(0.838, 81, "Level 3"),
-      LEVEL4(1.645, 51, "Level 4");
+      LEVEL4(1.645, 51, "Level 4"),
+      BARGE(1.645, 45, "Barge");
 
       public double height;
       public double angle;
@@ -341,7 +353,7 @@ public final class Constants {
       }
     }
 
-    public enum LevelType{
+    public enum LevelType {
       SOURCE,
       CORAL,
       ALGAE;
@@ -390,7 +402,7 @@ public final class Constants {
     public static final double POSITIONAL_CONVERSION_FACTOR = 360.0;
     public static final double VELOCITY_CONVERSTION_FACTOR = POSITIONAL_CONVERSION_FACTOR;
 
-    public static final double SENSOR_TO_MECHANISM_RATIO = (70.0 /8.0) * (37.0 / 15.0);
+    public static final double SENSOR_TO_MECHANISM_RATIO = (70.0 / 8.0) * (37.0 / 15.0);
 
     public static final double ENCODER_OFFSET = 300;
 
@@ -429,10 +441,9 @@ public final class Constants {
 
   }
 
-
   public final class kSourceIntake {
 
-    public static final int MOTOR_PORT = 13; //TODO find actual motor port number
+    public static final int MOTOR_PORT = 13; // TODO find actual motor port number
     public static final int ABSOLUTE_ENCODER_ID = 4;
     public static final double ABSOLUTE_ENCODER_OFFSET = 364;
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
@@ -459,12 +470,9 @@ public final class Constants {
 
     /* PID */
     public static final double KP = 1.0;
-    public static final double KI = 0;//0.01;
-    public static final double KD = 0;//0.1;
+    public static final double KI = 0;// 0.01;
+    public static final double KD = 0;// 0.1;
 
   }
-  
+
 }
-
-
-

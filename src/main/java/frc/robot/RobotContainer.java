@@ -34,11 +34,14 @@ import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.ScoreCoral;
+import frc.robot.commands.EndEffector.ThrowAlgae;
 import frc.robot.commands.LEDs.CoralLEDs;
 import frc.robot.commands.Scoring.AlignAndRemoveAlgae;
 import frc.robot.commands.Scoring.AlignAndScoreCoral;
+import frc.robot.commands.Scoring.BargeAlgae;
 import frc.robot.commands.Scoring.IntakeAdjustment;
 import frc.robot.commands.Scoring.MoveToLevel;
+import frc.robot.commands.Scoring.ProcessAlgae;
 import frc.robot.commands.Scoring.ResetRelativeEncoders;
 import frc.robot.commands.Scoring.ScoreAlgae;
 import frc.robot.commands.Scoring.SetLevel;
@@ -116,6 +119,8 @@ public class RobotContainer {
   public final ScoreAlgae m_scoreAlgae;
   public final ToStow m_elevatorToStow;
   public final IntakeAdjustment m_intakeAdjustment;
+  public final BargeAlgae m_bargeAlgae;
+  public final ProcessAlgae m_processAlgae;
 
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
@@ -188,10 +193,14 @@ public class RobotContainer {
         break;
       default:
         m_drivetrain = new Drivetrain(
-            new SwerveModuleIO() {},
-            new SwerveModuleIO() {},
-            new SwerveModuleIO() {},
-            new SwerveModuleIO() {});
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            });
         // m_autoSelector = new AutoSelector(m_drivetrain, null);
         break;
     }
@@ -225,11 +234,13 @@ public class RobotContainer {
     m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector, true);
     m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
     m_alignAndScoreCoral = new DeferredCommand(
-      () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
-      Set.of(m_drivetrain));
+        () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
+        Set.of(m_drivetrain));
     m_alignAndRemoveAlgae = new DeferredCommand(
-      () -> new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector),
-      Set.of(m_drivetrain));
+        () -> new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector),
+        Set.of(m_drivetrain));
+    m_bargeAlgae = new BargeAlgae(m_endEffector, m_elevator);
+    m_processAlgae = new ProcessAlgae(m_endEffector, m_elevator);
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
@@ -341,11 +352,9 @@ public class RobotContainer {
     // ==================
 
     /* End Effector */
-    Button.triangle2.onTrue(m_bumpAlgae);
-
-    Button.rightTrigger2.onTrue(m_intakeAdjustment);
-    Button.rightTrigger2.onFalse(m_goToSourceIntakeAngle1);
-    Button.rightTrigger2.onFalse(m_indexCoral);
+    Button.triangle2.onTrue(m_intakeAdjustment);
+    Button.triangle2.onFalse(m_goToSourceIntakeAngle1);
+    Button.triangle2.onFalse(m_indexCoral);
 
     /* Elevator */
     Button.controlPadDown2.onTrue(m_setLevelOne);
@@ -363,6 +372,8 @@ public class RobotContainer {
     /* Scoring */
     Button.leftBumper2.onTrue(m_setLowerAlgae);
     Button.rightBumper2.onTrue(m_setUpperAlgae);
+    Button.rightTrigger2.onTrue(m_bargeAlgae);
+    Button.leftTrigger2.onTrue(m_processAlgae);
 
   }
 
