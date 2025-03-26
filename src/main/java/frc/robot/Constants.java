@@ -93,7 +93,7 @@ public final class Constants {
     /* Swerve Current Limiting */
     public static final boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
     public static final int DRIVE_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int DRIVE_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+    public static final int DRIVE_SUPPLY_CURRENT_LOWER_LIMIT = 50;
     public static final double DRIVE_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
     public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
@@ -325,12 +325,13 @@ public final class Constants {
       PROCESSER(0.03, 0, "Processer"),
       SOURCE(0.035, 66, "Source"),
       LEVEL1(0.294, 41, "Level 1"),
-      ALGAE1(0.39, 13, "Algae 1"),
+      ALGAE1(0.37, 16, "Algae 1"),
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.77, 16, "Algae 2"),
       LEVEL3(0.838, 81, "Level 3"),
       LEVEL4(1.645, 51, "Level 4"),
-      BARGE(1.645, 45, "Barge");
+      BARGE(1.65, 45, "Barge"),
+      BARGE2(1.65, 65, "Barge 2");
 
       public double height;
       public double angle;
