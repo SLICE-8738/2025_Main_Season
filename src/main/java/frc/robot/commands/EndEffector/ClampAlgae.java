@@ -34,7 +34,7 @@ public class ClampAlgae extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_endEffector.set(0);
+    m_endEffector.setPlacementMotor(0);
   }
 
   // Returns true when the command should end.

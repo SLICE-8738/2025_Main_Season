@@ -22,10 +22,7 @@ public class BargeAlgae extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SetLevel(Level.BARGE, LevelType.SOURCE),
         new MoveToLevel(endEffector, elevator, LevelType.SOURCE, true),
-        new SetLevel(Level.BARGE2, LevelType.SOURCE),
-        new ParallelDeadlineGroup(
-            new ThrowAlgae(endEffector), 
-            new MoveToLevel(endEffector, elevator, LevelType.SOURCE, true)
-        ));
+        new SetLevel(Level.BARGE2, LevelType.SOURCE)
+        );
   }
 }

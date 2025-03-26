@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -357,9 +358,12 @@ public class RobotContainer {
     Button.leftBumper2.onTrue(m_setLowerAlgae);
     Button.rightBumper2.onTrue(m_setUpperAlgae);
     Button.rightTrigger2.onTrue(m_bargeAlgae);
-    Button.rightTrigger2.onFalse(new ThrowAlgae(m_endEffector));
+    Button.rightTrigger2.onFalse(
+          new ParallelDeadlineGroup(
+            new ThrowAlgae(m_endEffector), 
+            new MoveToLevel(m_endEffector, m_elevator, LevelType.SOURCE, true)
+        ));
     Button.leftTrigger2.onTrue(m_processAlgae);
-    Button.leftTrigger2.onFalse(new ThrowAlgae(m_endEffector));
 
   }
 
