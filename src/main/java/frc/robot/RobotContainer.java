@@ -357,7 +357,9 @@ public class RobotContainer {
     Button.leftBumper2.onTrue(m_setLowerAlgae);
     Button.rightBumper2.onTrue(m_setUpperAlgae);
     Button.rightTrigger2.onTrue(m_bargeAlgae);
+    Button.rightTrigger2.onFalse(new ThrowAlgae(m_endEffector));
     Button.leftTrigger2.onTrue(m_processAlgae);
+    Button.leftTrigger2.onFalse(new ThrowAlgae(m_endEffector));
 
   }
 
