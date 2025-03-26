@@ -4,9 +4,11 @@
 
 package frc.robot.commands.Scoring;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.EndEffector.MotorIntakeAlgae;
+import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.Constants.kElevator.LevelType;
@@ -20,7 +22,9 @@ public class ToAlgae extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-      addCommands(new MoveToLevel(endEffector, elevator, LevelType.ALGAE, true).withTimeout(1.5),
-          new MotorIntakeAlgae(endEffector));
+    addCommands(
+        new ParallelCommandGroup(new MoveElevatorToLevel(elevator, LevelType.ALGAE),
+            new PrepareEndEffector(endEffector, LevelType.ALGAE)).withTimeout(1.5),
+        new MotorIntakeAlgae(endEffector));
   }
 }
