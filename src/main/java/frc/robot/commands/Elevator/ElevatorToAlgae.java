@@ -20,6 +20,7 @@ public class ElevatorToAlgae extends SequentialCommandGroup {
   public ElevatorToAlgae(Elevator elevator, Level level, EndEffector endEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetLevel(level, LevelType.ALGAE), new MoveToLevel(endEffector, elevator, LevelType.ALGAE, false));
+    addCommands(new SetLevel(level, LevelType.ALGAE),
+        new MoveToLevel(endEffector, elevator, LevelType.ALGAE, false, false));
   }
 }

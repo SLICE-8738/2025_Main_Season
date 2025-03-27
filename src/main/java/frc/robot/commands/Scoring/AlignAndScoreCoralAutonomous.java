@@ -36,41 +36,42 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
 
   /** Creates a new AlignAndScoreCoralAutonomous. */
-  public AlignAndScoreCoralAutonomous(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector, AlignPosition position, Level level) {
+  public AlignAndScoreCoralAutonomous(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector,
+      AlignPosition position, Level level) {
 
-    int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
+    int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID
+        : position.redAprilTagID;
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
-      drivetrain,
-      position.fieldPosition.plus(new Transform2d(
-        new Translation2d(
-          EndEffector.getCoralLevel() == Level.LEVEL4 ? 
-            Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
-            : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
-          position.yAlignDistance), 
-        new Rotation2d())));
+        drivetrain,
+        position.fieldPosition.plus(new Transform2d(
+            new Translation2d(
+                EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF
+                    : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF,
+                position.yAlignDistance),
+            new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetAligningWithReefCommand(drivetrain, true),
-      new ParallelCommandGroup(
-        new ParallelDeadlineGroup(new IndexAlignCommand(endEffector), new ManualElevator(elevator, null)),
-        AutoBuilder.pathfindToPoseFlipped(
-          position.fieldPosition,
-          Constants.kDrivetrain.PATH_CONSTRAINTS,
-          0.5).until(
-            () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
-              || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
-                && alignWithReef.getDistanceFromTarget() <= 0.9)),
-      new SetLevel(level, LevelType.CORAL),
-      new ParallelCommandGroup(
-        alignWithReef,
-        new ConditionalCommand( 
-            new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
-            new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
-            () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))),
-      new ScoreCoral(endEffector).withTimeout(1));
+        new SetAligningWithReefCommand(drivetrain, true),
+        new ParallelCommandGroup(
+            new ParallelDeadlineGroup(new IndexAlignCommand(endEffector), new ManualElevator(elevator, null)),
+            AutoBuilder.pathfindToPoseFlipped(
+                position.fieldPosition,
+                Constants.kDrivetrain.PATH_CONSTRAINTS,
+                0.5).until(
+                    () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
+                        || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
+                        && alignWithReef.getDistanceFromTarget() <= 0.9)),
+        new SetLevel(level, LevelType.CORAL),
+        new ParallelCommandGroup(
+            alignWithReef,
+            new ConditionalCommand(
+                new MoveToLevel(endEffector, elevator, LevelType.CORAL, true, false),
+                new MoveToLevel(endEffector, elevator, LevelType.CORAL, false, false),
+                () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0))),
+        new ScoreCoral(endEffector).withTimeout(1));
 
   }
-  
+
 }

@@ -207,8 +207,8 @@ public class RobotContainer {
     // ==========================
 
     /* Scoring */
-    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false);
-    m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true);
+    m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false, false);
+    m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true, false);
     m_setLevelOne = new SetLevel(Level.LEVEL1, LevelType.CORAL);
     m_setLevelTwo = new SetLevel(Level.LEVEL2, LevelType.CORAL);
     m_setLevelThree = new SetLevel(Level.LEVEL3, LevelType.CORAL);
@@ -359,10 +359,9 @@ public class RobotContainer {
     Button.rightBumper2.onTrue(m_setUpperAlgae);
     Button.rightTrigger2.onTrue(m_bargeAlgae);
     Button.rightTrigger2.onFalse(
-          new ParallelDeadlineGroup(
-            new ThrowAlgae(m_endEffector), 
-            new MoveToLevel(m_endEffector, m_elevator, LevelType.SOURCE, true)
-        ));
+        new SequentialCommandGroup(
+            new MoveToLevel(m_endEffector, m_elevator, LevelType.SOURCE, true, false).withTimeout(0.5),
+            new ThrowAlgae(m_endEffector)));
     Button.leftTrigger2.onTrue(m_processAlgae);
 
   }

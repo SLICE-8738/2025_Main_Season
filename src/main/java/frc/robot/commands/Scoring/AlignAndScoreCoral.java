@@ -35,35 +35,35 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
   public AlignAndScoreCoral(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
 
     AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
-    int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
+    int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID
+        : position.redAprilTagID;
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
-      drivetrain,
-      position.fieldPosition.plus(new Transform2d(
-        new Translation2d(
-          EndEffector.getCoralLevel() == Level.LEVEL4 ? 
-            Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF 
-            : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF, 
-          position.yAlignDistance), 
-        new Rotation2d())));
+        drivetrain,
+        position.fieldPosition.plus(new Transform2d(
+            new Translation2d(
+                EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF
+                    : Constants.kDrivetrain.NON_L4_X_DISTANCE_TO_REEF,
+                position.yAlignDistance),
+            new Rotation2d())));
     ConditionalCommand moveToLevel = new ConditionalCommand(
-      new MoveToLevel(endEffector, elevator, LevelType.CORAL, true), 
-      new MoveToLevel(endEffector, elevator, LevelType.CORAL, false),
-      () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0));
+        new MoveToLevel(endEffector, elevator, LevelType.CORAL, true, false),
+        new MoveToLevel(endEffector, elevator, LevelType.CORAL, false, false),
+        () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> drivetrain.setAligningWithReef(true)),
-      AutoBuilder.pathfindToPoseFlipped(
-        position.fieldPosition,
-        Constants.kDrivetrain.PATH_CONSTRAINTS,
-        0.5).until(
-          () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID 
-            || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
-              && alignWithReef.getDistanceFromTarget() <= 0.9),
-      new InstantCommand(moveToLevel::schedule, endEffector, elevator),
-      alignWithReef);
+        new InstantCommand(() -> drivetrain.setAligningWithReef(true)),
+        AutoBuilder.pathfindToPoseFlipped(
+            position.fieldPosition,
+            Constants.kDrivetrain.PATH_CONSTRAINTS,
+            0.5).until(
+                () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
+                    || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
+                    && alignWithReef.getDistanceFromTarget() <= 0.9),
+        new InstantCommand(moveToLevel::schedule, endEffector, elevator),
+        alignWithReef);
 
   }
-  
+
 }

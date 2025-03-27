@@ -20,6 +20,6 @@ public class ProcessAlgae extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SetLevel(Level.PROCESSER, LevelType.SOURCE),
-        new MoveToLevel(endEffector, elevator, LevelType.SOURCE, false));
+        new MoveToLevel(endEffector, elevator, LevelType.SOURCE, false, true));
   }
 }
