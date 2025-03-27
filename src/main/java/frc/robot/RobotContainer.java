@@ -30,6 +30,7 @@ import frc.robot.commands.Drivetrain.DriveCommand;
 import frc.robot.commands.Drivetrain.ResetFieldOrientedHeading;
 import frc.robot.commands.Drivetrain.RunDutyCycleCommand;
 import frc.robot.commands.Elevator.ManualElevator;
+import frc.robot.commands.EndEffector.BargeAlgaeThrow;
 import frc.robot.commands.EndEffector.BumpAlgae;
 import frc.robot.commands.EndEffector.ClampAlgae;
 import frc.robot.commands.EndEffector.IndexSequence;
@@ -137,6 +138,8 @@ public class RobotContainer {
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
   public final ClampAlgae m_clampAlgae;
+
+  public final BargeAlgaeThrow m_bargeAlgaeThrow;
 
   /* Source Intake */
   public final ManualRotateSourceIntake m_manualSourceIntake;
@@ -249,6 +252,7 @@ public class RobotContainer {
     m_indexCoral = new IndexSequence(m_endEffector, m_elevator, operatorController);
     m_bumpAlgae = new BumpAlgae(m_endEffector);
     m_scoreCoral = new ScoreCoral(m_endEffector);
+    m_bargeAlgaeThrow = new BargeAlgaeThrow(m_endEffector);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
 
     m_IntakeAlgae = new IntakeAlgae(m_endEffector);
@@ -358,10 +362,7 @@ public class RobotContainer {
     Button.leftBumper2.onTrue(m_setLowerAlgae);
     Button.rightBumper2.onTrue(m_setUpperAlgae);
     Button.rightTrigger2.onTrue(m_bargeAlgae);
-    Button.rightTrigger2.onFalse(
-        new SequentialCommandGroup(
-            new MoveToLevel(m_endEffector, m_elevator, LevelType.SOURCE, true, false).withTimeout(0.5),
-            new ThrowAlgae(m_endEffector)));
+    Button.rightTrigger2.onFalse(m_bargeAlgaeThrow);
     Button.leftTrigger2.onTrue(m_processAlgae);
 
   }
