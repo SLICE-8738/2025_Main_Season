@@ -275,8 +275,8 @@ public final class Constants {
 
     }
 
-    public static final int[] NON_REEF_APRILTAG_IDS = { 13, 12, 16, 15, 14, 5, 4, 3, 2, 1 };
-    public static final int[] REEF_APRILTAG_IDS = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };
+    public static final int[] CORAL_STATION_APRILTAG_IDS = {1, 2, 12, 13};
+    public static final int[] REEF_APRILTAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
 
   }
 
@@ -324,7 +324,7 @@ public final class Constants {
       STOW(0.01, 84, "Stow"),
       PROCESSER(0.03, 0, "Processer"),
       SOURCE(0.035, 66, "Source"),
-      LEVEL1(0.294, 41, "Level 1"),
+      LEVEL1(0.19, 81, "Level 1"),
       ALGAE1(0.37, 16, "Algae 1"),
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.77, 16, "Algae 2"),

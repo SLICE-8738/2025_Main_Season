@@ -243,20 +243,22 @@ public class Drivetrain extends SubsystemBase {
         
         double tagID = LimelightHelpers.getFiducialID("limelight-" + side);
 
-        for (int ignoredTagID : aligningWithReef ? Constants.kDrivetrain.NON_REEF_APRILTAG_IDS : Constants.kDrivetrain.REEF_APRILTAG_IDS) {
+        for (int desiredID : aligningWithReef ? Constants.kDrivetrain.REEF_APRILTAG_IDS : Constants.kDrivetrain.CORAL_STATION_APRILTAG_IDS) {
 
-          if (tagID == ignoredTagID) {
-            return;
+          if (tagID == desiredID) {
+
+            Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
+
+            if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3.5) {
+                
+              m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading()), estimate.timestampSeconds);
+                
+            }
+
+            break;
+
           }
 
-        }
-
-        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_RobotSpace("limelight-" + side).getTranslation();
-
-        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 3.5) {
-          
-          m_odometry.addVisionMeasurement(new Pose2d(estimate.pose.getX(), estimate.pose.getY(), getHeading()), estimate.timestampSeconds);
-          
         }
 
       }

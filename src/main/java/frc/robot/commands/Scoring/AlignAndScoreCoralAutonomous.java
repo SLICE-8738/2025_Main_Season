@@ -25,6 +25,7 @@ import frc.robot.commands.Drivetrain.PoseAlignCommand;
 import frc.robot.commands.Drivetrain.SetAligningWithReefCommand;
 import frc.robot.commands.Elevator.ManualElevator;
 import frc.robot.commands.EndEffector.IndexAlignCommand;
+import frc.robot.commands.EndEffector.IndexInCommand;
 import frc.robot.commands.EndEffector.ScoreCoral;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
@@ -55,7 +56,9 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
     addCommands(
         new SetAligningWithReefCommand(drivetrain, true),
         new ParallelCommandGroup(
-            new ParallelDeadlineGroup(new IndexAlignCommand(endEffector), new ManualElevator(elevator, null)),
+            new ParallelDeadlineGroup(
+                new SequentialCommandGroup(new IndexInCommand(endEffector, null), new IndexAlignCommand(endEffector)), 
+                new ManualElevator(elevator, null)),
             AutoBuilder.pathfindToPoseFlipped(
                 position.fieldPosition,
                 Constants.kDrivetrain.PATH_CONSTRAINTS,

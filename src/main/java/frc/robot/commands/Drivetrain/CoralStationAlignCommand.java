@@ -39,11 +39,11 @@ public class CoralStationAlignCommand extends Command {
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
-        0.6,
+        0.5,
         Constants.OperatorConstants.DRIVE_EXPONENT,
         Constants.OperatorConstants.DRIVE_EXPONENT_PERCENT));
 
-    rotationController = new PIDController(4, 0, 0);
+    rotationController = new PIDController(6, 0, 0);
     rotationController.enableContinuousInput(0, 360);
 
   }

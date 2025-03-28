@@ -28,7 +28,7 @@ public class ManualEndEffector extends Command {
   @Override
   public void initialize() {
     m_endEffector.resetRelativeEncoder();
-    maintaining = true;
+    maintaining = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
