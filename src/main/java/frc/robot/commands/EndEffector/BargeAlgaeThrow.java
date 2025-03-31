@@ -18,6 +18,7 @@ public class BargeAlgaeThrow extends Command {
   public BargeAlgaeThrow(EndEffector endEffector) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_endEffector = endEffector;
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
