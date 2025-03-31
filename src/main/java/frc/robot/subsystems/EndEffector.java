@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -43,6 +44,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private static Level m_algaeLevel = Level.ALGAE1;
   private static Level m_sourceLevel = Level.SOURCE;
   private static LevelType m_levelType = LevelType.SOURCE;
+
   // private static DigitalInput middleSensor;
   public double normalKG = 2;
 
@@ -67,11 +69,19 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     frontSensor = new CANrange(8); // change id
     backSensor = new CANrange(9); // change id
     middleSensor = new CANrange(5); // change id
-    placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
-    // middleSensor = new DigitalInput(3);
+    CANrangeConfiguration config = new CANrangeConfiguration();
 
+    config.FovParams.FOVCenterX = 0;
+    config.FovParams.FOVCenterY = 0;
+
+    frontSensor.getConfigurator().apply(config);
+    backSensor.getConfigurator().apply(config);
+    middleSensor.getConfigurator().apply(config);
+
+    placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     encoder = new DutyCycleEncoder(6, 360, 0);
     encoder.setInverted(true);
+
   }
 
   /**
