@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.CANrangeConfiguration;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
@@ -34,14 +36,15 @@ public class EndEffector extends TalonFXPositionalSubsystem {
    * sensor
    * Coral successfully indexed
    */
-  private static DigitalInput frontSensor;
-  private static DigitalInput backSensor;
-  private static DigitalInput middleSensor;
+  private static CANrange frontSensor;
+  private static CANrange backSensor;
+  private static CANrange middleSensor;
   private TalonFX placementMotor;
   private static Level m_coralLevel = Level.LEVEL1;
   private static Level m_algaeLevel = Level.ALGAE1;
   private static Level m_sourceLevel = Level.SOURCE;
   private static LevelType m_levelType = LevelType.SOURCE;
+
   // private static DigitalInput middleSensor;
   public double normalKG = 2;
 
@@ -63,14 +66,22 @@ public class EndEffector extends TalonFXPositionalSubsystem {
         Constants.CTRE_CONFIGS.positionalFXConfig);
 
     // TODO enter parameters
-    frontSensor = new DigitalInput(8);
-    backSensor = new DigitalInput(9);
-    middleSensor = new DigitalInput(5);
-    placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
-    // middleSensor = new DigitalInput(3);
+    frontSensor = new CANrange(8); // change id
+    backSensor = new CANrange(9); // change id
+    middleSensor = new CANrange(5); // change id
+    CANrangeConfiguration config = new CANrangeConfiguration();
 
+    config.FovParams.FOVCenterX = 0;
+    config.FovParams.FOVCenterY = 0;
+
+    frontSensor.getConfigurator().apply(config);
+    backSensor.getConfigurator().apply(config);
+    middleSensor.getConfigurator().apply(config);
+
+    placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
     encoder = new DutyCycleEncoder(6, 360, 0);
     encoder.setInverted(true);
+
   }
 
   /**
@@ -142,9 +153,9 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   public static boolean[] checkSensorsIndexing() {
     boolean[] sensorStatuses = new boolean[3];
-    sensorStatuses[0] = !frontSensor.get();
-    sensorStatuses[1] = !middleSensor.get();
-    sensorStatuses[2] = !backSensor.get();
+    sensorStatuses[0] = !frontSensor.getIsDetected().getValue();
+    sensorStatuses[1] = !middleSensor.getIsDetected().getValue();
+    sensorStatuses[2] = !backSensor.getIsDetected().getValue();
     return sensorStatuses;
   }
 
@@ -161,15 +172,16 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Absolute End Effector Angle", encoder.get());
     SmartDashboard.putNumber("Relative End Effector Angle", getPositions()[0]);
-    SmartDashboard.putBoolean("SensorFront", frontSensor.get());
-    SmartDashboard.putBoolean("SensorBack", backSensor.get());
-    SmartDashboard.putBoolean("SensorMiddle", middleSensor.get());
+    SmartDashboard.putBoolean("SensorFront", frontSensor.getIsDetected().getValue());
+    SmartDashboard.putBoolean("SensorBack", backSensor.getIsDetected().getValue());
+    SmartDashboard.putBoolean("SensorMiddle", middleSensor.getIsDetected().getValue());
     SmartDashboard.putString("Last Command", getCurrentCommand() == null ? "null" : getCurrentCommand().getName());
 
     SmartDashboard.putNumber("Subsystem Target Angle", getLevelType().equals(LevelType.CORAL) ? getCoralLevel().angle
         : getLevelType().equals(LevelType.ALGAE) ? getAlgaeLevel().angle : getSourceLevel().angle);
     SmartDashboard.putNumber("Motor Target Angle", getTargetPosition());
 
-    Logger.recordOutput("End Effector/Current Command", getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
+    Logger.recordOutput("End Effector/Current Command",
+        getCurrentCommand() == null ? "Nothing" : getCurrentCommand().getName());
   }
 }
