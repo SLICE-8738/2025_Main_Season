@@ -264,8 +264,7 @@ public final class Constants {
       public final String name;
       public final int blueAprilTagID, redAprilTagID;
 
-      private AlignPosition(double yAlignDistance, Pose2d fieldPosition, String name, int blueAprilTagID,
-          int redAprilTagID) {
+      private AlignPosition(double yAlignDistance, Pose2d fieldPosition, String name, int blueAprilTagID, int redAprilTagID) {
         this.yAlignDistance = yAlignDistance;
         this.fieldPosition = fieldPosition;
         this.name = name;

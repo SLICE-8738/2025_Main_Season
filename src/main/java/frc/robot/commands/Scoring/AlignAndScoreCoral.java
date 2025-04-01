@@ -57,11 +57,10 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
         new SetAligningWithReefCommand(drivetrain, true),
         AutoBuilder.pathfindToPoseFlipped(
             position.fieldPosition,
-            Constants.kDrivetrain.PATH_CONSTRAINTS,
-            0.5).until(
+            Constants.kDrivetrain.PATH_CONSTRAINTS).until(
                 () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
                     || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
-                    && alignWithReef.getDistanceFromTarget() <= 0.9),
+                        && alignWithReef.getDistanceFromTarget() <= 1.1),
         new InstantCommand(moveToLevel::schedule, endEffector, elevator),
         alignWithReef);
 
