@@ -12,6 +12,7 @@ public class REVConfigs {
     public final SparkMaxConfig angleSparkMaxConfig = new SparkMaxConfig();
 
     public REVConfigs() {
+
         /* ==================================== */
         /* Default Velocity Motor Configuration */
         /* ==================================== */
@@ -86,6 +87,7 @@ public class REVConfigs {
             angleSparkMaxConfig.closedLoop.p(Constants.kDrivetrain.ANGLE_KP);
             angleSparkMaxConfig.closedLoop.i(Constants.kDrivetrain.ANGLE_KI);
             angleSparkMaxConfig.closedLoop.d(Constants.kDrivetrain.ANGLE_KD);
+            
     }
 
 }

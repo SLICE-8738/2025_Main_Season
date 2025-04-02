@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,7 +37,6 @@ import frc.robot.commands.EndEffector.IntakeAlgae;
 import frc.robot.commands.EndEffector.ManualEndEffector;
 import frc.robot.commands.EndEffector.OutakeAlgae;
 import frc.robot.commands.EndEffector.ScoreCoral;
-import frc.robot.commands.EndEffector.ThrowAlgae;
 import frc.robot.commands.LEDs.CoralLEDs;
 import frc.robot.commands.Scoring.AlignAndRemoveAlgae;
 import frc.robot.commands.Scoring.AlignAndScoreCoral;
@@ -184,14 +182,10 @@ public class RobotContainer {
         break;
       default:
         m_drivetrain = new Drivetrain(
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            },
-            new SwerveModuleIO() {
-            });
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {});
         break;
     }
 

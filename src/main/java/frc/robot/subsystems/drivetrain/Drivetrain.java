@@ -227,8 +227,6 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Updates the drivetrain odometry object to the robot's current position on the
    * field.
-   * 
-   * @return The new updated pose of the robot.
    */
   public void updateOdometry() {
 

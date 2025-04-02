@@ -15,6 +15,7 @@ public final class CTREConfigs {
     public final TalonFXConfiguration sourceIntakeFXConfig = new TalonFXConfiguration();
 
     public CTREConfigs() {
+
         /* ================================ */
         /* Swerve Drive Motor Configuration */
         /* ================================ */
@@ -47,8 +48,11 @@ public final class CTREConfigs {
             swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
             swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
 
+        /* =========================== */
         /* Pigeon 2 Gyro Configuration */
-        pigeon2Config.GyroTrim.GyroScalarZ = Constants.kDrivetrain.INVERT_GYRO ? -1 : 1;
+        /* =========================== */        
+            
+            pigeon2Config.GyroTrim.GyroScalarZ = Constants.kDrivetrain.INVERT_GYRO ? -1 : 1;
 
         /* ====================================== */
         /* Default Positional Motor Configuration */

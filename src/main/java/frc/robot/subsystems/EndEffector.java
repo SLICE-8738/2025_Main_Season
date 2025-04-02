@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
+import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -39,6 +40,8 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   private static CANrange frontSensor;
   private static CANrange backSensor;
   private static CANrange middleSensor;
+
+  private static boolean lastFront, lastMiddle, lastBack;
   private TalonFX placementMotor;
   private static Level m_coralLevel = Level.LEVEL1;
   private static Level m_algaeLevel = Level.ALGAE1;
@@ -66,19 +69,27 @@ public class EndEffector extends TalonFXPositionalSubsystem {
         Constants.CTRE_CONFIGS.positionalFXConfig);
 
     // TODO enter parameters
-    frontSensor = new CANrange(8); // change id
-    backSensor = new CANrange(9); // change id
-    middleSensor = new CANrange(5); // change id
+    frontSensor = new CANrange(25);
+    backSensor = new CANrange(26); // change id
+    middleSensor = new CANrange(24); // change id
     CANrangeConfiguration config = new CANrangeConfiguration();
 
     config.FovParams.FOVCenterX = 0;
     config.FovParams.FOVCenterY = 0;
+    config.FovParams.FOVRangeX = 6.75;
+    config.FovParams.FOVRangeY = 6.75;
+    config.ProximityParams.ProximityThreshold = 0.08;
+    config.ProximityParams.ProximityHysteresis = .001;
+    config.ProximityParams.MinSignalStrengthForValidMeasurement = 15000;
 
     frontSensor.getConfigurator().apply(config);
-    backSensor.getConfigurator().apply(config);
-    middleSensor.getConfigurator().apply(config);
+    // Middle and back sensor have offset centers to prevent them from triggering each other.
+    backSensor.getConfigurator().apply(config.withFovParams(config.FovParams.withFOVCenterY(9).withFOVCenterX(0).withFOVRangeX(6.75).withFOVRangeY(6.75)));
+    middleSensor.getConfigurator().apply(config.withFovParams(config.FovParams.withFOVCenterY(9).withFOVCenterX(0).withFOVRangeX(6.75).withFOVRangeY(6.75)));
+
 
     placementMotor = new TalonFX(Constants.kEndEffector.PLACEMENT_MOTOR_ID);
+
     encoder = new DutyCycleEncoder(6, 360, 0);
     encoder.setInverted(true);
 
@@ -153,9 +164,14 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   public static boolean[] checkSensorsIndexing() {
     boolean[] sensorStatuses = new boolean[3];
-    sensorStatuses[0] = !frontSensor.getIsDetected().getValue();
-    sensorStatuses[1] = !middleSensor.getIsDetected().getValue();
-    sensorStatuses[2] = !backSensor.getIsDetected().getValue();
+    sensorStatuses[0] = frontSensor.getIsDetected().getValue();
+    sensorStatuses[1] = middleSensor.getIsDetected().getValue();
+    sensorStatuses[2] = backSensor.getIsDetected().getValue();
+
+    lastFront = frontSensor.getIsDetected().getValue();
+    lastMiddle = middleSensor.getIsDetected().getValue();
+    lastBack = backSensor.getIsDetected().getValue();
+
     return sensorStatuses;
   }
 
@@ -169,12 +185,16 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
   @Override
   public void periodic() {
+
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Absolute End Effector Angle", encoder.get());
     SmartDashboard.putNumber("Relative End Effector Angle", getPositions()[0]);
-    SmartDashboard.putBoolean("SensorFront", frontSensor.getIsDetected().getValue());
-    SmartDashboard.putBoolean("SensorBack", backSensor.getIsDetected().getValue());
-    SmartDashboard.putBoolean("SensorMiddle", middleSensor.getIsDetected().getValue());
+    SmartDashboard.putBoolean("SensorFront", checkSensorsIndexing()[0]);
+    SmartDashboard.putBoolean("SensorBack", checkSensorsIndexing()[2]);
+    SmartDashboard.putBoolean("SensorMiddle", checkSensorsIndexing()[1]);
+    SmartDashboard.putNumber("SensorFront Distance", frontSensor.getDistance().getValueAsDouble());
+    SmartDashboard.putNumber("SensorBack Distance", backSensor.getDistance().getValueAsDouble());
+    SmartDashboard.putNumber("SensorMiddle Distance", middleSensor.getDistance().getValueAsDouble());
     SmartDashboard.putString("Last Command", getCurrentCommand() == null ? "null" : getCurrentCommand().getName());
 
     SmartDashboard.putNumber("Subsystem Target Angle", getLevelType().equals(LevelType.CORAL) ? getCoralLevel().angle
