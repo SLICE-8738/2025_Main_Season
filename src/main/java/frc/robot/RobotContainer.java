@@ -370,8 +370,8 @@ public class RobotContainer {
     return new SequentialCommandGroup(
         new ResetRelativeEncoders(m_endEffector, m_sourceIntake),
         new ParallelCommandGroup(
-            new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE)),
-        m_autoSelector.getAutoRoutine());
+          new RotateSourceIntake(m_sourceIntake, 2, Constants.kSourceIntake.INTAKE_ANGLE),
+          m_autoSelector.getAutoRoutine()));
   }
 
   public Command getTeleopInitCommand() {

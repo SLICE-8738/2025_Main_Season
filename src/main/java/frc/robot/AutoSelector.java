@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 //import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import frc.robot.Constants.kDrivetrain.AlignPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Scoring.AlignAndGetCoralAutonomous;
@@ -147,7 +148,7 @@ public class AutoSelector {
 
             AlignPosition position = AlignPosition.values()[i];
 
-            for (int j : new int[] {3, 5, 7, 8}) {
+            for (int j : new int[] {3, 5, 7}) {
 
                 Level level = Level.values()[j];
 
@@ -158,6 +159,20 @@ public class AutoSelector {
                 autoPoses.put("Score Coral " + position.name + " " + level.name, position.fieldPosition);
 
             }
+
+            NamedCommands.registerCommand(
+                "Score Coral " + position.name + " Level 4",
+                new ConditionalCommand(
+                    new AlignAndScoreCoralAutonomous(drivetrain, elevator, endEffector, position, Level.LEVEL4),
+                    new AlignAndScoreCoralAutonomous(
+                        drivetrain, 
+                        elevator, 
+                        endEffector, 
+                        position == AlignPosition.BACK_LEFT_LEFT_BRANCH ? AlignPosition.BACK_MIDDLE_LEFT_BRANCH : AlignPosition.BACK_MIDDLE_RIGHT_BRANCH, 
+                        Level.LEVEL2),
+                    () -> DriverStation.getMatchTime() >= 3));
+
+            autoPoses.put("Score Coral " + position.name + " Level 4", position.fieldPosition);
 
         }
 
@@ -186,7 +201,7 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.name
                 + ", Mode: " + mode.name);
             autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name));
-            initialAutoPose = (mode.useStartingPosition) ? 
+            initialAutoPose = mode.useStartingPosition ? 
                 new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose()
                 : null;
 

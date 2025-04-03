@@ -50,7 +50,10 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
           0.5).until(() -> alignWithCoralStation.getDistanceFromTarget() <= 0.9)),
       new ParallelCommandGroup(
         new IndexSequence(endEffector, elevator, null),
-        alignWithCoralStation).until(() -> EndEffector.checkSensorsIndexing()[2]));
+        alignWithCoralStation).until(() -> {
+          boolean[] sensors = EndEffector.checkSensorsIndexing();
+          return sensors[1] && sensors[2];
+        }));
 
   }
 

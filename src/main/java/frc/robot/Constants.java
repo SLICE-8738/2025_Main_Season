@@ -139,7 +139,7 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY = 12.5; // radians per second
 
     /* PathPlanner Values */
-    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.8, 11.5, 11.5, 12.5);
+    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.8, 6.5, 11, 12.5);
     public static final double TRANSLATION_KP = 10.5;
     public static final double ROTATION_KP = 4.0;
 
@@ -438,7 +438,7 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET = 364;
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
-    public static final double INTAKE_ANGLE = 27;
+    public static final double INTAKE_ANGLE = 24;
     public static final double CLIMB_ANGLE = 87;
 
     public static final double MAX_ANGLE = 88;
