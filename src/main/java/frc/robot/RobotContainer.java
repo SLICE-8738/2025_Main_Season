@@ -45,6 +45,7 @@ import frc.robot.commands.Scoring.AlignAndScoreCoral;
 import frc.robot.commands.Scoring.BargeAlgae;
 import frc.robot.commands.Scoring.IntakeAdjustment;
 import frc.robot.commands.Scoring.MoveToLevel;
+import frc.robot.commands.Scoring.MoveToLevelParallel;
 import frc.robot.commands.Scoring.ProcessAlgae;
 import frc.robot.commands.Scoring.ResetRelativeEncoders;
 import frc.robot.commands.Scoring.SetLevel;
@@ -121,6 +122,7 @@ public class RobotContainer {
   public final IntakeAdjustment m_intakeAdjustment;
   public final BargeAlgae m_bargeAlgae;
   public final ProcessAlgae m_processAlgae;
+  public final MoveToLevelParallel m_moveToLevelParallel;
 
   /* Climber */
   public final ManualClimberCommand m_manualClimb;
@@ -230,6 +232,7 @@ public class RobotContainer {
         Set.of(m_drivetrain));
     m_bargeAlgae = new BargeAlgae(m_endEffector, m_elevator);
     m_processAlgae = new ProcessAlgae(m_endEffector, m_elevator);
+    m_moveToLevelParallel = new MoveToLevelParallel(m_elevator, m_endEffector);
 
     /* Drivetrain */
     m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
@@ -325,8 +328,8 @@ public class RobotContainer {
     Button.psButton1.onTrue(m_elevatorToStow);
 
     /* Scoring */
-    Button.rightBumper1.onTrue(new ConditionalCommand(m_moveDownToLevel, m_moveUpToLevel,
-        () -> (Elevator.getCoralLevel().height - m_elevator.getPositions()[0] < 0)));
+    Button.rightBumper1.onTrue(new ConditionalCommand(m_moveUpToLevel, m_moveToLevelParallel,
+        () -> (Elevator.getCoralLevel() == Level.LEVEL4)));
 
     Button.circle1.onTrue(new ConditionalCommand(m_toAlgaeLower, m_toAlgaeHigher,
         () -> (Elevator.getAlgaeLevel().height - m_elevator.getPositions()[0] < 0)));
