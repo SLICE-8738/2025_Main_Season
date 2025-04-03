@@ -5,6 +5,7 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.subsystems.EndEffector;
@@ -24,14 +25,16 @@ public class BargeAlgaeThrow extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_endEffector.setPosition(Level.BARGE2.angle);
-    m_endEffector.setPlacementMotor(-0.2);
-    timer.reset();
+    timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_endEffector.setPosition(Level.BARGE2.angle);
+    m_endEffector.setPlacementMotor(-0.2);
+
+    SmartDashboard.putNumber("Timer", timer.get());
   }
 
   // Called once the command ends or is interrupted.

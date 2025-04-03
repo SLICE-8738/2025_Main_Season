@@ -5,6 +5,7 @@
 package frc.robot.commands.Scoring;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants.kElevator.LevelType;
 import frc.robot.commands.Elevator.MoveElevatorToLevel;
 import frc.robot.commands.EndEffector.PrepareEndEffector;
 import frc.robot.subsystems.Elevator;
@@ -15,10 +16,10 @@ import frc.robot.subsystems.EndEffector;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MoveToLevelParallel extends ParallelCommandGroup {
   /** Creates a new MoveToLevelParallel. */
-  public MoveToLevelParallel(Elevator elevator, EndEffector endEffector) {
+  public MoveToLevelParallel(Elevator elevator, EndEffector endEffector, LevelType levelType) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveElevatorToLevel(elevator, Elevator.getLevelType()),
-        new PrepareEndEffector(endEffector, EndEffector.getLevelType(), false));
+    addCommands(new MoveElevatorToLevel(elevator, levelType),
+        new PrepareEndEffector(endEffector, levelType, false));
   }
 }
