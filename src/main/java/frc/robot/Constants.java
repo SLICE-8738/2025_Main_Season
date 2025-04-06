@@ -438,7 +438,7 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET = 364;
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
-    public static final double INTAKE_ANGLE = 27;
+    public static final double INTAKE_ANGLE = 31;
     public static final double CLIMB_ANGLE = 87;
 
     public static final double MAX_ANGLE = 88;
