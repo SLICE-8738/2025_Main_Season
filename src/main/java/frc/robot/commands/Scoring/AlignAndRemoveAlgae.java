@@ -9,7 +9,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -34,13 +33,13 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
   public AlignAndRemoveAlgae(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
 
     AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
-    //int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
+    int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
     ToAlgae toAlgae = new ToAlgae(elevator, endEffector);
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
       position.fieldPosition.plus(new Transform2d(
         new Translation2d(
-          Constants.kDrivetrain.L4_X_DISTANCE_TO_REEF, 
+          Constants.kDrivetrain.X_DISTANCE_TO_REEF_FACE, 
           0), 
         new Rotation2d())));
 
@@ -50,12 +49,11 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
       new SetAligningWithReefCommand(drivetrain, true),
       AutoBuilder.pathfindToPoseFlipped(
         position.fieldPosition,
-        Constants.kDrivetrain.PATH_CONSTRAINTS)/*.until(
+        Constants.kDrivetrain.PATH_CONSTRAINTS).until(
           () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
               && alignWithReef.getDistanceFromTarget() <= 0.9),
-      new InstantCommand(() -> drivetrain.runChassisSpeeds(new ChassisSpeeds()))*/,
-      toAlgae,
+      new InstantCommand(toAlgae::schedule, elevator, endEffector),
       alignWithReef);
 
   }
