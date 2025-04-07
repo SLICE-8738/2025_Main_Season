@@ -217,7 +217,7 @@ public final class Constants {
                                                                   // field position to ideal position for L1 - L3
     public static final double L4_X_DISTANCE_TO_REEF = 0.28; // Robot-relative x distance from pathfinding target field
                                                              // position to ideal position for L4 (reef face)
-    public static final double X_DISTANCE_TO_CORAL_STATION = -0.518; // Robot-relative x distance from pathfinding
+    public static final double X_DISTANCE_TO_CORAL_STATION = -0.318; // Robot-relative x distance from pathfinding
                                                                      // target field position to coral station (coral
                                                                      // station face)
 
@@ -250,13 +250,21 @@ public final class Constants {
           "Back Middle Right Branch", 18, 7),
 
       /* Coral Station Positions */
-      LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.435, 6.595, Rotation2d.fromDegrees(305)),
+      /*LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.435, 6.595, Rotation2d.fromDegrees(305)),
           "Left Coral Station Right", 13, 1),
       LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.435, 6.595, Rotation2d.fromDegrees(305)),
           "Left Coral Station Left", 13, 1),
       RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.435, 1.477, Rotation2d.fromDegrees(55)),
           "Right Coral Station Right", 12, 2),
       RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.435, 1.477, Rotation2d.fromDegrees(55)),
+          "Right Coral Station Left", 12, 2); */
+      LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.32, 6.759, Rotation2d.fromDegrees(305)),
+          "Left Coral Station Right", 13, 1),
+      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.32, 6.759, Rotation2d.fromDegrees(305)),
+          "Left Coral Station Left", 13, 1),
+      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.32, 1.283, Rotation2d.fromDegrees(55)),
+          "Right Coral Station Right", 12, 2),
+      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.32, 1.283, Rotation2d.fromDegrees(55)),
           "Right Coral Station Left", 12, 2);
 
       public final double yAlignDistance;
