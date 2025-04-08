@@ -32,12 +32,6 @@ public class AlignPositionSelector {
         alignPositions.add(driverTab.add("          ", false).withPosition(7, 4).withWidget(BuiltInWidgets.kToggleButton).getEntry());
         alignPositions.add(driverTab.add("           ", false).withPosition(6, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
 
-        /* Coral Station Positions */
-        alignPositions.add(driverTab.add("            ", true).withPosition(0, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
-        alignPositions.add(driverTab.add("             ", false).withPosition(1, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
-        alignPositions.add(driverTab.add("              ", false).withPosition(10, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
-        alignPositions.add(driverTab.add("               ", false).withPosition(11, 5).withWidget(BuiltInWidgets.kToggleButton).getEntry());
-
         selectedAlignPosition = alignPositions.get(0);
 
     }

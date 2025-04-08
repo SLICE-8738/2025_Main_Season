@@ -46,9 +46,9 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
         drivetrain,
         position.fieldPosition.plus(new Transform2d(
             new Translation2d(
-                EndEffector.getCoralLevel() == Level.LEVEL4 ? Constants.kDrivetrain.X_DISTANCE_TO_REEF_FACE
-                    : Constants.kDrivetrain.X_DISTANCE_TO_REEF,
-                position.yAlignDistance),
+                (EndEffector.getCoralLevel() == Level.LEVEL4 || EndEffector.getCoralLevel() == Level.LEVEL1) ? 
+                    Constants.kDrivetrain.X_DISTANCE_TO_REEF_FACE: Constants.kDrivetrain.X_DISTANCE_TO_REEF,
+                position.yAlignDistance.getAsDouble()), // TODO: Change to use reef level argument
             new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.
@@ -64,7 +64,7 @@ public class AlignAndScoreCoralAutonomous extends SequentialCommandGroup {
                 Constants.kDrivetrain.PATH_CONSTRAINTS).until(
                     () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
                         || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
-                            && alignWithReef.getDistanceFromTarget() <= 1.1)),
+                            && alignWithReef.getDistanceFromTarget() <= 1.6)),
         new SetLevel(level, LevelType.CORAL),
         new ParallelCommandGroup(
             alignWithReef,

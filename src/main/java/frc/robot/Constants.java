@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -15,7 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-
+import frc.robot.Constants.kElevator.Level;
+import frc.robot.subsystems.EndEffector;
 import frc.slicelibs.util.CTREConfigs;
 import frc.slicelibs.util.REVConfigs;
 import frc.slicelibs.util.SwerveModuleConstants;
@@ -84,7 +87,7 @@ public final class Constants {
         new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
 
     /* Motor Gearing */
-    public static final double DRIVE_GEAR_RATIO = (6.75 / 1.0); // 6.75:1
+    public static final double DRIVE_GEAR_RATIO = (5.79 / 1.0); // 5.79:1
     public static final double ANGLE_GEAR_RATIO = (25.0 / 1.0); // 25:1
 
     /* Swerve Voltage Compensation */
@@ -97,7 +100,7 @@ public final class Constants {
     public static final double DRIVE_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
     public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double DRIVE_STATOR_CURRENT_LIMIT = 50;
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 60;
 
     public static final int ANGLE_CURRENT_LIMIT = 20;
 
@@ -124,7 +127,7 @@ public final class Constants {
 
     /* Drive Motor Feedforward Values */
     // TODO: Find drive motor feedforward gains from characterization
-    public static final double DRIVE_KS = 0.15;
+    public static final double DRIVE_KS = 0.155;
     public static final double DRIVE_KV = 2.1818;
     public static final double DRIVE_KA = 0.01;
 
@@ -220,36 +223,36 @@ public final class Constants {
                                                               field position to a little bit away from the reef */
     public static final double X_DISTANCE_TO_REEF_FACE = 0.28; /* Robot-relative x distance from pathfinding target field
                                                                   position to reef face */
-    public static final double X_DISTANCE_TO_CORAL_STATION = -0.318; /* Robot-relative x distance from pathfinding
+    public static final double X_DISTANCE_TO_CORAL_STATION = /*-0.518*/ -0.318; /* Robot-relative x distance from pathfinding
                                                                         target field position to coral station face */
 
     public static enum AlignPosition {
 
       /* Reef Positions */
-      BACK_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_DISTANCE, new Pose2d(2.853, 4.021, new Rotation2d()),
-          "Back Middle Left Branch", 18, 7),
-      BACK_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_DISTANCE, new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)),
-          "Back Left Right Branch", 19, 6),
-      BACK_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_DISTANCE, new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)),
-          "Back Left Left Branch", 19, 6),
-      FRONT_LEFT_RIGHT_BRANCH(RIGHT_BRANCH_Y_DISTANCE, new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)),
-          "Front Left Right Branch", 20, 11),
-      FRONT_LEFT_LEFT_BRANCH(LEFT_BRANCH_Y_DISTANCE, new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)),
-          "Front Left Left Branch", 20, 11),
-      FRONT_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_DISTANCE, new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)),
-          "Front Middle Right Branch", 21, 10),
-      FRONT_MIDDLE_LEFT_BRANCH(LEFT_BRANCH_Y_DISTANCE, new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)),
-          "Front Middle Left Branch", 21, 10),
-      FRONT_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_DISTANCE, new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)),
-          "Front Right Right Branch", 22, 9),
-      FRONT_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_DISTANCE, new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)),
-          "Front Right Left Branch", 22, 9),
-      BACK_RIGHT_RIGHT_BRANCH(RIGHT_BRANCH_Y_DISTANCE, new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)),
-          "Back Right Right Branch", 17, 8),
-      BACK_RIGHT_LEFT_BRANCH(LEFT_BRANCH_Y_DISTANCE, new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)),
-          "Back Right Left Branch", 17, 8),
-      BACK_MIDDLE_RIGHT_BRANCH(RIGHT_BRANCH_Y_DISTANCE, new Pose2d(2.853, 4.021, new Rotation2d()),
-          "Back Middle Right Branch", 18, 7),
+      BACK_MIDDLE_LEFT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+        new Pose2d(2.853, 4.021, new Rotation2d()), "Back Middle Left Branch", 18, 7),
+      BACK_LEFT_RIGHT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+        new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)), "Back Left Right Branch", 19, 6),
+      BACK_LEFT_LEFT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+        new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)), "Back Left Left Branch", 19, 6),
+      FRONT_LEFT_RIGHT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+        new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)), "Front Left Right Branch", 20, 11),
+      FRONT_LEFT_LEFT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+        new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)), "Front Left Left Branch", 20, 11),
+      FRONT_MIDDLE_RIGHT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+        new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)), "Front Middle Right Branch", 21, 10),
+      FRONT_MIDDLE_LEFT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+        new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)), "Front Middle Left Branch", 21, 10),
+      FRONT_RIGHT_RIGHT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+        new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)), "Front Right Right Branch", 22, 9),
+      FRONT_RIGHT_LEFT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+        new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)), "Front Right Left Branch", 22, 9),
+      BACK_RIGHT_RIGHT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+        new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)), "Back Right Right Branch", 17, 8),
+      BACK_RIGHT_LEFT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+        new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)), "Back Right Left Branch", 17, 8),
+      BACK_MIDDLE_RIGHT_BRANCH(() -> EndEffector.getCoralLevel() == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+        new Pose2d(2.853, 4.021, new Rotation2d()), "Back Middle Right Branch", 18, 7),
 
       /* Coral Station Positions */
       /*LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.435, 6.595, Rotation2d.fromDegrees(305)),
@@ -260,21 +263,21 @@ public final class Constants {
           "Right Coral Station Right", 12, 2),
       RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.435, 1.477, Rotation2d.fromDegrees(55)),
           "Right Coral Station Left", 12, 2); */
-      LEFT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.32, 6.759, Rotation2d.fromDegrees(305)),
+      LEFT_CORAL_STATION_RIGHT(() -> CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.32, 6.759, Rotation2d.fromDegrees(305)),
           "Left Coral Station Right", 13, 1),
-      LEFT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.32, 6.759, Rotation2d.fromDegrees(305)),
+      LEFT_CORAL_STATION_LEFT(() -> CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.32, 6.759, Rotation2d.fromDegrees(305)),
           "Left Coral Station Left", 13, 1),
-      RIGHT_CORAL_STATION_RIGHT(CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.32, 1.283, Rotation2d.fromDegrees(55)),
+      RIGHT_CORAL_STATION_RIGHT(() -> CORAL_STATION_RIGHT_Y_DISTANCE, new Pose2d(1.32, 1.283, Rotation2d.fromDegrees(55)),
           "Right Coral Station Right", 12, 2),
-      RIGHT_CORAL_STATION_LEFT(CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.32, 1.283, Rotation2d.fromDegrees(55)),
+      RIGHT_CORAL_STATION_LEFT(() -> CORAL_STATION_LEFT_Y_DISTANCE, new Pose2d(1.32, 1.283, Rotation2d.fromDegrees(55)),
           "Right Coral Station Left", 12, 2);
 
-      public final double yAlignDistance;
+      public final DoubleSupplier yAlignDistance;
       public final Pose2d fieldPosition;
       public final String name;
       public final int blueAprilTagID, redAprilTagID;
 
-      private AlignPosition(double yAlignDistance, Pose2d fieldPosition, String name, int blueAprilTagID, int redAprilTagID) {
+      private AlignPosition(DoubleSupplier yAlignDistance, Pose2d fieldPosition, String name, int blueAprilTagID, int redAprilTagID) {
         this.yAlignDistance = yAlignDistance;
         this.fieldPosition = fieldPosition;
         this.name = name;
@@ -333,7 +336,7 @@ public final class Constants {
       STOW(0.01, 84, "Stow"),
       PROCESSER(0.03, 0, "Processer"),
       SOURCE(0.05, 66, "Source"),
-      LEVEL1(0.19, 81, "Level 1"),
+      LEVEL1(0.22, 81, "Level 1"),
       ALGAE1(0.37, 16, "Algae 1"),
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.77, 16, "Algae 2"),

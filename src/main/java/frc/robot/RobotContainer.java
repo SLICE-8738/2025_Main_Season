@@ -75,7 +75,7 @@ public class RobotContainer {
   public final Command m_sysIDDriveRoutine;
   public final Command m_alignAndScoreCoral;
   public final Command m_alignAndRemoveAlgae;
-  public final Command m_coralStationAlign;
+  public final Command m_alignAndGetCoral;
 
   /* Scoring */
   public final SetLevel m_setLevelOne;
@@ -191,11 +191,14 @@ public class RobotContainer {
     m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector);
     m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
     m_alignAndScoreCoral = new DeferredCommand(
-        () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
-        Set.of(m_drivetrain));
+      () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
+      Set.of(m_drivetrain));
+    m_alignAndGetCoral = new DeferredCommand(
+      () -> new AlignAndGetCoral(m_drivetrain, m_elevator, m_endEffector, operatorController),
+      Set.of(m_drivetrain));
     m_alignAndRemoveAlgae = new DeferredCommand(
-        () -> new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector),
-        Set.of(m_drivetrain));
+      () -> new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector),
+      Set.of(m_drivetrain));
     m_bargeAlgae = new BargeAlgae(m_endEffector, m_elevator);
     m_processAlgae = new ProcessAlgae(m_endEffector, m_elevator);
     m_moveToLevelParallel = new MoveToLevelParallel(m_elevator, m_endEffector, LevelType.CORAL);
@@ -206,16 +209,6 @@ public class RobotContainer {
     m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
     m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
     m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
-    /*
-     * m_coralStationAlign = new DeferredCommand(
-     * () -> AutoBuilder.pathfindToPoseFlipped(
-     * CoralPositionSelector.getSelectedCoralStationPosition().fieldPosition,
-     * Constants.kDrivetrain.PATH_CONSTRAINTS,
-     * 0.5).andThen(new CoralPositionAlignCommand(m_drivetrain,
-     * CoralPositionSelector.getSelectedCoralStationPosition())),
-     * Set.of(m_drivetrain));
-     */
-    m_coralStationAlign = new CoralStationAlignCommand(m_drivetrain, driverController);
 
     /* End Effector */
     m_indexCoral = new IndexSequence(m_endEffector, m_elevator, operatorController);
@@ -288,7 +281,7 @@ public class RobotContainer {
     Button.controlPadLeft1.whileTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_alignAndScoreCoral);
     Button.square1.whileTrue(m_alignAndRemoveAlgae);
-    Button.cross1.whileTrue(m_coralStationAlign.beforeStarting(new WaitCommand(0.25)));
+    Button.cross1.whileTrue(m_alignAndGetCoral);
 
     /* Elevator */
     Button.psButton1.onTrue(m_elevatorToStow);
