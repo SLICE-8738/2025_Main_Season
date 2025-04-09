@@ -15,7 +15,8 @@ public class IndexAlignCommand extends Command {
   EndEffector endEffector;
   boolean frontSensor;
   boolean middleSensor;
-  boolean backSensor;
+  boolean topBackSensor;
+  boolean bottomBackSensor;
 
   Timer timer;
 
@@ -39,7 +40,8 @@ public class IndexAlignCommand extends Command {
     boolean[] sensorGroup = EndEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
     middleSensor = sensorGroup[1];
-    backSensor = sensorGroup[2];
+    topBackSensor = sensorGroup[2];
+    bottomBackSensor = sensorGroup[3];
     endEffector.alignCoral();
   }
 
@@ -57,7 +59,7 @@ public class IndexAlignCommand extends Command {
     if (timer.get() < 0.5) {
       return false;
     }
-    if (backSensor == false && frontSensor == true && middleSensor == true) {
+    if (!topBackSensor && !bottomBackSensor && frontSensor && middleSensor) {
       return true;
     }
     return false;

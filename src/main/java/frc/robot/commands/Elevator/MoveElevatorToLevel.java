@@ -45,7 +45,7 @@ public class MoveElevatorToLevel extends Command {
     }
 
     public void execute() {
-        if(m_levelType == LevelType.CORAL && !EndEffector.checkSensorsIndexing()[2]){
+        if(m_levelType == LevelType.CORAL && !EndEffector.checkSensorsIndexing()[2] && !EndEffector.checkSensorsIndexing()[3]){
             m_elevator.moveTo(m_level);
             SmartDashboard.putBoolean("Level Height", m_level == Level.STOW.height);
             if (m_level == Level.STOW.height

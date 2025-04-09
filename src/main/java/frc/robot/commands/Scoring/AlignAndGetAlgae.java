@@ -27,14 +27,14 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AlignAndRemoveAlgae extends SequentialCommandGroup {
+public class AlignAndGetAlgae extends SequentialCommandGroup {
 
   /** Creates a new AlignAndRemoveAlgae. */
-  public AlignAndRemoveAlgae(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
+  public AlignAndGetAlgae(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
 
     AlignPosition position = AlignPositionSelector.getSelectedAlignPosition();
     int targetTagID = DriverStation.getAlliance().get() == Alliance.Blue ? position.blueAprilTagID : position.redAprilTagID;
-    ToAlgae toAlgae = new ToAlgae(elevator, endEffector);
+    PickupAlgaePhase1 toAlgae = new PickupAlgaePhase1(elevator, endEffector);
     PoseAlignCommand alignWithReef = new PoseAlignCommand(
       drivetrain,
       position.fieldPosition.plus(new Transform2d(
@@ -52,7 +52,7 @@ public class AlignAndRemoveAlgae extends SequentialCommandGroup {
         Constants.kDrivetrain.PATH_CONSTRAINTS).until(
           () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
-              && alignWithReef.getDistanceFromTarget() <= 0.9),
+              && alignWithReef.getDistanceFromTarget() <= 1.6),
       new InstantCommand(toAlgae::schedule, elevator, endEffector),
       alignWithReef);
 

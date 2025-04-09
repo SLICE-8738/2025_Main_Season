@@ -74,7 +74,7 @@ public class RobotContainer {
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
   public final Command m_sysIDDriveRoutine;
   public final Command m_alignAndScoreCoral;
-  public final Command m_alignAndRemoveAlgae;
+  public final Command m_alignAndGetAlgae;
   public final Command m_alignAndGetCoral;
 
   /* Scoring */
@@ -177,6 +177,13 @@ public class RobotContainer {
     // Commands
     // ==========================
 
+    /* Drivetrain */
+    m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
+    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
+    m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
+    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+    m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
+
     /* Scoring */
     m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false, false);
     m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true, false);
@@ -196,19 +203,12 @@ public class RobotContainer {
     m_alignAndGetCoral = new DeferredCommand(
       () -> new AlignAndGetCoral(m_drivetrain, m_elevator, m_endEffector, operatorController),
       Set.of(m_drivetrain));
-    m_alignAndRemoveAlgae = new DeferredCommand(
-      () -> new AlignAndRemoveAlgae(m_drivetrain, m_elevator, m_endEffector),
+    m_alignAndGetAlgae = new DeferredCommand(
+      () -> new AlignAndGetAlgae(m_drivetrain, m_elevator, m_endEffector),
       Set.of(m_drivetrain));
     m_bargeAlgae = new BargeAlgae(m_endEffector, m_elevator);
     m_processAlgae = new ProcessAlgae(m_endEffector, m_elevator);
     m_moveToLevelParallel = new MoveToLevelParallel(m_elevator, m_endEffector, LevelType.CORAL);
-
-    /* Drivetrain */
-    m_swerveDriveOpenLoop = new DriveCommand(m_drivetrain, driverController, true);
-    m_swerveDriveClosedLoop = new DriveCommand(m_drivetrain, driverController, false);
-    m_setDrivePercentOutput = new RunDutyCycleCommand(m_drivetrain, 0.10, 0);
-    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-    m_sysIDDriveRoutine = new DeferredCommand(m_drivetrain::getSysIDDriveRoutine, Set.of(m_drivetrain));
 
     /* End Effector */
     m_indexCoral = new IndexSequence(m_endEffector, m_elevator, operatorController);
@@ -280,7 +280,7 @@ public class RobotContainer {
     Button.options.onTrue(m_resetFieldOrientedHeading);
     Button.controlPadLeft1.whileTrue(m_sysIDDriveRoutine);
     Button.leftTrigger1.whileTrue(m_alignAndScoreCoral);
-    Button.square1.whileTrue(m_alignAndRemoveAlgae);
+    Button.square1.whileTrue(m_alignAndGetAlgae);
     Button.cross1.whileTrue(m_alignAndGetCoral);
 
     /* Elevator */

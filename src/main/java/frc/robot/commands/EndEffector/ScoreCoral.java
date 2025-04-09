@@ -15,7 +15,8 @@ public class ScoreCoral extends Command {
 
   private boolean frontSensor;
   // Boolean middleSensor;
-  private boolean backSensor;
+  private boolean topBackSensor;
+  private boolean bottomBackSensor;
 
   /** Creates a new ScoreCoral. */
   public ScoreCoral(EndEffector endEffector) {
@@ -39,7 +40,8 @@ public class ScoreCoral extends Command {
 
     frontSensor = sensorGroup[0];
     // middleSensor = sensorGroup[1];
-    backSensor = sensorGroup[2];
+    topBackSensor = sensorGroup[2];
+    bottomBackSensor = sensorGroup[3];
 
     endEffector.setPlacementMotor(-0.25);
   }
@@ -53,7 +55,7 @@ public class ScoreCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (backSensor == false && frontSensor == false) {
+    if (!topBackSensor && !bottomBackSensor && !frontSensor) {
       return true;
     }
     return false;

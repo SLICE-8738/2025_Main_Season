@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants;
 import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.PoseAlignCommand;
 import frc.robot.commands.Drivetrain.SetAligningWithReefCommand;
 import frc.robot.subsystems.Elevator;
@@ -35,7 +36,7 @@ public class AlignAndGetCoral extends SequentialCommandGroup {
       position.fieldPosition.plus(new Transform2d(
         new Translation2d(
           Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
-          position.yAlignDistance.getAsDouble()), 
+          position.yAlignDistance.apply(Level.SOURCE)), 
         new Rotation2d())));
 
     // Add your commands in the addCommands() call, e.g.

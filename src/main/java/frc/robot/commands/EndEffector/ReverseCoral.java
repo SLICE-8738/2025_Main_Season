@@ -35,7 +35,7 @@ public class ReverseCoral extends Command {
   @Override
   public boolean isFinished() {
     boolean finished = false;
-    if(EndEffector.checkSensorsIndexing()[1] == true && EndEffector.checkSensorsIndexing()[2] == false && EndEffector.checkSensorsIndexing()[3] == true){
+    if(EndEffector.checkSensorsIndexing()[1] && !EndEffector.checkSensorsIndexing()[2] && !EndEffector.checkSensorsIndexing()[3]){
       finished = true;
     }
     return finished;

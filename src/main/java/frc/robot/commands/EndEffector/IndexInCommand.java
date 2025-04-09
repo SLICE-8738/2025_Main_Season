@@ -17,7 +17,8 @@ public class IndexInCommand extends Command {
   GenericHID m_controller;
   boolean frontSensor;
   boolean middleSensor;
-  boolean backSensor;
+  boolean topBackSensor;
+  boolean bottomBackSensor;
   boolean maintaining;
 
   public IndexInCommand(EndEffector endEffector, GenericHID controller) {
@@ -40,7 +41,8 @@ public class IndexInCommand extends Command {
     boolean[] sensorGroup = EndEffector.checkSensorsIndexing();
     frontSensor = sensorGroup[0];
     middleSensor = sensorGroup[1];
-    backSensor = sensorGroup[2];
+    topBackSensor = sensorGroup[2];
+    bottomBackSensor = sensorGroup[3];
     m_endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
 
     // Manual control
@@ -70,10 +72,6 @@ public class IndexInCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (backSensor == false && frontSensor == true && middleSensor == true) {
-      return true;
-    }
-    return false;
+    return (!topBackSensor && !bottomBackSensor && frontSensor && middleSensor);
   }
-
 }
