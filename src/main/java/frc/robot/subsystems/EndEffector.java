@@ -81,12 +81,12 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     config.FovParams.FOVCenterY = 0;
     config.FovParams.FOVRangeX = 6.75;
     config.FovParams.FOVRangeY = 6.75;
-    config.ProximityParams.ProximityThreshold = 0.08;
+    config.ProximityParams.ProximityThreshold = 0.13;
     config.ProximityParams.ProximityHysteresis = .001;
     config.ProximityParams.MinSignalStrengthForValidMeasurement = 15000;
 
-    frontSensor.getConfigurator().apply(config.withProximityParams(config.ProximityParams.withProximityThreshold(.13)));
-    config = config.withProximityParams((config.ProximityParams.withProximityThreshold(0.08)));
+    frontSensor.getConfigurator().apply(config);
+    //config = config.withProximityParams((config.ProximityParams.withProximityThreshold(0.13)));
     // Middle and back sensor have offset centers to prevent them from triggering each other.
     middleSensor.getConfigurator().apply(config);
     topBackSensor.getConfigurator().apply(config);

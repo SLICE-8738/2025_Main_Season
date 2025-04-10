@@ -337,6 +337,7 @@ public final class Constants {
       PROCESSER(0.03, 0, "Processer"),
       SOURCE(0.05, 66, "Source"),
       LEVEL1(0.22, 81, "Level 1"),
+      LEVEL1B(.26, 82, "Level 1B"),
       ALGAE1(0.37, 16, "Algae 1"),
       ALGAEPICKUP1(0.41, 52, "Algae Pickup 1"),
       LEVEL2(0.44, 81, "Level 2"),

@@ -80,6 +80,7 @@ public class RobotContainer {
 
   /* Scoring */
   public final SetLevel m_setLevelOne;
+  public final SetLevel m_setLevelOneB;
   public final SetLevel m_setLevelTwo;
   public final SetLevel m_setLevelThree;
   public final SetLevel m_setLevelFour;
@@ -90,6 +91,7 @@ public class RobotContainer {
   public final ToAlgae m_toAlgaeHigher;
   public final ToAlgae m_toAlgaeLower;
   public final ToStow m_elevatorToStow;
+  public final ToStow m_elevatorEmergencyStow;
   public final IntakeAdjustment m_intakeAdjustment;
   public final BargeAlgae m_bargeAlgae;
   public final ProcessAlgae m_processAlgae;
@@ -192,12 +194,14 @@ public class RobotContainer {
     m_moveUpToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, false, false);
     m_moveDownToLevel = new MoveToLevel(m_endEffector, m_elevator, LevelType.CORAL, true, false);
     m_setLevelOne = new SetLevel(Level.LEVEL1, LevelType.CORAL);
+    m_setLevelOneB = new SetLevel(Level.LEVEL1B, LevelType.CORAL);
     m_setLevelTwo = new SetLevel(Level.LEVEL2, LevelType.CORAL);
     m_setLevelThree = new SetLevel(Level.LEVEL3, LevelType.CORAL);
     m_setLevelFour = new SetLevel(Level.LEVEL4, LevelType.CORAL);
     m_setLowerAlgae = new SetLevel(Level.ALGAE1, LevelType.ALGAE);
     m_setUpperAlgae = new SetLevel(Level.ALGAE2, LevelType.ALGAE);
     m_elevatorToStow = new ToStow(m_endEffector, m_elevator);
+    m_elevatorEmergencyStow = new ToStow(m_endEffector, m_elevator);
     m_toAlgaeHigher = new ToAlgae(m_elevator, m_endEffector);
     m_toAlgaeLower = new ToAlgae(m_elevator, m_endEffector);
     m_intakeAdjustment = new IntakeAdjustment(m_endEffector, m_sourceIntake);
@@ -316,6 +320,7 @@ public class RobotContainer {
 
     /* Elevator */
     Button.controlPadDown2.onTrue(m_setLevelOne);
+    Button.back.onTrue(m_setLevelOneB);
     Button.controlPadLeft2.onTrue(m_setLevelTwo);
     Button.controlPadRight2.onTrue(m_setLevelThree);
     Button.controlPadUp2.onTrue(m_setLevelFour);
@@ -334,8 +339,7 @@ public class RobotContainer {
     Button.rightTrigger2.onFalse(m_bargeAlgaeThrow);
     Button.leftTrigger2.onTrue(m_processAlgae);
 
-    robotTipping.onTrue(new ParallelCommandGroup(m_scoreCoral, new SequentialCommandGroup(new WaitCommand(.5), m_elevatorToStow)));
-
+    robotTipping.onTrue(m_elevatorEmergencyStow);
   }
 
   /**

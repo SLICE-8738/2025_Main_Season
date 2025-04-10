@@ -10,17 +10,18 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
 public class ShuffleboardData {
 
-    private final ShuffleboardTab /*driverTab,*/ debugTab, swerveTab, autoTab;
+    private final ShuffleboardTab driverTab, debugTab, swerveTab, autoTab;
 
     public ShuffleboardData(Drivetrain drivetrain, EndEffector endEffector, AutoSelector autoSelector) {
 
-        //driverTab = Shuffleboard.getTab("Driver");
+        driverTab = Shuffleboard.getTab("Driver");
         debugTab = Shuffleboard.getTab("Debug");
         swerveTab = Shuffleboard.getTab("Swerve");
         autoTab = Shuffleboard.getTab("Autonomous");
@@ -100,36 +101,12 @@ public class ShuffleboardData {
         withPosition(3, 1).
         withSize(4, 3);
 
-        // //Adds a tuner for the drive motor PID gains to Shuffleboard
-        // ShuffleboardTuner.create(
-        //     (values) -> {
-          
-        //       drivetrain.setDrivePID(values[0], values[1], values[2]);
-          
-        //     },
-        //     new String[] {"kP", "kI", "kD"},
-        //     "Drive Motor PID");
-
-        // //Adds a tuner for the angle motor PID gains to Shuffleboard
-        // ShuffleboardTuner.create(
-        //     (values) -> {
-
-        //         drivetrain.setAnglePIDF(values[0], values[1], values[2], values[3]);
-
-        //     },
-        //     new String[] {"kP", "kI", "kD", "kFF"},
-        //     "Angle Motor PIDF");
-
-        // //Adds a tuner for the maximum velocities to Shuffleboard
-        // ShuffleboardTuner.create(
-        //     (values) -> {
-
-        //         drivetrain.maxLinearVelocity = values[0];
-        //         drivetrain.maxAngularVelocity = values[1];
-
-        //     },
-        //     new String[] {"Max Linear", "Max Angular"},
-        //     "Drivetrain Max Velocities");
+        driverTab.addCamera("Left Limelight", "limelight-left", "http://10.87.38.201").
+        withPosition(0, 1).
+        withSize(3, 3);
+        driverTab.addCamera("Right Limelight", "limelight-right", "http://10.87.38.202").
+        withPosition(9, 1).
+        withSize(3, 3);
 
         debugTab.add("SysID Routine", drivetrain.sysIDChooser);
 

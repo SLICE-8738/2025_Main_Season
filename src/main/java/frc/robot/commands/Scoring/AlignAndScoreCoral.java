@@ -46,10 +46,10 @@ public class AlignAndScoreCoral extends SequentialCommandGroup {
                     Constants.kDrivetrain.X_DISTANCE_TO_REEF_FACE : Constants.kDrivetrain.X_DISTANCE_TO_REEF,
                 position.yAlignDistance.apply(EndEffector.getCoralLevel())),
             new Rotation2d())));
-    SequentialCommandGroup moveToLevel = new ConditionalCommand(
+    SequentialCommandGroup moveToLevel = new SequentialCommandGroup(new ConditionalCommand(
         new MoveToLevel(endEffector, elevator, LevelType.CORAL, true, false),
         new MoveToLevel(endEffector, elevator, LevelType.CORAL, false, false),
-        () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0)).andThen(new InstantCommand(() -> endEffector.setPlacementMotor(0), endEffector));
+        () -> (Elevator.getCoralLevel().height - elevator.getPositions()[0] < 0)), new InstantCommand(() -> endEffector.setPlacementMotor(0)));
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
