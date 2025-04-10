@@ -70,10 +70,10 @@ public class EndEffector extends TalonFXPositionalSubsystem {
         Constants.CTRE_CONFIGS.positionalFXConfig);
 
     // TODO enter parameters
-    frontSensor = new CANrange(25);
-    middleSensor = new CANrange(24); // change id
+    frontSensor = new CANrange(24);
+    middleSensor = new CANrange(27); // change id
     topBackSensor = new CANrange(26);
-    bottomBackSensor = new CANrange(27); // change id
+    bottomBackSensor = new CANrange(25); // change id
 
     CANrangeConfiguration config = new CANrangeConfiguration();
 
@@ -160,7 +160,7 @@ public class EndEffector extends TalonFXPositionalSubsystem {
 
     if (!frontSensor) {
       setPlacementMotor(0);
-    } else if (topBackSensor && bottomBackSensor) {
+    } else if (topBackSensor || bottomBackSensor) {
       setPlacementMotor(-0.05);
     } else if (!middleSensor) {
       setPlacementMotor(0.05);
@@ -185,11 +185,12 @@ public class EndEffector extends TalonFXPositionalSubsystem {
   }
 
   public void resetRelativeEncoder() {
-    if (encoder.get() < 60) {
+    setEncoderPosition(360 + encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
+    /*if (encoder.get() < 60) {
       setEncoderPosition(360 + encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
     } else {
       setEncoderPosition(encoder.get() - Constants.kEndEffector.ENCODER_OFFSET);
-    }
+    }*/
   }
 
   @Override

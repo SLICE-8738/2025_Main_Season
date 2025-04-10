@@ -409,7 +409,7 @@ public final class Constants {
 
     public static final double SENSOR_TO_MECHANISM_RATIO = (70.0 / 8.0) * (37.0 / 15.0);
 
-    public static final double ENCODER_OFFSET = 300;
+    public static final double ENCODER_OFFSET = 385;
 
     public static final double KG = 0.24;
 
