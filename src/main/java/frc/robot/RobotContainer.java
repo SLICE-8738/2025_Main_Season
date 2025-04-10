@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -120,6 +121,9 @@ public class RobotContainer {
 
   /* LEDs */
   public final CoralLEDs m_coralLEDs;
+
+  /* Triggers */
+  public final Trigger robotTipping;
 
   /* Tests */
   public final DrivetrainTest m_drivetrainTest;
@@ -244,6 +248,9 @@ public class RobotContainer {
     m_drivetrainTest = new DrivetrainTest(m_drivetrain);
     m_antiGravityTest = new InstantCommand(() -> m_endEffector.setVoltage(-m_endEffector.normalKG), m_endEffector);
 
+    /* Triggers */
+    robotTipping = new Trigger(() -> m_drivetrain.getRoll() > 20 || m_drivetrain.getPitch() > 20);
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -326,6 +333,8 @@ public class RobotContainer {
     Button.rightTrigger2.onTrue(m_bargeAlgae);
     Button.rightTrigger2.onFalse(m_bargeAlgaeThrow);
     Button.leftTrigger2.onTrue(m_processAlgae);
+
+    robotTipping.onTrue(new ParallelCommandGroup(m_scoreCoral, new SequentialCommandGroup(new WaitCommand(.5), m_elevatorToStow)));
 
   }
 
