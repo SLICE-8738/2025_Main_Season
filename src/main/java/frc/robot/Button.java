@@ -49,6 +49,6 @@ public class Button {
     public static Trigger controlPadRight2 = new POVButton(controller2, 90);
     public static Trigger controlPadUp2 = new POVButton(controller2, 0);
     public static Trigger controlPadLeft2 = new POVButton(controller2, 270);
-    public static Trigger controlPadDown2 = new POVButton(controller2, 180); 
+    public static Trigger controlPadDown2 = new POVButton(controller2, 180);
 
 }

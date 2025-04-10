@@ -487,6 +487,21 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+
+  /** 
+   * @return Returns the current pitch of the robot as detected by the Gyro
+   */
+  public double getPitch(){
+    return m_gyro.getPitch().getValueAsDouble();
+  }
+
+  /**  
+   * @return The current roll of the robot as detected by the Gyro 
+   */
+  public double getRoll(){
+    return m_gyro.getPitch().getValueAsDouble();
+  }
+
   /**
    * Resets the gyro yaw axis to the given angle.
    */
