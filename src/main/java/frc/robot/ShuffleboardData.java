@@ -101,10 +101,10 @@ public class ShuffleboardData {
         withPosition(3, 1).
         withSize(4, 3);
 
-        driverTab.addCamera("Left Limelight", "limelight-left", "http://10.87.38.201").
+        driverTab.addCamera("Left Limelight", "limelight-left-1", "http://10.87.38.201").
         withPosition(0, 1).
         withSize(3, 3);
-        driverTab.addCamera("Right Limelight", "limelight-right", "http://10.87.38.202").
+        driverTab.addCamera("Right Limelight", "limelight-right-1", "http://10.87.38.202").
         withPosition(9, 1).
         withSize(3, 3);
 

@@ -55,15 +55,17 @@ public class PrepareEndEffector extends Command {
   public void execute() {
     if (angle == Level.SOURCE.angle) {
       endEffector.setPlacementMotor(-.1);
-    }
-    if (m_retainAlgae) {
+    }else if (m_retainAlgae) {
       endEffector.setPlacementMotor(0.1);
+    }else {
+      endEffector.alignCoral();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    endEffector.setPlacementMotor(0);
   }
 
   // Returns true when the command should end.

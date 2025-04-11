@@ -24,6 +24,8 @@ public class PoseAlignCommand extends Command {
   private final Pose2d m_targetPose;
 
   private final PIDController distanceController, rotationController;
+  
+  private Transform2d targetRelativePosition = new Transform2d();
 
   /**
    * Automatically aligns to the given pose using PID.
@@ -67,7 +69,8 @@ public class PoseAlignCommand extends Command {
   @Override
   public void execute() {
 
-    Translation2d difference = m_targetPose.minus(m_drivetrain.getPose()).getTranslation();
+    targetRelativePosition = m_targetPose.minus(m_drivetrain.getPose());
+    Translation2d difference = targetRelativePosition.getTranslation();
     double distanceFeedback = Math.abs(distanceController.calculate(Math.hypot(difference.getX(), difference.getY())));
 
     double translationX = difference.getAngle().getCos() * distanceFeedback;
@@ -103,6 +106,10 @@ public class PoseAlignCommand extends Command {
 
   public double getDistanceFromTarget() {
     return m_drivetrain.getPose().getTranslation().getDistance(m_targetPose.getTranslation());
+  }
+
+  public Transform2d getTargetRelativePosition() {
+    return targetRelativePosition;
   }
 
 }

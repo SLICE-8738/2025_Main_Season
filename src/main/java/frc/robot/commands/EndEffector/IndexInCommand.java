@@ -43,7 +43,7 @@ public class IndexInCommand extends Command {
     middleSensor = sensorGroup[1];
     topBackSensor = sensorGroup[2];
     bottomBackSensor = sensorGroup[3];
-    m_endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.2); // Intake slower when the front sensor is activated
+    m_endEffector.setPlacementMotor(frontSensor ? -0.1 : -0.3); // Intake slower when the front sensor is activated
 
     // Manual control
     double axis = m_controller == null ? 0 : MathUtil.applyDeadband(m_controller.getRawAxis(0) * .5, .1);

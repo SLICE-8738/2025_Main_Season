@@ -100,7 +100,7 @@ public final class Constants {
     public static final double DRIVE_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
     public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double DRIVE_STATOR_CURRENT_LIMIT = 60;
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 50;
 
     public static final int ANGLE_CURRENT_LIMIT = 20;
 
@@ -143,7 +143,7 @@ public final class Constants {
 
     /* PathPlanner Values */
     public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(4.8, 6.5, 11, 12.5);
-    public static final double TRANSLATION_KP = 10.5;
+    public static final double TRANSLATION_KP = 6.0;
     public static final double ROTATION_KP = 4.0;
 
     /* Motor Idle Modes */
@@ -335,7 +335,7 @@ public final class Constants {
 
       STOW(0.01, 84, "Stow"),
       PROCESSER(0.03, 0, "Processer"),
-      SOURCE(0.05, 66, "Source"),
+      SOURCE(0.0, 68, "Source"),
       LEVEL1(0.22, 81, "Level 1"),
       LEVEL1B(.26, 82, "Level 1B"),
       ALGAE1(0.37, 16, "Algae 1"),
@@ -454,8 +454,8 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET = 364;
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
-    public static final double INTAKE_ANGLE = 31;
-    public static final double CLIMB_ANGLE = 87;
+    public static final double INTAKE_ANGLE = 34;
+    public static final double CLIMB_ANGLE = 50;
 
     public static final double MAX_ANGLE = 88;
 
