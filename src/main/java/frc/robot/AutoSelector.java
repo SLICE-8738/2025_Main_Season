@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -22,15 +21,9 @@ import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.SourceIntake;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
-//import java.io.File;
-//import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
-//import org.json.simple.parser.JSONParser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -47,13 +40,17 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
  */
 public class AutoSelector {
 
-    public enum StartingPosition {
+    public enum Routine {
 
-        PLACEHOLDER("Placeholder");
+        SCORE_1_CORAL_L4("Score 1 Coral L4"),
+        TEST_PATH("Test Path"),
+        AUTO_BUILDER("Auto Builder"),
+        SCORE_4_CORAL_L4_FRONT_LEFT("Score 4 Coral L4 Front Left"),
+        SCORE_4_CORAL_L4_FRONT_RIGHT("Score 4 Coral L4 Front Right");
 
         public final String name;
 
-        StartingPosition(String name) {
+        Routine(String name) {
 
             this.name = name;
 
@@ -61,63 +58,26 @@ public class AutoSelector {
 
     }
 
-    public enum Mode {
+    public final SendableChooser<Routine> routineChooser;
 
-        SCORE_1_CORAL_L4("Score 1 Coral L4", false),
-        TEST_PATH("Test Path", false),
-        AUTO_BUILDER("Auto Builder", false),
-        SCORE_4_CORAL_L4_FRONT_LEFT("Score 4 Coral L4 Front Left", false),
-        SCORE_4_CORAL_L4_FRONT_RIGHT("Score 4 Coral L4 Front Right", false);
-
-        public final String name;
-        public final boolean useStartingPosition;
-
-        Mode(String name, boolean useStartingPosition) {
-
-            this.name = name;
-            this.useStartingPosition = useStartingPosition;
-
-        }
-
-    }
-
-    private StartingPosition storedStartingPosition = StartingPosition.PLACEHOLDER;
-    private Mode storedMode = Mode.TEST_PATH;
-
-    public final SendableChooser<StartingPosition> startingPositionChooser;
-    public final SendableChooser<Mode> modeChooser;
-
-    private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
-
-    private Pose2d initialAutoPose = new Pose2d();
+    private Optional<PathPlannerAuto> autoCommand = Optional.empty();
 
     private final Map<String, Pose2d> autoPoses = new HashMap<String, Pose2d>();
 
-    private final Drivetrain m_drivetrain/*, m_simDrivetrain*/;
+    public AutoSelector(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector, SourceIntake sourceIntake) {
 
-    public AutoSelector(Drivetrain drivetrain/*, Drivetrain simDrivetrain*/, Elevator elevator, EndEffector endEffector, SourceIntake sourceIntake) {
+        routineChooser = new SendableChooser<Routine>();
 
-        m_drivetrain = drivetrain;
-        //m_simDrivetrain = simDrivetrain;
+        routineChooser.setDefaultOption(Routine.SCORE_1_CORAL_L4.name, Routine.SCORE_1_CORAL_L4);
 
-        startingPositionChooser = new SendableChooser<StartingPosition>();
+        for (int i = 1; i < Routine.values().length; i++) {
 
-        startingPositionChooser.setDefaultOption("Placeholder", StartingPosition.PLACEHOLDER);
-
-        startingPositionChooser.onChange((position) -> updateAutoRoutine(position, storedMode));
-
-        modeChooser = new SendableChooser<Mode>();
-
-        modeChooser.setDefaultOption(Mode.SCORE_1_CORAL_L4.name, Mode.SCORE_1_CORAL_L4);
-
-        for (int i = 1; i < Mode.values().length; i++) {
-
-            Mode mode = Mode.values()[i];
-            modeChooser.addOption(mode.name, mode);
+            Routine mode = Routine.values()[i];
+            routineChooser.addOption(mode.name, mode);
 
         }
 
-        modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
+        routineChooser.onChange(routine -> updateAutoCommand(routine));
 
         AutoBuilder.configure(
             drivetrain::getPose,
@@ -191,127 +151,33 @@ public class AutoSelector {
 
     }
 
-    private void updateAutoRoutine(StartingPosition position, Mode mode) {
-
-        storedStartingPosition = position;
-        storedMode = mode;
+    private void updateAutoCommand(Routine routine) {
 
         try {
 
-            System.out.println("Auto selection changed, updating creator; Starting Position: " + position.name
-                + ", Mode: " + mode.name);
-            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name));
-            initialAutoPose = mode.useStartingPosition ? 
-                new PathPlannerAuto(mode.useStartingPosition? position.name + " " + mode.name : mode.name).getStartingPose()
-                : null;
-
-            /*if (m_simDrivetrain != null) {
-
-                AutoBuilder.configure(
-                    m_simDrivetrain::getPose,
-                    m_simDrivetrain::resetOdometry,
-                    m_simDrivetrain::getChassisSpeeds,
-                    m_simDrivetrain::runChassisSpeeds,
-                    new PPHolonomicDriveController(
-                        new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
-                        new PIDConstants(Constants.kDrivetrain.ROTATION_KP)),
-                    new RobotConfig(
-                        Constants.kDrivetrain.MASS,
-                        Constants.kDrivetrain.MOMENT_OF_INERTIA,
-                        new ModuleConfig(
-                            Constants.kDrivetrain.WHEEL_DIAMETER / 2,
-                            Constants.kDrivetrain.MAX_LINEAR_VELOCITY,
-                            Constants.kDrivetrain.WHEEL_COEFFICIENT_OF_FRICTION,
-                            DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
-                            Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
-                            1),
-                        Constants.kDrivetrain.kSwerveKinematics.getModules()),
-                    () -> DriverStation.getAlliance().get() == Alliance.Red,
-                    m_simDrivetrain);
-
-            }
-
-            JSONObject autoJSON = (JSONObject) new JSONParser().parse(new FileReader(new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoRoutine.get().getName() + ".auto")));
-            JSONArray autoCommands = (JSONArray) ((JSONObject) ((JSONObject) (autoJSON.get("command"))).get("data")).get("commands");
-
-            SequentialCommandGroup autoSequence = new SequentialCommandGroup() {
-                @Override
-                public boolean runsWhenDisabled() {
-                    return true;
-                }
-            };
-            
-            for (int i = 0; i < autoCommands.size(); i++) {
-
-                String pathName = (String) ((JSONObject) ((JSONObject) autoCommands.get(i)).get("data")).get("name");
-
-                autoSequence.addCommands(AutoBuilder.pathfindToPoseFlipped(
-                    autoPoses.get(pathName), 
-                    Constants.kDrivetrain.PATH_CONSTRAINTS,
-                    0.5));
-
-            }
-
-            //autoSequence.schedule();
-
-            if (m_simDrivetrain != null) {
-                
-                AutoBuilder.configure(
-                    m_drivetrain::getPose,
-                    m_drivetrain::resetOdometry,
-                    m_drivetrain::getChassisSpeeds,
-                    m_drivetrain::runChassisSpeeds,
-                    new PPHolonomicDriveController(
-                        new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
-                        new PIDConstants(Constants.kDrivetrain.ROTATION_KP)),
-                    new RobotConfig(
-                        Constants.kDrivetrain.MASS,
-                        Constants.kDrivetrain.MOMENT_OF_INERTIA,
-                        new ModuleConfig(
-                            Constants.kDrivetrain.WHEEL_DIAMETER / 2,
-                            Constants.kDrivetrain.MAX_LINEAR_VELOCITY,
-                            Constants.kDrivetrain.WHEEL_COEFFICIENT_OF_FRICTION,
-                            DCMotor.getKrakenX60(1).withReduction(Constants.kDrivetrain.DRIVE_GEAR_RATIO),
-                            Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT,
-                            1),
-                        Constants.kDrivetrain.kSwerveKinematics.getModules()),
-                    () -> DriverStation.getAlliance().get() == Alliance.Red,
-                    m_drivetrain);
-
-            }*/
+            System.out.println("Auto selection changed to " + routine.name);
+            autoCommand = Optional.of(new PathPlannerAuto(routine.name));
 
         }
         catch (Exception e) {
 
             DriverStation.reportError(e.getMessage(), false);   
             e.printStackTrace();         
-            autoRoutine = Optional.empty();
+            autoCommand = Optional.empty();
 
         }
 
     }
 
-    public Transform2d getInitialAutoPoseOffset() {
+    public Command getAutoCommand() {
 
-        return initialAutoPose == null ? new Transform2d() : initialAutoPose.minus(m_drivetrain.getPose());
-
-    }
-
-    public Command getAutoRoutine() {
-
-        return autoRoutine.get();
+        return autoCommand.get();
 
     }
 
-    public String getStartingPosition() {
+    public String getRoutine() {
 
-        return startingPositionChooser.getSelected().name;
-
-    }
-
-    public String getMode() {
-
-        return modeChooser.getSelected().name;
+        return routineChooser.getSelected().name;
 
     }
 

@@ -1,6 +1,6 @@
-package frc.slicelibs.util;
+package frc.slicelibs.config;
 
-import frc.slicelibs.PolarJoystickFilter;
+import frc.slicelibs.math.PolarJoystickFilter;
 
 /**
  * Contains the configuration values for a Joystick filter

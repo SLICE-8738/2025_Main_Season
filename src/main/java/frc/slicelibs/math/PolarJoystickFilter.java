@@ -3,9 +3,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.slicelibs;
+package frc.slicelibs.math;
 
-import frc.slicelibs.util.JoystickFilterConfig;
+import frc.slicelibs.config.JoystickFilterConfig;
 
 /** Add your docs here. */
 public class PolarJoystickFilter {

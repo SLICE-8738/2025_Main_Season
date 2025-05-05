@@ -114,36 +114,15 @@ public class ShuffleboardData {
         // Autonomous
         // ==========================
 
-        //Adds the sendable chooser for the desired autonomous mode onto Shuffleboard
-        autoTab.add("Auto Mode", autoSelector.modeChooser).
+        //Adds the sendable chooser for the desired autonomous routine onto Shuffleboard
+        autoTab.add("Auto Routine", autoSelector.routineChooser).
         withPosition(2, 0).
         withSize(2, 1);
-        //Adds the sendable chooser for the robot starting position onto Shuffleboard
-        autoTab.add("Starting Position", autoSelector.startingPositionChooser).
-        withPosition(5, 0).
-        withSize(2, 1);
 
-        //Displays the autonomous mode selected on the sendable chooser on Shuffleboard
-        autoTab.addString("Selected Auto Mode", autoSelector::getMode).
+        //Displays the autonomous routine selected on the sendable chooser on Shuffleboard
+        autoTab.addString("Selected Auto Mode", autoSelector::getRoutine).
         withPosition(2, 1).
         withSize(2, 1);
-        //Displays the robot starting position selected on the sendable chooser on Shuffleboard
-        autoTab.addString("Selected Starting Position", autoSelector::getStartingPosition).
-        withPosition(5, 1).
-        withSize(2, 1);
-
-        //Displays the X offset of the robot from the inital pose of the selected autonomous routine on Shuffleboard
-        autoTab.addDouble("Initial Auto Pose X Offset", () -> autoSelector.getInitialAutoPoseOffset().getX()).
-        withPosition(1, 2).
-        withSize(2, 1);
-        //Displays the Y offset of the robot from the inital pose of the selected autonomous routine on Shuffleboard
-        autoTab.addDouble("Initial Auto Pose Y Offset", () -> autoSelector.getInitialAutoPoseOffset().getY()).
-        withPosition(6, 2).
-        withSize(2, 1);
-        //Displays the rotational offset of the robot from the inital pose of the selected autonomous routine on Shuffleboard
-        autoTab.addDouble("Initial Auto Pose Rotation Offset", () -> autoSelector.getInitialAutoPoseOffset().getRotation().getDegrees()).
-        withPosition(3, 2).
-        withSize(3, 1);
 
         // ==========================
         // End Effector

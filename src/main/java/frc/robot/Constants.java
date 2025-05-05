@@ -19,9 +19,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 import frc.robot.Constants.kElevator.Level;
-import frc.slicelibs.util.CTREConfigs;
-import frc.slicelibs.util.REVConfigs;
-import frc.slicelibs.util.SwerveModuleConstants;
+import frc.slicelibs.config.CTREConfigs;
+import frc.slicelibs.config.REVConfigs;
+import frc.slicelibs.config.SwerveModuleConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide

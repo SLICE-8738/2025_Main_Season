@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.slicelibs.PolarJoystickFilter;
-import frc.slicelibs.util.JoystickFilterConfig;
+import frc.slicelibs.config.JoystickFilterConfig;
+import frc.slicelibs.math.PolarJoystickFilter;
 
 public class PartialPoseAlignCommand extends Command {
 

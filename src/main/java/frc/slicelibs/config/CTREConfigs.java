@@ -1,4 +1,4 @@
-package frc.slicelibs.util;
+package frc.slicelibs.config;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
