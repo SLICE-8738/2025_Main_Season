@@ -25,8 +25,7 @@ public class IndexSequence extends SequentialCommandGroup {
   public IndexSequence(EndEffector endEffector, Elevator elevator, GenericHID controller) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    SequentialCommandGroup indexSequence = new SequentialCommandGroup(new IndexInCommand(endEffector, controller),
-        new IndexAlignCommand(endEffector));
+    SequentialCommandGroup indexSequence = new SequentialCommandGroup(new IndexInCommand(endEffector, controller));
     ParallelDeadlineGroup indexAndManualElevator = new ParallelDeadlineGroup(indexSequence,
         new ManualElevator(elevator, controller));
     addCommands(new SetLevel(Level.SOURCE, LevelType.SOURCE),

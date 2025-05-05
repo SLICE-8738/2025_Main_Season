@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -109,6 +108,7 @@ public class RobotContainer {
   public final BumpAlgae m_bumpAlgae;
   public final ScoreCoral m_scoreCoral;
   public final ManualEndEffector m_manualEndEffector;
+  public final ManualFeedCommand m_manualFeed;
 
   public final IntakeAlgae m_IntakeAlgae;
   public final OutakeAlgae m_OutakeAlgae;
@@ -212,7 +212,7 @@ public class RobotContainer {
       () -> new AlignAndGetCoral(m_drivetrain, m_elevator, m_endEffector, operatorController),
       Set.of(m_drivetrain));
     m_alignAndGetAlgae = new DeferredCommand(
-      () -> new AlignAndGetAlgae(m_drivetrain, m_elevator, m_endEffector),
+      () -> new AlignAndGetAlgae(m_drivetrain, m_elevator, m_endEffector, driverController),
       Set.of(m_drivetrain));
     m_bargeAlgae = new BargeAlgae(m_endEffector, m_elevator);
     m_processAlgae = new ProcessAlgae(m_endEffector, m_elevator);
@@ -224,6 +224,7 @@ public class RobotContainer {
     m_scoreCoral = new ScoreCoral(m_endEffector);
     m_bargeAlgaeThrow = new BargeAlgaeThrow(m_endEffector);
     m_manualEndEffector = new ManualEndEffector(m_endEffector, operatorController);
+    m_manualFeed = new ManualFeedCommand(m_endEffector);
 
     m_IntakeAlgae = new IntakeAlgae(m_endEffector);
     m_OutakeAlgae = new OutakeAlgae(m_endEffector);
@@ -329,7 +330,7 @@ public class RobotContainer {
     Button.start.onTrue(new InstantCommand(
         () -> m_elevator.setEncoderPosition(0), m_elevator));
 
-    Button.cross2.onTrue(m_goToSourceIntakeAngle1);
+    Button.cross2.whileTrue(m_manualFeed);
     Button.circle2.onTrue(m_goToSourceIntakeAngle2);
 
     /* Scoring */

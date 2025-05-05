@@ -5,7 +5,7 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants.kElevator.Level;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -43,7 +43,20 @@ public class ScoreCoral extends Command {
     topBackSensor = sensorGroup[2];
     bottomBackSensor = sensorGroup[3];
 
-    endEffector.setPlacementMotor(-0.25);
+    // On the lower levels, regular power causes the coral to overshoot, so it is reduced for l1
+    if (EndEffector.getCoralLevel() == Level.LEVEL1) {
+
+      endEffector.setPlacementMotor(-0.18);
+
+    }else if (EndEffector.getCoralLevel() == Level.LEVEL1B) {
+
+      endEffector.setPlacementMotor(-0.21);
+
+    }else {
+
+      endEffector.setPlacementMotor(-0.25);
+
+    }
   }
 
   // Called once the command ends or is interrupted.

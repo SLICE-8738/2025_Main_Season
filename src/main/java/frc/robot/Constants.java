@@ -229,29 +229,29 @@ public final class Constants {
     public static enum AlignPosition {
 
       /* Reef Positions */
-      BACK_MIDDLE_LEFT_BRANCH(level -> level == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+      BACK_MIDDLE_LEFT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
         new Pose2d(2.853, 4.021, new Rotation2d()), "Back Middle Left Branch", 18, 7),
-      BACK_LEFT_RIGHT_BRANCH(level -> level == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+      BACK_LEFT_RIGHT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
         new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)), "Back Left Right Branch", 19, 6),
-      BACK_LEFT_LEFT_BRANCH(level -> level == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+      BACK_LEFT_LEFT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
         new Pose2d(3.672, 5.437, Rotation2d.fromDegrees(300)), "Back Left Left Branch", 19, 6),
-      FRONT_LEFT_RIGHT_BRANCH(level -> level == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+      FRONT_LEFT_RIGHT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
         new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)), "Front Left Right Branch", 20, 11),
-      FRONT_LEFT_LEFT_BRANCH(level -> level == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+      FRONT_LEFT_LEFT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
         new Pose2d(5.307, 5.437, Rotation2d.fromDegrees(240)), "Front Left Left Branch", 20, 11),
-      FRONT_MIDDLE_RIGHT_BRANCH(level -> level == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+      FRONT_MIDDLE_RIGHT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
         new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)), "Front Middle Right Branch", 21, 10),
-      FRONT_MIDDLE_LEFT_BRANCH(level -> level == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+      FRONT_MIDDLE_LEFT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
         new Pose2d(6.126, 4.021, Rotation2d.fromDegrees(180)), "Front Middle Left Branch", 21, 10),
-      FRONT_RIGHT_RIGHT_BRANCH(level -> level == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+      FRONT_RIGHT_RIGHT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
         new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)), "Front Right Right Branch", 22, 9),
-      FRONT_RIGHT_LEFT_BRANCH(level -> level == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+      FRONT_RIGHT_LEFT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
         new Pose2d(5.307, 2.604, Rotation2d.fromDegrees(120)), "Front Right Left Branch", 22, 9),
-      BACK_RIGHT_RIGHT_BRANCH(level -> level == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+      BACK_RIGHT_RIGHT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
         new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)), "Back Right Right Branch", 17, 8),
-      BACK_RIGHT_LEFT_BRANCH(level -> level == Level.LEVEL1 ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
+      BACK_RIGHT_LEFT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? LEFT_CORNER_Y_DISTANCE : LEFT_BRANCH_Y_DISTANCE, 
         new Pose2d(3.672, 2.604, Rotation2d.fromDegrees(60)), "Back Right Left Branch", 17, 8),
-      BACK_MIDDLE_RIGHT_BRANCH(level -> level == Level.LEVEL1 ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
+      BACK_MIDDLE_RIGHT_BRANCH(level -> (level == Level.LEVEL1 || level == Level.LEVEL1B) ? RIGHT_CORNER_Y_DISTANCE : RIGHT_BRANCH_Y_DISTANCE, 
         new Pose2d(2.853, 4.021, new Rotation2d()), "Back Middle Right Branch", 18, 7),
 
       /* Coral Station Positions */
@@ -316,7 +316,7 @@ public final class Constants {
     // TODO: Find current limits
     public static final boolean ELEVATORFX_ENABLE_SUPPLY_CURRENT_LIMIT = true;
     public static final int ELEVATORFX_SUPPLY_CURRENT_LIMIT = 40;
-    public static final int ELEVATORFX_SUPPLY_CURRENT_LOWER_LIMIT = 65;
+    public static final int ELEVATORFX_SUPPLY_CURRENT_LOWER_LIMIT = 50;
     public static final double ELEVATORFX_SUPPLY_CURRENT_LOWER_TIME = 0.1;
 
     public static final boolean ELEVATORFX_ENABLE_STATOR_CURRENT_LIMIT = true;
@@ -333,17 +333,17 @@ public final class Constants {
     /* Elevator Levels */
     public enum Level {
 
-      STOW(0.01, 84, "Stow"),
+      STOW(0.01, 90, "Stow"),
       PROCESSER(0.03, 0, "Processer"),
-      SOURCE(0.0, 68, "Source"),
-      LEVEL1(0.22, 81, "Level 1"),
-      LEVEL1B(.26, 82, "Level 1B"),
+      SOURCE(0.015, 70, "Source"),
+      LEVEL1(0.20, 90, "Level 1"),
+      LEVEL1B(.25, 90, "Level 1B"),
       ALGAE1(0.37, 16, "Algae 1"),
-      ALGAEPICKUP1(0.41, 52, "Algae Pickup 1"),
+      ALGAEPICKUP1(0.38, 52, "Algae Pickup 1"),
       LEVEL2(0.44, 81, "Level 2"),
       ALGAE2(0.77, 16, "Algae 2"),
-      ALGAEPICKUP2(0.82, 52, "Algae Pickup 2"),
-      LEVEL3(0.838, 81, "Level 3"),
+      ALGAEPICKUP2(0.79, 52, "Algae Pickup 2"),
+      LEVEL3(0.858, 81, "Level 3"),
       LEVEL4(1.645, 51, "Level 4"),
       BARGE(1.65, 52, "Barge"),
       BARGE2(1.65, 65, "Barge 2");
@@ -454,7 +454,7 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET = 364;
     public static final double ABSOLUTE_ENCODER_RANGE = 404.4;
 
-    public static final double INTAKE_ANGLE = 34;
+    public static final double INTAKE_ANGLE = 32;
     public static final double CLIMB_ANGLE = 50;
 
     public static final double MAX_ANGLE = 88;

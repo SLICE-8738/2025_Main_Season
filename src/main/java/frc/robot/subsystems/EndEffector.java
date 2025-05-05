@@ -158,14 +158,15 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     boolean middleSensor = sensors[1];
     boolean frontSensor = sensors[0];
 
-    if (!frontSensor) {
+    if(!bottomBackSensor && !topBackSensor && !middleSensor && !frontSensor){
       setPlacementMotor(0);
-    } else if (topBackSensor || bottomBackSensor) {
-      setPlacementMotor(-0.05);
-    } else if (!middleSensor) {
+    }
+    else if(!topBackSensor && !bottomBackSensor && middleSensor && frontSensor){
+      setPlacementMotor(0);
+    } else if(!topBackSensor && !bottomBackSensor && !middleSensor && frontSensor){
       setPlacementMotor(0.05);
-    } else {
-      setPlacementMotor(0);
+    }else{
+      setPlacementMotor(-0.05);
     }
   }
 
@@ -176,10 +177,23 @@ public class EndEffector extends TalonFXPositionalSubsystem {
     sensorStatuses[2] = topBackSensor.getIsDetected().getValue();
     sensorStatuses[3] = bottomBackSensor.getIsDetected().getValue();
 
+    double[] measurementTimes = new double[]{
+      frontSensor.getMeasurementTime().getValueAsDouble(),
+      middleSensor.getMeasurementTime().getValueAsDouble(), 
+      topBackSensor.getMeasurementTime().getValueAsDouble(), 
+      bottomBackSensor.getMeasurementTime().getValueAsDouble()};
+
+    SmartDashboard.putNumber("Maxiumum Measurement Time", Math.max(Math.max(measurementTimes[0], measurementTimes[1]), Math.max(measurementTimes[2], measurementTimes[3])));
+
     lastFront = frontSensor.getIsDetected().getValue();
     lastMiddle = middleSensor.getIsDetected().getValue();
     topLastBack = topBackSensor.getIsDetected().getValue();
     bottomLastBack = bottomBackSensor.getIsDetected().getValue();
+
+    Logger.recordOutput("End Effector/Front Sensor", sensorStatuses[0]);
+    Logger.recordOutput("End Effector/Middle Sensor", sensorStatuses[1]);
+    Logger.recordOutput("End Effector/Top Back Sensor", sensorStatuses[2]);
+    Logger.recordOutput("End Effector/Bottom Back Sensor", sensorStatuses[3]);
 
     return sensorStatuses;
   }
