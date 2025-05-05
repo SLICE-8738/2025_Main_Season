@@ -23,7 +23,6 @@ import frc.slicelibs.TalonFXPositionalSubsystem;
 
 public class EndEffector extends TalonFXPositionalSubsystem {
   private DutyCycleEncoder encoder;
-  // TODO rename maybe idk
   /*
    * HOW INDEXING CORAL WORKS
    * Coral begins indexing into the end effector and begins to trip the back
