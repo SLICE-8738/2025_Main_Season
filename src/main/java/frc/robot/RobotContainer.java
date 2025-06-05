@@ -209,7 +209,7 @@ public class RobotContainer {
       () -> new AlignAndScoreCoral(m_drivetrain, m_elevator, m_endEffector),
       Set.of(m_drivetrain));
     m_alignAndGetCoral = new DeferredCommand(
-      () -> new AlignAndGetCoral(m_drivetrain, m_elevator, m_endEffector, operatorController),
+      () -> new AlignAndGetCoral(m_drivetrain, m_elevator, m_endEffector),
       Set.of(m_drivetrain));
     m_alignAndGetAlgae = new DeferredCommand(
       () -> new AlignAndGetAlgae(m_drivetrain, m_elevator, m_endEffector, driverController),

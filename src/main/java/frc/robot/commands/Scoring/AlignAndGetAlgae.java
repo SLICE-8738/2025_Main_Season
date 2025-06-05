@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.Constants.kField.AlignPosition;
 import frc.robot.AlignPositionSelector;
 import frc.robot.commands.Drivetrain.PartialPoseAlignCommand;
 import frc.robot.commands.Drivetrain.SetAligningWithReefCommand;
@@ -41,7 +41,7 @@ public class AlignAndGetAlgae extends SequentialCommandGroup {
       driverController,
       position.fieldPosition.plus(new Transform2d(
         new Translation2d(
-          Constants.kDrivetrain.X_DISTANCE_TO_REEF_FACE, 
+          Constants.kField.X_DISTANCE_TO_REEF_FACE, 
           0), 
         new Rotation2d())));
 
@@ -54,7 +54,7 @@ public class AlignAndGetAlgae extends SequentialCommandGroup {
         Constants.kDrivetrain.PATH_CONSTRAINTS).until(
           () -> (LimelightHelpers.getFiducialID("limelight-left") == targetTagID
             || LimelightHelpers.getFiducialID("limelight-right") == targetTagID)
-              && alignWithReef.getDistanceFromTarget() <= 1.6),
+            && alignWithReef.getDistanceFromTarget() <= 1.6),
       new ScheduleCommand(toAlgae),
       alignWithReef);
 

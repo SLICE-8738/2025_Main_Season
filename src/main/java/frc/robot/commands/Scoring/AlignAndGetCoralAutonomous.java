@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.Constants.kField.AlignPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.PoseAlignCommand;
 import frc.robot.commands.Drivetrain.SetAligningWithReefCommand;
@@ -35,7 +35,7 @@ public class AlignAndGetCoralAutonomous extends SequentialCommandGroup {
       drivetrain,
       position.fieldPosition.plus(new Transform2d(
         new Translation2d(
-          Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
+          Constants.kField.X_DISTANCE_TO_CORAL_STATION, 
           position.yAlignDistance.apply(Level.SOURCE)), 
         new Rotation2d())));
 

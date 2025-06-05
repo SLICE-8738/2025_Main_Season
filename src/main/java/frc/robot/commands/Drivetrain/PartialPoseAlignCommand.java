@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -18,10 +17,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.slicelibs.LoggedCommand;
 import frc.slicelibs.config.JoystickFilterConfig;
 import frc.slicelibs.math.PolarJoystickFilter;
 
-public class PartialPoseAlignCommand extends Command {
+public class PartialPoseAlignCommand extends LoggedCommand {
 
   private final Drivetrain m_drivetrain;
   private final PS4Controller m_driverController;
@@ -39,10 +39,10 @@ public class PartialPoseAlignCommand extends Command {
    * 
    * @param drivetrain The drivetrain subsystem instance passed in
    *                   from RobotContainer.
-   * @param targetPose The pose to align to
+   * @param targetPose The pose to align to (must be for blue alliance)
    * @param automaticallyFlip Whether the given pose should automatically be
-   *                          flipped to the red alliance side (given pose
-   *                          must be for blue alliance)
+   *                          flipped to the red alliance side when red alliance
+   *                          is selected in DriverStation
    */
   public PartialPoseAlignCommand(Drivetrain drivetrain, PS4Controller driverController, Pose2d targetPose) {
 
@@ -65,7 +65,7 @@ public class PartialPoseAlignCommand extends Command {
     rotationController = new PIDController(6, 0, 0);
 
     yController.setSetpoint(0);
-    yController.setTolerance(0.02);
+    yController.setTolerance(0.04);
 
     rotationController.setSetpoint(m_targetPose.getRotation().getDegrees());
     rotationController.enableContinuousInput(0, 360);
@@ -77,6 +77,7 @@ public class PartialPoseAlignCommand extends Command {
   @Override
   public void initialize() {
 
+    super.initialize();
     m_drivetrain.addField2dPose(m_targetPose, "Auto Align Target Pose");
 
   }
@@ -109,6 +110,7 @@ public class PartialPoseAlignCommand extends Command {
       new Transform2d(), 
       false,
       false);
+    super.end(interrupted);
     
   }
 

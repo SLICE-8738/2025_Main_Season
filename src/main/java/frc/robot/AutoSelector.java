@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.Constants.kField.AlignPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Scoring.AlignAndGetCoralAutonomous;
 import frc.robot.commands.Scoring.AlignAndScoreCoralAutonomous;

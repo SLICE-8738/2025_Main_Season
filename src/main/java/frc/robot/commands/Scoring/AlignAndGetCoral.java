@@ -9,11 +9,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.Constants;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.Constants.kField.AlignPosition;
 import frc.robot.Constants.kElevator.Level;
 import frc.robot.commands.Drivetrain.PoseAlignCommand;
 import frc.robot.commands.Drivetrain.SetAligningWithReefCommand;
@@ -28,14 +27,14 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class AlignAndGetCoral extends SequentialCommandGroup {
 
   /** Creates a new AlignAndGetCoral. */
-  public AlignAndGetCoral(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector, GenericHID controller) {
+  public AlignAndGetCoral(Drivetrain drivetrain, Elevator elevator, EndEffector endEffector) {
 
     AlignPosition position = drivetrain.getClosestCoralStationPosition();
     PoseAlignCommand alignWithCoralStation = new PoseAlignCommand(
       drivetrain,
       position.fieldPosition.plus(new Transform2d(
         new Translation2d(
-          Constants.kDrivetrain.X_DISTANCE_TO_CORAL_STATION, 
+          Constants.kField.X_DISTANCE_TO_CORAL_STATION, 
           position.yAlignDistance.apply(Level.SOURCE)), 
         new Rotation2d())));
 

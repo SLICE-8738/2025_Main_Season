@@ -5,7 +5,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.Constants.kDrivetrain.AlignPosition;
+import frc.robot.Constants.kField.AlignPosition;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -241,7 +241,7 @@ public class Drivetrain extends SubsystemBase {
         
         double tagID = LimelightHelpers.getFiducialID("limelight-" + side);
 
-        for (int desiredID : aligningWithReef ? Constants.kDrivetrain.REEF_APRILTAG_IDS : Constants.kDrivetrain.CORAL_STATION_APRILTAG_IDS) {
+        for (int desiredID : aligningWithReef ? Constants.kField.REEF_APRILTAG_IDS : Constants.kField.CORAL_STATION_APRILTAG_IDS) {
 
           if (tagID == desiredID) {
 
